@@ -14,7 +14,9 @@ const events = [
     date: "Saturday, 11 October 2025",
     location: "Gedung Kesenian Balikpapan",
     dayTime: "Saturday, 11 October 2025 - 08:00 - 19:00 WITA",
-    video: "/video1.mp4"
+    video: "/video1.mp4",
+    mapsEmbed:
+      "https://www.google.com/maps?q=Gedung%20Kesenian%20Balikpapan&output=embed",
   },
   {
     id: 2,
@@ -26,10 +28,12 @@ const events = [
       "10K : 06:00 WITA (COT = 2 Jam)",
       "5K Open : 06:10 WITA (COT = 1 Jam)",
       "5K Teens : 06:10 WITA (COT = 1 Jam)",
-      "2.5K Kids : 06:20 WITA (COT = 50 Menit)"
+      "2.5K Kids : 06:20 WITA (COT = 50 Menit)",
     ],
-    video: "/video2.mp4"
-  }
+    video: "/video2.mp4",
+    mapsEmbed:
+      "https://www.google.com/maps?q=Lapangan%20Merdeka%20Balikpapan&output=embed",
+  },
 ];
 
 export default function EventSchedule() {
@@ -53,7 +57,6 @@ export default function EventSchedule() {
         ".event-video"
       ) as NodeListOf<HTMLElement>;
 
-      // Set all boxes to full opacity initially
       boxes?.forEach((box) => {
         gsap.set(box, { opacity: 1 });
       });
@@ -63,12 +66,8 @@ export default function EventSchedule() {
           trigger: box,
           start: "top center",
           end: "bottom center",
-          onEnter: () => {
-            showVideo(index);
-          },
-          onEnterBack: () => {
-            showVideo(index);
-          },
+          onEnter: () => showVideo(index),
+          onEnterBack: () => showVideo(index),
         });
       });
 
@@ -103,8 +102,9 @@ export default function EventSchedule() {
           <h2 className="text-3xl lg:text-5xl font-bold mb-4 text-blue-900">
             EVENT SCHEDULE
           </h2>
-         <p>Don&apos;t miss the exciting events at Bayanr Run 2025! Here&apos;s the full schedule</p>
-
+          <p className="text-red-600 font-semibold">
+          Jangan lewatkan berbagai keseruan di Bayan Run 2026! Berikut jadwal lengkapnya
+          </p>
         </div>
 
         {/* Event Cards */}
@@ -113,7 +113,7 @@ export default function EventSchedule() {
             <div
               key={event.id}
               className={`animate_event_fade bg-white border-4 ${
-                index === 0 ? 'border-yellow-400' : 'border-red-500'
+                index === 0 ? "border-yellow-400" : "border-red-500"
               } rounded-3xl p-8 shadow-lg hover:shadow-xl transition-shadow`}
             >
               <div className="flex justify-between items-start mb-6">
@@ -134,47 +134,49 @@ export default function EventSchedule() {
               <div className="space-y-4">
                 {/* Date */}
                 <div className="flex items-start">
-                  <span className="font-semibold text-blue-900 min-w-[120px]">Date</span>
-                  <div className="flex items-center text-blue-900">
-                    <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
-                    </svg>
-                    {event.date}
-                  </div>
+                  <span className="font-semibold text-blue-900 min-w-[120px]">
+                    Date
+                  </span>
+                  <div className="text-blue-900">{event.date}</div>
                 </div>
 
                 {/* Location */}
                 <div className="flex items-start">
-                  <span className="font-semibold text-blue-900 min-w-[120px]">Location</span>
-                  <div className="flex items-start text-blue-900">
-                    <svg className="w-5 h-5 mr-2 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                    </svg>
-                    <span className="whitespace-pre-line">{event.location}</span>
-                  </div>
+                  <span className="font-semibold text-blue-900 min-w-[120px]">
+                    Location
+                  </span>
+                  <span className="whitespace-pre-line text-blue-900">
+                    {event.location}
+                  </span>
                 </div>
 
-                {/* Day & Time or Start Time */}
+                {/* Maps */}
+                <div className="mt-4">
+                  <iframe
+                    src={event.mapsEmbed}
+                    className="w-full h-48 rounded-xl border"
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
+                </div>
+
+                {/* Time */}
                 {event.dayTime ? (
                   <div className="flex items-start">
-                    <span className="font-semibold text-blue-900 min-w-[120px]">Day & Time</span>
-                    <div className="flex items-start text-blue-900">
-                      <svg className="w-5 h-5 mr-2 mt-1" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-                      </svg>
-                      {event.dayTime}
-                    </div>
+                    <span className="font-semibold text-blue-900 min-w-[120px]">
+                      Day & Time
+                    </span>
+                    <div className="text-blue-900">{event.dayTime}</div>
                   </div>
                 ) : (
                   <div className="flex items-start">
-                    <span className="font-semibold text-blue-900 min-w-[120px]">Start Time</span>
-                    <div className="space-y-2 flex-1">
+                    <span className="font-semibold text-blue-900 min-w-[120px]">
+                      Start Time
+                    </span>
+                    <div className="space-y-1">
                       {event.startTimes?.map((time, idx) => (
-                        <div key={idx} className="flex items-start text-blue-900">
-                          <svg className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-                          </svg>
-                          <span>{time}</span>
+                        <div key={idx} className="text-blue-900">
+                          {time}
                         </div>
                       ))}
                     </div>
