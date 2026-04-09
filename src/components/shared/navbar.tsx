@@ -106,7 +106,7 @@ export default function Navbar() {
                 <Image
                   src={
                     pathname === "/about"
-                      ? "https://res.cloudinary.com/djs5pi7ev/image/upload/q_auto/f_auto/v1775466723/LOGO_BR2026_vbixvo.pngZ"
+                      ? "https://res.cloudinary.com/djs5pi7ev/image/upload/q_auto/f_auto/v1775466723/LOGO_BR2026_vbixvo.png"
                       : "https://res.cloudinary.com/djs5pi7ev/image/upload/q_auto/f_auto/v1775466723/LOGO_BR2026_vbixvo.png"
                   }
                   alt="logo"
@@ -117,8 +117,8 @@ export default function Navbar() {
               </Link>
             </div>
 
-            {/* Desktop Navigation 
-            <div className="element uppercase invisible lg:-ml-16 hidden lg:block">
+            {/* Desktop Navigation */}
+            <div className="element  invisible lg:-ml-16 hidden lg:block">
               <ul className="flex gap-8 items-center">
                 {navLinks.map((link) => {
                   const isActive =
@@ -128,34 +128,34 @@ export default function Navbar() {
                   return (
                     <li
                       key={link.link}
-                      className={isActive ? "text-blue-900" : ""}
+                      className={isActive ? "text-blue-900 font-semibold" : "font-semibold text-blue-900/60 hover:text-blue-900" }
                     >
                       <Link href={link.link}>{link.name}</Link>
                     </li>
                   );
                 })}
               </ul>
-            </div>*/}
+            </div>
 
-            {/* Desktop Contact Button *
+            {/* Desktop Contact Button */}
             <div className="contact-animate invisible hidden lg:block">
               <Button
-                className={`bg-amber-600 uppercase border border-white/20 ${
+                className={`bg-amber-600  border border-white/20 ${
                   pathname === "/about"
-                    ? "bg-white text-blue-900 hover:bg-white/80"
+                    ? "bg-amber-500 text-white hover:bg-white/80"
                     : ""
                 } text-lg cursor-pointer`}
               >
-                REGISTER NOW !!!
+                Daftar Sekarang
               </Button>
-            </div>/}
+            </div>
 
-            {/* Mobile Hamburger + Contact 
+            {/* Mobile Hamburger + Contact */}
             <div className="flex items-center gap-4 lg:hidden">
               <Button
-                className="uppercase bg-amber-600 border border-white/20 text-sm px-4 py-1"
+                className=" bg-amber-600 border border-white/20 text-sm px-4 py-1"
               >
-                REGISTER NOW !!!
+               Daftar Sekarang
               </Button>
               <button onClick={toggleMobileMenu} className="">
                 {mobileMenuOpen ? (
@@ -164,9 +164,9 @@ export default function Navbar() {
                   <Menu className="w-6 h-6" />
                 )}
               </button>
-            </div>*/}
+            </div>
 
-            {/* Mobile Menu 
+            {/* Mobile Menu */}
             <div
               className={`
                 fixed top-0 h-screen w-full lg:hidden bg-black/90 backdrop-blur-2xl pt-20
@@ -195,7 +195,7 @@ export default function Navbar() {
                   <X className="w-6 h-6" />
                 </div>
               </div>
-            </div>*/}
+            </div>
           </div>
         </div>
       </nav>

@@ -147,7 +147,7 @@ export default function StackedSlider() {
   };
 
   return (
-    <section className="py-16 lg:py-24 bg-[#f5f2ec] overflow-hidden relative">
+    <section className="py-16 lg:py-24 bg-white overflow-hidden relative">
 
       {/* Subtle background decoration */}
       <div className="absolute inset-0 pointer-events-none">
@@ -157,7 +157,7 @@ export default function StackedSlider() {
 
       {/* Header */}
       <div className="text-center mb-16 relative z-10">
-        <p className="text-[11px] uppercase font-semibold tracking-[0.5em] text-blue-900/40 mb-3">
+        <p className="text-[15px] uppercase font-semibold tracking-[0.5em] text-blue-900/40 mb-3">
           Bayan Run 2025
         </p>
         <p className="text-4xl lg:text-6xl font-bold flex flex-wrap justify-center gap-3">

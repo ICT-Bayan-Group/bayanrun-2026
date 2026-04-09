@@ -76,7 +76,7 @@ export default function Home() {
       {/* <ServiceSection /> */}
             {/* <RacePack />*/}
       <StackedSlider />
-       <AboutMissionVision />
+           {/* <AboutMissionVision />*/}
     </main>
   );
 }

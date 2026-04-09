@@ -11,12 +11,8 @@ export default function page() {
     <main>
       <AboutBanner />
       <AboutMissionVision />
-      <div className="py-2 lg:py-20">
         <Achievement />
-      </div>
       <Testimonial />
-
-      <WorksSection />
     </main>
   );
 }

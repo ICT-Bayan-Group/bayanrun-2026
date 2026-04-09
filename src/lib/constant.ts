@@ -1,10 +1,10 @@
 // Navigation Links
 export const navLinks = [
-  //{ name: "Home", link: "/" },
- // { name: "About", link: "/about" },
- // { name: "Schedule & Rules", link: "/schedule-rules" },
- // { name: "FAQ", link: "/faq" },
- // { name: "Surat Kuasa", link: "https://bayanrun.com/BAYAN%20RUN%202025%20-%20SURAT%20KUASA%20(Power%20of%20Attorney%20Letter).pdf" },
+  { name: "Home", link: "/" },
+  { name: "About", link: "/about" },
+  { name: "Schedule & Rules", link: "/schedule-rules" },
+  { name: "FAQ", link: "/faq" },
+  { name: "Surat Kuasa", link: "https://bayanrun.com/BAYAN%20RUN%202025%20-%20SURAT%20KUASA%20(Power%20of%20Attorney%20Letter).pdf" },
  // { name: "Portfolio", link: "/portfolio" },
  // { name: "Blog", link: "/blog" },
 ];

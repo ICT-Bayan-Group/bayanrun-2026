@@ -104,11 +104,11 @@ const Footer: React.FC = () => {
                         <div className="flex flex-col space-y-6 max-md:items-center max-md:text-center font-[var(--font-poppins)]">
                             <div className="flex flex-col space-y-2">
                                 <span className="uppercase text-gray-700 font-extrabold tracking-widest mb-3 text-sm md:text-base">Menu</span>
-                                <Link href="/" className="hover:underline hover:text-blue-900 transition-colors text-base md:text-lg font-medium">Home</Link>
-                                <Link href="/" className="hover:underline hover:text-blue-900 transition-colors text-base md:text-lg font-medium">About</Link>
-                                <Link href="/" className="hover:underline hover:text-blue-900 transition-colors text-base md:text-lg font-medium">Schedule & Rules</Link>
-                                <Link href="/" className="hover:underline hover:text-blue-900 transition-colors text-base md:text-lg font-medium">FAQ</Link>
-                                <p className="cursor-pointer hover:underline hover:text-blue-900 transition-colors text-base md:text-lg font-medium" onClick={() => setIsContactOpen(true)}>Contact</p>
+                                <Link href="/" className=" hover:text-blue-900 transition-colors text-base md:text-lg font-medium">Home</Link>
+                                <Link href="/about" className=" hover:text-blue-900 transition-colors text-base md:text-lg font-medium">About</Link>
+                                <Link href="/schedule-rules" className="hover:text-blue-900 transition-colors text-base md:text-lg font-medium">Schedule & Rules</Link>
+                                <Link href="/faq" className="hover:text-blue-900 transition-colors text-base md:text-lg font-medium">FAQ</Link>
+                                <p className="cursor-pointer hover:text-blue-900 transition-colors text-base md:text-lg font-medium" onClick={() => setIsContactOpen(true)}>Contact</p>
                             </div>
                             <p className="text-gray-600 text-sm md:text-base font-medium">© 2026 BAYAN OPEN</p>
                         </div>
