@@ -113,19 +113,19 @@ export default function Testimonial() {
                                         {/* Number badge */}
                                         <div className="flex items-center gap-2 text-gray-300 shrink-0">
                                             <ArrowRightCircle className="h-4 w-4 sm:h-5 sm:w-5" />
-                                            <span className="text-sm sm:text-base lg:text-lg font-semibold font-[Roboto]">
+                                            <span className="text-sm sm:text-base lg:text-lg font-semibold ">
                                                 {testimonial.id}
                                             </span>
                                         </div>
 
                                         {/* Content */}
                                         <div className="space-y-3 sm:space-y-4 lg:space-y-5 flex-1">
-                                            <h3 className="text-base sm:text-lg lg:text-xl tracking-wide font-medium leading-relaxed font-[Roboto] text-white">
+                                            <h3 className="text-base sm:text-lg lg:text-xl tracking-wide font-medium leading-relaxed  text-white">
                                                 {testimonial.comment}
                                             </h3>
 
                                             {/* Author info */}
-                                            <div className="flex items-center gap-3 font-[Roboto]">
+                                            <div className="flex items-center gap-3 ">
                                                
                                                 <div>
                                                     <h4 className="text-sm sm:text-base lg:text-lg font-semibold text-white">
