@@ -110,7 +110,7 @@ const Footer: React.FC = () => {
                                 <Link href="/faq" className="hover:text-blue-900 transition-colors text-base md:text-lg font-medium">FAQ</Link>
                                 <p className="cursor-pointer hover:text-blue-900 transition-colors text-base md:text-lg font-medium" onClick={() => setIsContactOpen(true)}>Contact</p>
                             </div>
-                            <p className="text-gray-600 text-sm md:text-base font-medium">© 2026 BAYAN OPEN</p>
+                            <p className="text-gray-600 text-sm md:text-base font-medium">© 2026 PT BAYAN RESOURCES TBK</p>
                         </div>
 
                         {/* Social Links & Infos */}

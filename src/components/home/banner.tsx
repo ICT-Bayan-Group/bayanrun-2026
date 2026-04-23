@@ -150,11 +150,11 @@ export default function AboutBanner() {
                 <span className="text-3xl md:text-5xl lg:text-5xl font-black text-blue-900 tracking-tight uppercase mx-8">
                   THE NEXT LEVEL
                 </span>
-                <span className="text-3xl md:text-5xl lg:text-5xl font-black text-blue-900 mx-4">•</span>
+                <span className="text-3xl md:text-5xl lg:text-7xl font-black text-blue-900 mx-4">•</span>
                 <span className="text-3xl md:text-5xl lg:text-5xl font-black text-red-600 tracking-tight uppercase mx-8">
                   KEEP MOVING KEEP STRONG
                 </span>
-                <span className="text-3xl md:text-5xl lg:text-7xl font-black text-red-900 mx-4">•</span>
+                <span className="text-3xl md:text-5xl lg:text-7xl font-black text-red-600 mx-4">•</span>
               </div>
             ))}
           </div>

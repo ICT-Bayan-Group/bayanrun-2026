@@ -147,7 +147,7 @@ export default function StackedSlider() {
   };
 
   return (
-    <section className="py-16 lg:py-24 bg-white overflow-hidden relative">
+    <section className="py-16 lg:py-24 bg-gray-200 overflow-hidden relative">
 
       {/* Subtle background decoration */}
       <div className="absolute inset-0 pointer-events-none">

@@ -169,7 +169,7 @@ export default function CategorySection() {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen flex justify-center items-center bg-amber-500 overflow-hidden py-20 px-4 sm:px-6 md:px-8"
+      className="relative min-h-screen flex justify-center items-center bg-blue-900 overflow-hidden py-20 px-4 sm:px-6 md:px-8"
     >
       {/* Background blobs */}
       <div className="blob1 absolute top-1/3 left-1/4 w-96 h-96 rounded-full pointer-events-none"
