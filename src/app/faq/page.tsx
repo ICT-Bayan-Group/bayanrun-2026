@@ -296,41 +296,6 @@ export default function FAQPage() {
         </div>
 
         {/* Contact Section */}
-        <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl p-8">
-          <h3 className="text-3xl font-bold mb-6 text-center flex items-center justify-center gap-3 text-gray-900">
-            <MessageCircle className="w-8 h-8 text-blue-600" />
-            Masih Butuh Bantuan?
-          </h3>
-          <p className="text-gray-500 text-center mb-8">
-            Jangan ragu untuk menghubungi tim dukungan kami melalui saluran kontak resmi
-          </p>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-white border border-blue-100 rounded-xl p-6 text-center hover:border-blue-300 hover:shadow-md transition-all duration-300">
-              <Mail className="w-8 h-8 mx-auto mb-3 text-blue-600" />
-              <h4 className="font-semibold mb-2 text-gray-900">Email</h4>
-              <p className="text-sm text-gray-500">admin@bayanrun.com</p>
-            </div>
-
-            <div className="bg-white border border-blue-100 rounded-xl p-6 text-center hover:border-blue-300 hover:shadow-md transition-all duration-300">
-              <Phone className="w-8 h-8 mx-auto mb-3 text-green-500" />
-              <h4 className="font-semibold mb-2 text-gray-900">WhatsApp</h4>
-              <p className="text-sm text-gray-500">082154815113</p>
-            </div>
-
-            <div className="bg-white border border-blue-100 rounded-xl p-6 text-center hover:border-blue-300 hover:shadow-md transition-all duration-300">
-              <Instagram className="w-8 h-8 mx-auto mb-3 text-pink-500" />
-              <h4 className="font-semibold mb-2 text-gray-900">Instagram</h4>
-              <p className="text-sm text-gray-500">@bayan_open</p>
-            </div>
-
-            <div className="bg-white border border-blue-100 rounded-xl p-6 text-center hover:border-blue-300 hover:shadow-md transition-all duration-300">
-              <HelpCircle className="w-8 h-8 mx-auto mb-3 text-purple-500" />
-              <h4 className="font-semibold mb-2 text-gray-900">Website</h4>
-              <p className="text-sm text-gray-500">bayanrun.com</p>
-            </div>
-          </div>
-        </div>
 
       </div>
     </div>
