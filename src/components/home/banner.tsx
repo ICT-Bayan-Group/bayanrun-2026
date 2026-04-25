@@ -80,10 +80,10 @@ export default function AboutBanner() {
           <div ref={contentRef} className="relative z-20 text-center px-6 flex flex-col items-center">
             {/* Coming Soon Badge */}
             <div className="flex items-center justify-center mb-6">
-              <div className="flex items-center gap-2 border border-yellow-400/60 rounded-full px-5 py-1.5 backdrop-blur-sm bg-yellow-400/10">
-                <span className="w-1.5 h-1.5 rounded-full bg-yellow-400 animate-pulse" />
-                <span className="text-yellow-400 text-sm sm:text-base font-semibold tracking-[0.3em] uppercase">
-                  Coming Soon
+              <div className="flex items-center gap-2 border border-blue-400/60 rounded-full px-5 py-1.5 backdrop-blur-sm bg-blue-400/10">
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
+                <span className="text-blue-300 text-sm sm:text-base font-semibold tracking-[0.3em] uppercase">
+                  PENDAFTARAN DIBUKA
                 </span>
               </div>
             </div>
