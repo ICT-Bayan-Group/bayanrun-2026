@@ -10,7 +10,7 @@ if (typeof window !== "undefined") {
 
 const STATS = [
   { value: "2026", label: "Year" },
-  { value: "5000+", label: "Runners" },
+  { value: "6000+", label: "Runners" },
   { value: "4", label: "Categories" },
   { value: "21K", label: "Max Distance" },
 ];
