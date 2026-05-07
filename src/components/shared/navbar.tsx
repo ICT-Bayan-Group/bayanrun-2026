@@ -140,9 +140,9 @@ export default function Navbar() {
             {/* Desktop Contact Button */}
             <div className="contact-animate invisible hidden lg:block">
               <Button
-                className={`bg-amber-600  border border-white/20 ${
+                className={`bg-blue-900  border border-white/20 ${
                   pathname === "/about"
-                    ? "bg-amber-500 text-white hover:bg-white/80"
+                    ? "bg-blue-900 text-white hover:bg-blue-600/80"
                     : ""
                 } text-lg cursor-pointer`}
               >
@@ -153,7 +153,7 @@ export default function Navbar() {
             {/* Mobile Hamburger + Contact */}
             <div className="flex items-center gap-4 lg:hidden">
               <Button
-                className=" bg-amber-600 border border-white/20 text-sm px-4 py-1"
+                className=" bg-blue-900 border border-white/20 text-sm px-4 py-1"
               >
                Daftar Sekarang
               </Button>
