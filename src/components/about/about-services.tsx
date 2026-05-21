@@ -4,7 +4,7 @@ import {
   Award, Clock, Users,
   AlertCircle, CheckCircle, Zap, Shield, ChevronRight, Timer, Package,
 } from "lucide-react";
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -37,7 +37,7 @@ const importantRules = [
   { icon: Clock,       title: "Cut-Off Time",    desc: "Wajib finish sebelum waktu COT untuk mendapat medali",           color: "#0B6B8A", bg: "#E3F2F7", tag: "REQUIRED" },
 ];
 
-// ─── Google Font loader ───────────────────────────────────────────────────────
+// ─── Hooks ───────────────────────────────────────────────────────────────────
 function useBayanFont() {
   useEffect(() => {
     if (document.getElementById("bayan-run-font")) return;
@@ -47,6 +47,17 @@ function useBayanFont() {
     link.href = "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&display=swap";
     document.head.appendChild(link);
   }, []);
+}
+
+function useIsMobile(breakpoint = 640) {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < breakpoint);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, [breakpoint]);
+  return isMobile;
 }
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
@@ -100,9 +111,51 @@ function BulletList({ items, color }: { items: string[]; color: string }) {
   );
 }
 
+// ─── Category Card (mobile view) ─────────────────────────────────────────────
+function CategoryCard({ cat }: { cat: typeof categories[0] }) {
+  return (
+    <div style={{
+      background: "#fff",
+      border: `1px solid #DDEAF8`,
+      borderLeft: `4px solid ${cat.color}`,
+      borderRadius: 10,
+      padding: "12px 14px",
+      display: "flex",
+      flexDirection: "column",
+      gap: 8,
+    }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <div style={{ background: cat.bg, border: `1px solid ${cat.border}`, borderRadius: 4, padding: "2px 9px" }}>
+            <span style={{ fontFamily: BEBAS, fontSize: 12, color: cat.textColor, letterSpacing: "0.08em" }}>{cat.sub}</span>
+          </div>
+          <span style={{ fontFamily: BEBAS, fontSize: 17, letterSpacing: "0.01em", color: "#111" }}>{cat.title}</span>
+        </div>
+        <span style={{ fontFamily: BEBAS, fontSize: 11, color: "#BCC8DC" }}>{cat.num}</span>
+      </div>
+      <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+        <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, color: "#778" }}>
+          <Users size={11} />{cat.age}
+        </span>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: cat.bg, border: `1px solid ${cat.border}`, borderRadius: 6, padding: "4px 10px" }}>
+          <Timer size={12} color={cat.color} />
+          <span style={{ fontFamily: BEBAS, fontSize: 14, letterSpacing: "0.04em", color: cat.textColor }}>COT {cat.cutoff}</span>
+        </div>
+      </div>
+      <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+        {cat.tags.map((tag, j) => (
+          <span key={j} style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#8E9BAE", border: "1px solid #D8E4F5", borderRadius: 3, padding: "2px 7px", background: "#F4F7FB" }}>{tag}</span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function BayanRunInfo() {
   useBayanFont();
+  const isMobile = useIsMobile(640);
+  const isTablet = useIsMobile(900);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const titleRef     = useRef<HTMLHeadingElement>(null);
@@ -110,6 +163,14 @@ export default function BayanRunInfo() {
   const rulesRef     = useRef<HTMLDivElement>(null);
   const catsRef      = useRef<HTMLDivElement>(null);
   const regRef       = useRef<HTMLDivElement>(null);
+
+  // Desktop cols
+  const catDesktopCols = "36px 76px 1fr 120px 100px 1fr";
+  const catTabletCols  = "36px 76px 1fr 100px";
+  const catMobileCols  = "none"; // card mode on mobile
+
+  const cotDesktopCols = "36px 76px 1fr 120px 110px";
+  const cotTabletCols  = "36px 76px 1fr 110px";
 
   // ── Banner-style ticker animation ──────────────────────────────────────────
   useEffect(() => {
@@ -194,16 +255,16 @@ export default function BayanRunInfo() {
     >
 
       {/* ── HERO with video background ── */}
-        <div style={{
-          position: "relative",
-          width: "100%",
-          height: "100vh",
-          minHeight: 600,
-          overflow: "hidden",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}>
+      <div style={{
+        position: "relative",
+        width: "100%",
+        height: "100vh",
+        minHeight: 480,
+        overflow: "hidden",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}>
         {/* Background video */}
         <video
           src={VIDEO_SRC}
@@ -223,12 +284,14 @@ export default function BayanRunInfo() {
           background: "rgba(0,0,0,0.58)", zIndex: 1,
           pointerEvents: "none",
         }} />
-        {/* Grid overlay */}
-        <div style={{
-          position: "absolute", top: 0, right: 0, width: "52%", height: "100%",
-          background: `repeating-linear-gradient(90deg,transparent,transparent 54px,${BLUE}09 54px,${BLUE}09 55px)`,
-          pointerEvents: "none", zIndex: 2,
-        }} />
+        {/* Grid overlay — only on desktop */}
+        {!isMobile && (
+          <div style={{
+            position: "absolute", top: 0, right: 0, width: "52%", height: "100%",
+            background: `repeating-linear-gradient(90deg,transparent,transparent 54px,${BLUE}09 54px,${BLUE}09 55px)`,
+            pointerEvents: "none", zIndex: 2,
+          }} />
+        )}
 
         <div style={{
           maxWidth: 1100,
@@ -240,14 +303,13 @@ export default function BayanRunInfo() {
           flexDirection: "column",
           alignItems: "center",
           gap: 18,
+          padding: "0 clamp(16px, 4vw, 40px)",
         }}>
-
-          {/* Title — Bebas Neue */}
           <h1
             ref={titleRef}
             style={{
               fontFamily: BEBAS,
-              fontSize: "clamp(60px, 11vw, 108px)",
+              fontSize: "clamp(52px, 11vw, 108px)",
               fontWeight: 400,
               lineHeight: 0.92,
               letterSpacing: "0.01em",
@@ -256,12 +318,13 @@ export default function BayanRunInfo() {
               perspective: "700px",
               display: "flex",
               flexWrap: "wrap",
+              justifyContent: "center",
               gap: "0 6px",
               color: "#fff",
             }}
           >
             {"BAYAN RUN 2026".split("").map((c, i) =>
-              c === " " ? <span key={i} style={{ display: "inline-block", width: 18 }} /> : (
+              c === " " ? <span key={i} style={{ display: "inline-block", width: isMobile ? 10 : 18 }} /> : (
                 <span key={i} className="ltr" style={{ display: "inline-block", color: i < 5 ? BLUE : "#fff" }}>
                   {c}
                 </span>
@@ -271,17 +334,21 @@ export default function BayanRunInfo() {
 
           <p style={{
             fontFamily: "'Inter', sans-serif",
-            fontSize: 13, color: "#ffffff",
-            letterSpacing: "0.18em", textTransform: "uppercase",
-            fontWeight: 600, margin: 0,
+            fontSize: isMobile ? 10 : 13,
+            color: "#ffffff",
+            letterSpacing: "0.18em",
+            textTransform: "uppercase",
+            fontWeight: 600,
+            margin: 0,
+            textAlign: "center",
           }}>
             Informasi & Ketentuan Lomba · Balikpapan, Kalimantan Timur
           </p>
         </div>
       </div>
 
-      {/* ── TICKER — banner-style (gray bg, large Bebas Neue, blue + red) ── */}
-      <div className="relative bg-gray-200 py-6 md:py-8 overflow-hidden">
+      {/* ── TICKER ── */}
+      <div className="relative bg-gray-200 py-4 md:py-6 lg:py-8 overflow-hidden">
         <div
           ref={topTextRef}
           className="flex whitespace-nowrap"
@@ -289,35 +356,35 @@ export default function BayanRunInfo() {
         >
           {[...Array(4)].map((_, index) => (
             <div key={index} className="flex items-center flex-shrink-0">
-              <span className="text-3xl md:text-5xl lg:text-5xl font-black text-blue-900 tracking-tight uppercase mx-8">
+              <span className="text-2xl md:text-4xl lg:text-5xl font-black text-blue-900 tracking-tight uppercase mx-6 md:mx-8">
                 THE NEXT LEVEL
               </span>
-              <span className="text-3xl md:text-5xl lg:text-7xl font-black text-blue-900 mx-4">•</span>
-              <span className="text-3xl md:text-5xl lg:text-5xl font-black text-red-600 tracking-tight uppercase mx-8">
+              <span className="text-2xl md:text-4xl lg:text-7xl font-black text-blue-900 mx-3 md:mx-4">•</span>
+              <span className="text-2xl md:text-4xl lg:text-5xl font-black text-red-600 tracking-tight uppercase mx-6 md:mx-8">
                 KEEP MOVING KEEP STRONG
               </span>
-              <span className="text-3xl md:text-5xl lg:text-7xl font-black text-red-600 mx-4">•</span>
+              <span className="text-2xl md:text-4xl lg:text-7xl font-black text-red-600 mx-3 md:mx-4">•</span>
             </div>
           ))}
         </div>
       </div>
 
       {/* ── MAIN ── */}
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 40px" }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: `0 clamp(16px, 4vw, 40px)` }}>
 
         {/* ── NOTICE ── */}
         <div style={{
-          margin: "52px 0",
+          margin: isMobile ? "32px 0" : "52px 0",
           border: `1px solid ${BLUE_BORDER}`, borderLeft: `4px solid ${BLUE}`,
-          borderRadius: 10, padding: "22px 28px", background: BLUE_BG,
-          display: "flex", gap: 16, alignItems: "flex-start",
+          borderRadius: 10, padding: isMobile ? "16px 14px" : "22px 28px", background: BLUE_BG,
+          display: "flex", gap: 12, alignItems: "flex-start",
         }}>
-          <AlertCircle size={20} color={BLUE} style={{ flexShrink: 0, marginTop: 2 }} />
+          <AlertCircle size={18} color={BLUE} style={{ flexShrink: 0, marginTop: 2 }} />
           <div>
-            <p style={{ fontFamily: BEBAS, fontSize: 14, letterSpacing: "0.16em", color: BLUE_TEXT, textTransform: "uppercase", margin: "0 0 6px" }}>
+            <p style={{ fontFamily: BEBAS, fontSize: 13, letterSpacing: "0.16em", color: BLUE_TEXT, textTransform: "uppercase", margin: "0 0 6px" }}>
               Perhatian Penting
             </p>
-            <p style={{ fontSize: 13, color: "#334", lineHeight: 1.75, margin: 0 }}>
+            <p style={{ fontSize: 12, color: "#334", lineHeight: 1.75, margin: 0 }}>
               Peserta wajib membaca, memahami, dan mematuhi segala Informasi Penting, Syarat dan Ketentuan dan
               Peraturan Lomba secara seksama sebelum mengikuti lomba. Syarat, Ketentuan dan Peraturan Lomba
               dibuat untuk menciptakan perlombaan yang sistematis dan teratur, memastikan keselamatan untuk
@@ -327,9 +394,16 @@ export default function BayanRunInfo() {
         </div>
 
         {/* ── KEY RULES ── */}
-        <div ref={rulesRef} style={{ marginBottom: 68 }}>
+        <div ref={rulesRef} style={{ marginBottom: isMobile ? 44 : 68 }}>
           <SL>Aturan Utama</SL>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: 10, marginTop: 20 }}>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: isMobile
+              ? "repeat(2, 1fr)"
+              : "repeat(auto-fit, minmax(200px, 1fr))",
+            gap: 10,
+            marginTop: 20,
+          }}>
             {importantRules.map((r, i) => (
               <div
                 key={i}
@@ -350,70 +424,104 @@ export default function BayanRunInfo() {
                   el.style.boxShadow = "none";
                 }}
               >
-                <div style={{ padding: "10px 14px", background: r.bg, borderBottom: "1px solid #E8F0FB", display: "flex", alignItems: "center", gap: 8 }}>
-                  <div style={{ width: 26, height: 26, borderRadius: 6, background: r.color + "18", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <r.icon size={14} color={r.color} />
+                <div style={{ padding: "10px 12px", background: r.bg, borderBottom: "1px solid #E8F0FB", display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                  <div style={{ width: 24, height: 24, borderRadius: 6, background: r.color + "18", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <r.icon size={13} color={r.color} />
                   </div>
-                  <h3 style={{ fontFamily: BEBAS, fontSize: 14, letterSpacing: "0.12em", textTransform: "uppercase", margin: 0, color: r.color }}>
+                  <h3 style={{ fontFamily: BEBAS, fontSize: 13, letterSpacing: "0.12em", textTransform: "uppercase", margin: 0, color: r.color }}>
                     {r.title}
                   </h3>
-                  <StatusBadge label={r.tag} color={r.color} bg={r.bg} border={r.color + "30"} />
+                  {!isMobile && <StatusBadge label={r.tag} color={r.color} bg={r.bg} border={r.color + "30"} />}
                 </div>
-                <p style={{ fontSize: 12, color: "#556", lineHeight: 1.65, margin: 0, padding: "12px 14px" }}>{r.desc}</p>
+                <p style={{ fontSize: 11, color: "#556", lineHeight: 1.65, margin: 0, padding: "10px 12px" }}>{r.desc}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* ── CATEGORIES ── */}
-        <div style={{ marginBottom: 68 }}>
+        <div style={{ marginBottom: isMobile ? 44 : 68 }}>
           <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 20 }}>
             <SL>Kategori Lomba</SL>
             <Award size={16} color={BLUE} />
           </div>
-          <div ref={catsRef} style={{ border: "1px solid #DDEAF8", borderRadius: 10, overflow: "hidden" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "36px 76px 1fr 120px 100px 1fr", gap: 0, background: "#F0F6FF", borderBottom: "1px solid #DDEAF8", padding: "8px 16px" }}>
-              {["#", "Kode", "Nama Kategori", "Usia", "COT", "Tags"].map((h, i) => (
-                <span key={i} style={{ fontFamily: BEBAS, fontSize: 12, color: "#8E9BAE", textTransform: "uppercase", letterSpacing: "0.14em" }}>{h}</span>
+
+          {/* Mobile: card layout */}
+          {isMobile ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {categories.map((cat, i) => (
+                <CategoryCard key={i} cat={cat} />
               ))}
             </div>
-            {categories.map((cat, i) => (
-              <div
-                key={i}
-                className="cat-row"
-                style={{
-                  display: "grid", gridTemplateColumns: "36px 76px 1fr 120px 100px 1fr",
-                  alignItems: "center", padding: "11px 16px",
-                  background: "#fff",
-                  borderTop: i > 0 ? "1px solid #F0F4FA" : "none",
-                  borderRight: "none", borderBottom: "none",
-                  borderLeft: "3px solid #D8E4F5",
-                  cursor: "default", transition: "background 0.12s",
-                }}
-                onMouseEnter={(e) => onCatEnter(e.currentTarget, cat.color)}
-                onMouseLeave={(e) => onCatLeave(e.currentTarget)}
-              >
-                <span className="cat-num" style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.1em", color: "#BCC8DC", fontVariantNumeric: "tabular-nums" }}>{cat.num}</span>
-                <div style={{ background: cat.bg, border: `1px solid ${cat.border}`, borderRadius: 4, padding: "2px 9px", width: "fit-content" }}>
-                  <span style={{ fontFamily: BEBAS, fontSize: 12, color: cat.textColor, letterSpacing: "0.08em" }}>{cat.sub}</span>
-                </div>
-                <span style={{ fontFamily: BEBAS, fontSize: 17, letterSpacing: "0.01em", color: "#111" }}>{cat.title}</span>
-                <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, color: "#778" }}><Users size={11} />{cat.age}</span>
-                <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, color: "#778" }}><Clock size={11} />COT {cat.cutoff}</span>
-                <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
-                  {cat.tags.map((tag, j) => (
-                    <span key={j} style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#8E9BAE", border: "1px solid #D8E4F5", borderRadius: 3, padding: "2px 7px", background: "#F4F7FB" }}>{tag}</span>
-                  ))}
-                </div>
+          ) : (
+            /* Tablet & Desktop: table layout */
+            <div ref={catsRef} style={{ border: "1px solid #DDEAF8", borderRadius: 10, overflow: "hidden" }}>
+              {/* Header */}
+              <div style={{
+                display: "grid",
+                gridTemplateColumns: isTablet ? catTabletCols : catDesktopCols,
+                gap: 0,
+                background: "#F0F6FF",
+                borderBottom: "1px solid #DDEAF8",
+                padding: "8px 16px",
+              }}>
+                {(isTablet
+                  ? ["#", "Kode", "Nama Kategori", "COT"]
+                  : ["#", "Kode", "Nama Kategori", "Usia", "COT", "Tags"]
+                ).map((h, i) => (
+                  <span key={i} style={{ fontFamily: BEBAS, fontSize: 12, color: "#8E9BAE", textTransform: "uppercase", letterSpacing: "0.14em" }}>{h}</span>
+                ))}
               </div>
-            ))}
-          </div>
+              {/* Rows */}
+              {categories.map((cat, i) => (
+                <div
+                  key={i}
+                  className="cat-row"
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: isTablet ? catTabletCols : catDesktopCols,
+                    alignItems: "center",
+                    padding: "11px 16px",
+                    background: "#fff",
+                    borderTop: i > 0 ? "1px solid #F0F4FA" : "none",
+                    borderRight: "none", borderBottom: "none",
+                    borderLeft: "3px solid #D8E4F5",
+                    cursor: "default", transition: "background 0.12s",
+                  }}
+                  onMouseEnter={(e) => onCatEnter(e.currentTarget, cat.color)}
+                  onMouseLeave={(e) => onCatLeave(e.currentTarget)}
+                >
+                  <span className="cat-num" style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.1em", color: "#BCC8DC", fontVariantNumeric: "tabular-nums" }}>{cat.num}</span>
+                  <div style={{ background: cat.bg, border: `1px solid ${cat.border}`, borderRadius: 4, padding: "2px 9px", width: "fit-content" }}>
+                    <span style={{ fontFamily: BEBAS, fontSize: 12, color: cat.textColor, letterSpacing: "0.08em" }}>{cat.sub}</span>
+                  </div>
+                  <span style={{ fontFamily: BEBAS, fontSize: 16, letterSpacing: "0.01em", color: "#111" }}>{cat.title}</span>
+                  {!isTablet && (
+                    <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, color: "#778" }}><Users size={11} />{cat.age}</span>
+                  )}
+                  <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, color: "#778" }}><Clock size={11} />COT {cat.cutoff}</span>
+                  {!isTablet && (
+                    <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+                      {cat.tags.map((tag, j) => (
+                        <span key={j} style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#8E9BAE", border: "1px solid #D8E4F5", borderRadius: 3, padding: "2px 7px", background: "#F4F7FB" }}>{tag}</span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* ── PENDAFTARAN & PERATURAN ── */}
-        <div ref={regRef} style={{ marginBottom: 68 }}>
+        <div ref={regRef} style={{ marginBottom: isMobile ? 44 : 68 }}>
           <SL>Pendaftaran & Peraturan</SL>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(290px, 1fr))", gap: 12, marginTop: 20 }}>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(270px, 1fr))",
+            gap: 12,
+            marginTop: 20,
+          }}>
             <div className="reg-panel" style={{ background: "#fff", border: "1px solid #DDEAF8", borderRadius: 10, overflow: "hidden" }}>
               <PanelHeader icon={<CheckCircle size={14} color={BLUE} />} bg={BLUE_BG} color={BLUE} border={BLUE_BORDER} label="Pendaftaran" />
               <BulletList color={BLUE} items={[
@@ -452,39 +560,87 @@ export default function BayanRunInfo() {
         </div>
 
         {/* ── COT TABLE ── */}
-        <div style={{ marginBottom: 68 }}>
+        <div style={{ marginBottom: isMobile ? 44 : 68 }}>
           <SL>Waktu Cut-Off</SL>
-          <div style={{ border: "1px solid #DDEAF8", borderRadius: 10, overflow: "hidden", marginTop: 20 }}>
-            <div style={{ display: "grid", gridTemplateColumns: "36px 76px 1fr 120px 110px", background: "#F0F6FF", borderBottom: "1px solid #DDEAF8", padding: "8px 16px" }}>
-              {["#", "Kode", "Kategori", "Usia", "Cut-Off Time"].map((h, i) => (
-                <span key={i} style={{ fontFamily: BEBAS, fontSize: 12, color: "#8E9BAE", textTransform: "uppercase", letterSpacing: "0.14em" }}>{h}</span>
+
+          {/* Mobile: card layout */}
+          {isMobile ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 20 }}>
+              {categories.map((cat, i) => (
+                <div
+                  key={i}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 10,
+                    background: "#fff",
+                    border: "1px solid #DDEAF8",
+                    borderLeft: `4px solid ${cat.color}`,
+                    borderRadius: 10,
+                    padding: "12px 14px",
+                  }}
+                >
+                  <div style={{ background: cat.bg, border: `1px solid ${cat.border}`, borderRadius: 4, padding: "2px 9px", flexShrink: 0 }}>
+                    <span style={{ fontFamily: BEBAS, fontSize: 12, color: cat.textColor }}>{cat.sub}</span>
+                  </div>
+                  <span style={{ fontFamily: BEBAS, fontSize: 15, color: "#111", flex: 1 }}>{cat.title}</span>
+                  <div style={{ display: "inline-flex", alignItems: "center", gap: 5, background: cat.bg, border: `1px solid ${cat.border}`, borderRadius: 6, padding: "4px 10px", flexShrink: 0 }}>
+                    <Timer size={11} color={cat.color} />
+                    <span style={{ fontFamily: BEBAS, fontSize: 14, color: cat.textColor }}>{cat.cutoff}</span>
+                  </div>
+                </div>
               ))}
             </div>
-            {categories.map((cat, i) => (
-              <div
-                key={i}
-                style={{
-                  display: "grid", gridTemplateColumns: "36px 76px 1fr 120px 110px",
-                  alignItems: "center", padding: "11px 16px",
-                  background: "#fff", borderTop: i > 0 ? "1px solid #F0F4FA" : "none",
-                  cursor: "default", transition: "background 0.12s",
-                }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#F4F7FB"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "#fff"; }}
-              >
-                <span style={{ fontSize: 10, color: "#BCC8DC", fontFamily: "monospace", fontWeight: 700 }}>{cat.num}</span>
-                <div style={{ background: cat.bg, border: `1px solid ${cat.border}`, borderRadius: 4, padding: "2px 9px", width: "fit-content" }}>
-                  <span style={{ fontFamily: BEBAS, fontSize: 12, color: cat.textColor }}>{cat.sub}</span>
-                </div>
-                <div style={{ fontFamily: BEBAS, fontSize: 17, letterSpacing: "0.01em", color: "#111" }}>{cat.title}</div>
-                <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, color: "#778" }}><Users size={11} />{cat.age}</span>
-                <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: cat.bg, border: `1px solid ${cat.border}`, borderRadius: 6, padding: "5px 10px", width: "fit-content" }}>
-                  <Timer size={12} color={cat.color} />
-                  <span style={{ fontFamily: BEBAS, fontSize: 15, letterSpacing: "0.04em", color: cat.textColor }}>{cat.cutoff}</span>
-                </div>
+          ) : (
+            /* Tablet & Desktop: table layout */
+            <div style={{ border: "1px solid #DDEAF8", borderRadius: 10, overflow: "hidden", marginTop: 20 }}>
+              <div style={{
+                display: "grid",
+                gridTemplateColumns: isTablet ? cotTabletCols : cotDesktopCols,
+                background: "#F0F6FF",
+                borderBottom: "1px solid #DDEAF8",
+                padding: "8px 16px",
+              }}>
+                {(isTablet
+                  ? ["#", "Kode", "Kategori", "Cut-Off Time"]
+                  : ["#", "Kode", "Kategori", "Usia", "Cut-Off Time"]
+                ).map((h, i) => (
+                  <span key={i} style={{ fontFamily: BEBAS, fontSize: 12, color: "#8E9BAE", textTransform: "uppercase", letterSpacing: "0.14em" }}>{h}</span>
+                ))}
               </div>
-            ))}
-          </div>
+              {categories.map((cat, i) => (
+                <div
+                  key={i}
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: isTablet ? cotTabletCols : cotDesktopCols,
+                    alignItems: "center",
+                    padding: "11px 16px",
+                    background: "#fff",
+                    borderTop: i > 0 ? "1px solid #F0F4FA" : "none",
+                    cursor: "default",
+                    transition: "background 0.12s",
+                  }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#F4F7FB"; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "#fff"; }}
+                >
+                  <span style={{ fontSize: 10, color: "#BCC8DC", fontFamily: "monospace", fontWeight: 700 }}>{cat.num}</span>
+                  <div style={{ background: cat.bg, border: `1px solid ${cat.border}`, borderRadius: 4, padding: "2px 9px", width: "fit-content" }}>
+                    <span style={{ fontFamily: BEBAS, fontSize: 12, color: cat.textColor }}>{cat.sub}</span>
+                  </div>
+                  <div style={{ fontFamily: BEBAS, fontSize: 16, letterSpacing: "0.01em", color: "#111" }}>{cat.title}</div>
+                  {!isTablet && (
+                    <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, color: "#778" }}><Users size={11} />{cat.age}</span>
+                  )}
+                  <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: cat.bg, border: `1px solid ${cat.border}`, borderRadius: 6, padding: "5px 10px", width: "fit-content" }}>
+                    <Timer size={12} color={cat.color} />
+                    <span style={{ fontFamily: BEBAS, fontSize: 15, letterSpacing: "0.04em", color: cat.textColor }}>{cat.cutoff}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
           <p style={{ fontSize: 11, color: "#AAB8CC", marginTop: 10, fontStyle: "italic" }}>
             * Peserta yang melebihi COT tidak dianggap sebagai finisher dan tidak menerima medali maupun finisher shirt
           </p>
