@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  Award, Clock, MapPin, Users,
+  Award, Clock, Users,
   AlertCircle, CheckCircle, Zap, Shield, ChevronRight, Timer, Package,
 } from "lucide-react";
 import React, { useRef, useEffect } from "react";
@@ -10,15 +10,17 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const BLUE = "#1D5FD4";
-const BLUE_BG = "#EEF4FF";
+const BLUE        = "#1D5FD4";
+const BLUE_BG     = "#EEF4FF";
 const BLUE_BORDER = "#C5D9F8";
-const BLUE_TEXT = "#0C3E9B";
+const BLUE_TEXT   = "#0C3E9B";
+const RED         = "#DC2626";
+const RED_TEXT    = "#991B1B";
+const RED_BG      = "#FEF2F2";
+const RED_BORDER  = "#FECACA";
+const BEBAS       = "'Bebas Neue', Arial Black, sans-serif";
 
-const RED       = "#DC2626";
-const RED_TEXT  = "#991B1B";
-const RED_BG    = "#FEF2F2";
-const RED_BORDER= "#FECACA";
+const VIDEO_SRC = "https://res.cloudinary.com/djs5pi7ev/video/upload/v1775095878/about-video_pmag3j.mp4";
 
 const categories = [
   { title: "Half Marathon", sub: "21K",    age: "17+ tahun",   cutoff: "4 Jam",    color: BLUE,      textColor: BLUE_TEXT, bg: BLUE_BG,    border: BLUE_BORDER, tags: ["Nasional", "Medal", "Finisher Shirt"], num: "01" },
@@ -35,8 +37,19 @@ const importantRules = [
   { icon: Clock,       title: "Cut-Off Time",    desc: "Wajib finish sebelum waktu COT untuk mendapat medali",           color: "#0B6B8A", bg: "#E3F2F7", tag: "REQUIRED" },
 ];
 
-const TICKER_TEXT = "BAYAN RUN 2026 · BALIKPAPAN · 12 OKTOBER 2026 · HALF MARATHON · 10K · 5K · KIDS RUN · ";
+// ─── Google Font loader ───────────────────────────────────────────────────────
+function useBayanFont() {
+  useEffect(() => {
+    if (document.getElementById("bayan-run-font")) return;
+    const link = document.createElement("link");
+    link.id = "bayan-run-font";
+    link.rel = "stylesheet";
+    link.href = "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&display=swap";
+    document.head.appendChild(link);
+  }, []);
+}
 
+// ─── Sub-components ───────────────────────────────────────────────────────────
 function StatusBadge({ label, color, bg, border }: { label: string; color: string; bg: string; border: string }) {
   return (
     <span style={{
@@ -44,7 +57,9 @@ function StatusBadge({ label, color, bg, border }: { label: string; color: strin
       fontSize: 9, fontWeight: 800, letterSpacing: "0.16em", textTransform: "uppercase",
       color, background: bg, border: `1px solid ${border}`,
       borderRadius: 3, padding: "2px 8px",
-    }}>{label}</span>
+    }}>
+      {label}
+    </span>
   );
 }
 
@@ -52,7 +67,7 @@ function SL({ children }: { children: React.ReactNode }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
       <div style={{ width: 3, height: 17, background: BLUE, borderRadius: 2 }} />
-      <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.2em", textTransform: "uppercase", color: "#8E9BAE" }}>
+      <span style={{ fontFamily: BEBAS, fontSize: 14, letterSpacing: "0.22em", textTransform: "uppercase", color: "#8E9BAE" }}>
         {children}
       </span>
     </div>
@@ -65,7 +80,7 @@ function PanelHeader({ icon, bg, color, border, label }: { icon: React.ReactNode
       <div style={{ width: 26, height: 26, borderRadius: 6, background: color + "18", display: "flex", alignItems: "center", justifyContent: "center" }}>
         {icon}
       </div>
-      <h3 style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color, margin: 0 }}>
+      <h3 style={{ fontFamily: BEBAS, fontSize: 14, letterSpacing: "0.16em", textTransform: "uppercase", color, margin: 0 }}>
         {label}
       </h3>
     </div>
@@ -85,23 +100,38 @@ function BulletList({ items, color }: { items: string[]; color: string }) {
   );
 }
 
+// ─── Main Component ───────────────────────────────────────────────────────────
 export default function BayanRunInfo() {
+  useBayanFont();
+
   const containerRef = useRef<HTMLDivElement>(null);
   const titleRef     = useRef<HTMLHeadingElement>(null);
-  const tickerRef    = useRef<HTMLDivElement>(null);
+  const topTextRef   = useRef<HTMLDivElement>(null);
   const rulesRef     = useRef<HTMLDivElement>(null);
   const catsRef      = useRef<HTMLDivElement>(null);
   const regRef       = useRef<HTMLDivElement>(null);
 
+  // ── Banner-style ticker animation ──────────────────────────────────────────
+  useEffect(() => {
+    const topText = topTextRef.current;
+    if (topText) {
+      gsap.fromTo(topText,
+        { x: "-50%" },
+        { x: "0%", duration: 20, ease: "none", repeat: -1 }
+      );
+    }
+    return () => {
+      gsap.killTweensOf(topTextRef.current);
+    };
+  }, []);
+
+  // ── Scroll-triggered animations ────────────────────────────────────────────
   useEffect(() => {
     const ctx = gsap.context(() => {
       if (titleRef.current) {
         const letters = titleRef.current.querySelectorAll<HTMLElement>(".ltr");
         gsap.set(letters, { opacity: 0, y: 90, rotateX: -75 });
         gsap.to(letters, { opacity: 1, y: 0, rotateX: 0, duration: 0.6, stagger: 0.038, ease: "back.out(1.6)" });
-      }
-      if (tickerRef.current) {
-        gsap.to(tickerRef.current, { x: "-50%", duration: 22, ease: "none", repeat: -1 });
       }
       if (rulesRef.current) {
         const cards = rulesRef.current.querySelectorAll<HTMLElement>(".rule-card");
@@ -152,44 +182,122 @@ export default function BayanRunInfo() {
   };
 
   return (
-    <div ref={containerRef} style={{ minHeight: "100vh", background: "#F4F7FB", color: "#111", fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", overflowX: "hidden" }}>
+    <div
+      ref={containerRef}
+      style={{
+        minHeight: "100vh",
+        background: "#F4F7FB",
+        color: "#111",
+        fontFamily: "'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+        overflowX: "hidden",
+      }}
+    >
 
-      {/* ── HERO ── */}
-      <div style={{ background: "#fff", position: "relative", padding: "80px 40px 60px", borderBottom: "1px solid #DDEAF8", overflow: "hidden" }}>
-        <div style={{ position: "absolute", top: 0, right: 0, width: "52%", height: "100%", background: `repeating-linear-gradient(90deg,transparent,transparent 54px,${BLUE}09 54px,${BLUE}09 55px)`, pointerEvents: "none" }} />
-        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 20 }}>
-            <div style={{ width: 22, height: 22, background: BLUE, borderRadius: 5, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Zap size={12} fill="#fff" stroke="none" />
-            </div>
-            <span style={{ fontFamily: "monospace", fontSize: 12, color: "#8E9BAE" }}>bayan-run</span>
-            <span style={{ color: "#C8D5E8", fontSize: 16 }}>/</span>
-            <span style={{ fontFamily: "monospace", fontSize: 12, color: "#8E9BAE" }}>event-docs</span>
-            <span style={{ fontSize: 9, fontWeight: 800, background: BLUE, color: "#fff", borderRadius: 3, padding: "2px 7px", letterSpacing: "0.1em" }}>2026</span>
-          </div>
+      {/* ── HERO with video background ── */}
+        <div style={{
+          position: "relative",
+          width: "100%",
+          height: "100vh",
+          minHeight: 600,
+          overflow: "hidden",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}>
+        {/* Background video */}
+        <video
+          src={VIDEO_SRC}
+          autoPlay
+          loop
+          muted
+          playsInline
+          style={{
+            position: "absolute", inset: 0,
+            width: "100%", height: "100%",
+            objectFit: "cover", zIndex: 0,
+          }}
+        />
+        {/* Dark overlay */}
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "rgba(0,0,0,0.58)", zIndex: 1,
+          pointerEvents: "none",
+        }} />
+        {/* Grid overlay */}
+        <div style={{
+          position: "absolute", top: 0, right: 0, width: "52%", height: "100%",
+          background: `repeating-linear-gradient(90deg,transparent,transparent 54px,${BLUE}09 54px,${BLUE}09 55px)`,
+          pointerEvents: "none", zIndex: 2,
+        }} />
+
+        <div style={{
+          maxWidth: 1100,
+          margin: "0 auto",
+          position: "relative",
+          zIndex: 3,
+          textAlign: "center",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 18,
+        }}>
+
+          {/* Title — Bebas Neue */}
           <h1
             ref={titleRef}
-            style={{ fontSize: "clamp(50px, 10vw, 112px)", fontWeight: 900, lineHeight: 0.9, letterSpacing: "-0.04em", margin: "0 0 18px", textTransform: "uppercase", perspective: "700px", display: "flex", flexWrap: "wrap", gap: "0 5px" }}
+            style={{
+              fontFamily: BEBAS,
+              fontSize: "clamp(60px, 11vw, 108px)",
+              fontWeight: 400,
+              lineHeight: 0.92,
+              letterSpacing: "0.01em",
+              margin: "0 0 18px",
+              textTransform: "uppercase",
+              perspective: "700px",
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "0 6px",
+              color: "#fff",
+            }}
           >
             {"BAYAN RUN 2026".split("").map((c, i) =>
-              c === " " ? <span key={i} style={{ display: "inline-block", width: 16 }} /> : (
-                <span key={i} className="ltr" style={{ display: "inline-block", color: i < 5 ? BLUE : "#1a2540" }}>{c}</span>
+              c === " " ? <span key={i} style={{ display: "inline-block", width: 18 }} /> : (
+                <span key={i} className="ltr" style={{ display: "inline-block", color: i < 5 ? BLUE : "#fff" }}>
+                  {c}
+                </span>
               )
             )}
           </h1>
-          <p style={{ fontSize: 13, color: "#8E9BAE", letterSpacing: "0.14em", textTransform: "uppercase", fontWeight: 600, margin: 0 }}>
+
+          <p style={{
+            fontFamily: "'Inter', sans-serif",
+            fontSize: 13, color: "#ffffff",
+            letterSpacing: "0.18em", textTransform: "uppercase",
+            fontWeight: 600, margin: 0,
+          }}>
             Informasi & Ketentuan Lomba · Balikpapan, Kalimantan Timur
           </p>
         </div>
       </div>
 
-      {/* ── TICKER ── */}
-      <div style={{ background: BLUE, padding: "9px 0", overflow: "hidden", whiteSpace: "nowrap" }}>
-        <div ref={tickerRef} style={{ display: "inline-flex" }}>
-          {[0, 1, 2, 3].map((i) => (
-            <span key={i} style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", color: "#fff" }}>
-              {TICKER_TEXT}
-            </span>
+      {/* ── TICKER — banner-style (gray bg, large Bebas Neue, blue + red) ── */}
+      <div className="relative bg-gray-200 py-6 md:py-8 overflow-hidden">
+        <div
+          ref={topTextRef}
+          className="flex whitespace-nowrap"
+          style={{ width: "200%" }}
+        >
+          {[...Array(4)].map((_, index) => (
+            <div key={index} className="flex items-center flex-shrink-0">
+              <span className="text-3xl md:text-5xl lg:text-5xl font-black text-blue-900 tracking-tight uppercase mx-8">
+                THE NEXT LEVEL
+              </span>
+              <span className="text-3xl md:text-5xl lg:text-7xl font-black text-blue-900 mx-4">•</span>
+              <span className="text-3xl md:text-5xl lg:text-5xl font-black text-red-600 tracking-tight uppercase mx-8">
+                KEEP MOVING KEEP STRONG
+              </span>
+              <span className="text-3xl md:text-5xl lg:text-7xl font-black text-red-600 mx-4">•</span>
+            </div>
           ))}
         </div>
       </div>
@@ -198,12 +306,22 @@ export default function BayanRunInfo() {
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 40px" }}>
 
         {/* ── NOTICE ── */}
-        <div style={{ margin: "52px 0", border: `1px solid ${BLUE_BORDER}`, borderLeft: `4px solid ${BLUE}`, borderRadius: 10, padding: "22px 28px", background: BLUE_BG, display: "flex", gap: 16, alignItems: "flex-start" }}>
+        <div style={{
+          margin: "52px 0",
+          border: `1px solid ${BLUE_BORDER}`, borderLeft: `4px solid ${BLUE}`,
+          borderRadius: 10, padding: "22px 28px", background: BLUE_BG,
+          display: "flex", gap: 16, alignItems: "flex-start",
+        }}>
           <AlertCircle size={20} color={BLUE} style={{ flexShrink: 0, marginTop: 2 }} />
           <div>
-            <p style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.2em", color: BLUE_TEXT, textTransform: "uppercase", margin: "0 0 6px" }}>Perhatian Penting</p>
+            <p style={{ fontFamily: BEBAS, fontSize: 14, letterSpacing: "0.16em", color: BLUE_TEXT, textTransform: "uppercase", margin: "0 0 6px" }}>
+              Perhatian Penting
+            </p>
             <p style={{ fontSize: 13, color: "#334", lineHeight: 1.75, margin: 0 }}>
-              Peserta wajib membaca, memahami, dan mematuhi segala Informasi Penting, Syarat dan Ketentuan dan Peraturan Lomba secara seksama sebelum mengikuti lomba. Syarat, Ketentuan dan Peraturan Lomba dibuat untuk menciptakan perlombaan yang sistematis dan teratur, memastikan keselamatan untuk seluruh pihak yang terlibat, terutama keselamatan peserta lomba.
+              Peserta wajib membaca, memahami, dan mematuhi segala Informasi Penting, Syarat dan Ketentuan dan
+              Peraturan Lomba secara seksama sebelum mengikuti lomba. Syarat, Ketentuan dan Peraturan Lomba
+              dibuat untuk menciptakan perlombaan yang sistematis dan teratur, memastikan keselamatan untuk
+              seluruh pihak yang terlibat, terutama keselamatan peserta lomba.
             </p>
           </div>
         </div>
@@ -216,15 +334,29 @@ export default function BayanRunInfo() {
               <div
                 key={i}
                 className="rule-card"
-                style={{ background: "#fff", border: "1px solid #DDEAF8", borderRadius: 10, overflow: "hidden", transition: "border-color 0.2s, box-shadow 0.2s", cursor: "default" }}
-                onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = r.color + "55"; el.style.boxShadow = `0 4px 18px ${r.color}14`; }}
-                onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "#DDEAF8"; el.style.boxShadow = "none"; }}
+                style={{
+                  background: "#fff", border: "1px solid #DDEAF8",
+                  borderRadius: 10, overflow: "hidden",
+                  transition: "border-color 0.2s, box-shadow 0.2s", cursor: "default",
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLElement;
+                  el.style.borderColor = r.color + "55";
+                  el.style.boxShadow = `0 4px 18px ${r.color}14`;
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLElement;
+                  el.style.borderColor = "#DDEAF8";
+                  el.style.boxShadow = "none";
+                }}
               >
                 <div style={{ padding: "10px 14px", background: r.bg, borderBottom: "1px solid #E8F0FB", display: "flex", alignItems: "center", gap: 8 }}>
                   <div style={{ width: 26, height: 26, borderRadius: 6, background: r.color + "18", display: "flex", alignItems: "center", justifyContent: "center" }}>
                     <r.icon size={14} color={r.color} />
                   </div>
-                  <h3 style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", margin: 0, color: r.color }}>{r.title}</h3>
+                  <h3 style={{ fontFamily: BEBAS, fontSize: 14, letterSpacing: "0.12em", textTransform: "uppercase", margin: 0, color: r.color }}>
+                    {r.title}
+                  </h3>
                   <StatusBadge label={r.tag} color={r.color} bg={r.bg} border={r.color + "30"} />
                 </div>
                 <p style={{ fontSize: 12, color: "#556", lineHeight: 1.65, margin: 0, padding: "12px 14px" }}>{r.desc}</p>
@@ -242,7 +374,7 @@ export default function BayanRunInfo() {
           <div ref={catsRef} style={{ border: "1px solid #DDEAF8", borderRadius: 10, overflow: "hidden" }}>
             <div style={{ display: "grid", gridTemplateColumns: "36px 76px 1fr 120px 100px 1fr", gap: 0, background: "#F0F6FF", borderBottom: "1px solid #DDEAF8", padding: "8px 16px" }}>
               {["#", "Kode", "Nama Kategori", "Usia", "COT", "Tags"].map((h, i) => (
-                <span key={i} style={{ fontSize: 9, fontWeight: 800, color: "#8E9BAE", textTransform: "uppercase", letterSpacing: "0.12em" }}>{h}</span>
+                <span key={i} style={{ fontFamily: BEBAS, fontSize: 12, color: "#8E9BAE", textTransform: "uppercase", letterSpacing: "0.14em" }}>{h}</span>
               ))}
             </div>
             {categories.map((cat, i) => (
@@ -253,21 +385,19 @@ export default function BayanRunInfo() {
                   display: "grid", gridTemplateColumns: "36px 76px 1fr 120px 100px 1fr",
                   alignItems: "center", padding: "11px 16px",
                   background: "#fff",
-                  borderTop:    i > 0 ? "1px solid #F0F4FA" : "none",
-                  borderRight:  "none",
-                  borderBottom: "none",
-                  borderLeft:   "3px solid #D8E4F5",
-                  cursor: "default",
-                  transition: "background 0.12s",
+                  borderTop: i > 0 ? "1px solid #F0F4FA" : "none",
+                  borderRight: "none", borderBottom: "none",
+                  borderLeft: "3px solid #D8E4F5",
+                  cursor: "default", transition: "background 0.12s",
                 }}
                 onMouseEnter={(e) => onCatEnter(e.currentTarget, cat.color)}
                 onMouseLeave={(e) => onCatLeave(e.currentTarget)}
               >
                 <span className="cat-num" style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.1em", color: "#BCC8DC", fontVariantNumeric: "tabular-nums" }}>{cat.num}</span>
                 <div style={{ background: cat.bg, border: `1px solid ${cat.border}`, borderRadius: 4, padding: "2px 9px", width: "fit-content" }}>
-                  <span style={{ fontSize: 10, fontWeight: 900, color: cat.textColor, letterSpacing: "0.08em", fontFamily: "monospace" }}>{cat.sub}</span>
+                  <span style={{ fontFamily: BEBAS, fontSize: 12, color: cat.textColor, letterSpacing: "0.08em" }}>{cat.sub}</span>
                 </div>
-                <span style={{ fontSize: 14, fontWeight: 800, letterSpacing: "-0.02em", color: "#111" }}>{cat.title}</span>
+                <span style={{ fontFamily: BEBAS, fontSize: 17, letterSpacing: "0.01em", color: "#111" }}>{cat.title}</span>
                 <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, color: "#778" }}><Users size={11} />{cat.age}</span>
                 <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, color: "#778" }}><Clock size={11} />COT {cat.cutoff}</span>
                 <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
@@ -321,13 +451,13 @@ export default function BayanRunInfo() {
           </div>
         </div>
 
-        {/* ── COT ── */}
+        {/* ── COT TABLE ── */}
         <div style={{ marginBottom: 68 }}>
           <SL>Waktu Cut-Off</SL>
           <div style={{ border: "1px solid #DDEAF8", borderRadius: 10, overflow: "hidden", marginTop: 20 }}>
             <div style={{ display: "grid", gridTemplateColumns: "36px 76px 1fr 120px 110px", background: "#F0F6FF", borderBottom: "1px solid #DDEAF8", padding: "8px 16px" }}>
               {["#", "Kode", "Kategori", "Usia", "Cut-Off Time"].map((h, i) => (
-                <span key={i} style={{ fontSize: 9, fontWeight: 800, color: "#8E9BAE", textTransform: "uppercase", letterSpacing: "0.12em" }}>{h}</span>
+                <span key={i} style={{ fontFamily: BEBAS, fontSize: 12, color: "#8E9BAE", textTransform: "uppercase", letterSpacing: "0.14em" }}>{h}</span>
               ))}
             </div>
             {categories.map((cat, i) => (
@@ -336,8 +466,7 @@ export default function BayanRunInfo() {
                 style={{
                   display: "grid", gridTemplateColumns: "36px 76px 1fr 120px 110px",
                   alignItems: "center", padding: "11px 16px",
-                  background: "#fff",
-                  borderTop: i > 0 ? "1px solid #F0F4FA" : "none",
+                  background: "#fff", borderTop: i > 0 ? "1px solid #F0F4FA" : "none",
                   cursor: "default", transition: "background 0.12s",
                 }}
                 onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#F4F7FB"; }}
@@ -345,15 +474,13 @@ export default function BayanRunInfo() {
               >
                 <span style={{ fontSize: 10, color: "#BCC8DC", fontFamily: "monospace", fontWeight: 700 }}>{cat.num}</span>
                 <div style={{ background: cat.bg, border: `1px solid ${cat.border}`, borderRadius: 4, padding: "2px 9px", width: "fit-content" }}>
-                  <span style={{ fontSize: 10, fontWeight: 900, color: cat.textColor, fontFamily: "monospace" }}>{cat.sub}</span>
+                  <span style={{ fontFamily: BEBAS, fontSize: 12, color: cat.textColor }}>{cat.sub}</span>
                 </div>
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: "#111" }}>{cat.title}</div>
-                </div>
+                <div style={{ fontFamily: BEBAS, fontSize: 17, letterSpacing: "0.01em", color: "#111" }}>{cat.title}</div>
                 <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, color: "#778" }}><Users size={11} />{cat.age}</span>
                 <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: cat.bg, border: `1px solid ${cat.border}`, borderRadius: 6, padding: "5px 10px", width: "fit-content" }}>
                   <Timer size={12} color={cat.color} />
-                  <span style={{ fontSize: 13, fontWeight: 800, color: cat.textColor, fontFamily: "monospace" }}>{cat.cutoff}</span>
+                  <span style={{ fontFamily: BEBAS, fontSize: 15, letterSpacing: "0.04em", color: cat.textColor }}>{cat.cutoff}</span>
                 </div>
               </div>
             ))}

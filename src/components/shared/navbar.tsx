@@ -140,11 +140,16 @@ export default function Navbar() {
             {/* Desktop Contact Button */}
             <div className="contact-animate invisible hidden lg:block">
               <Button
-                className={`bg-blue-900  border border-white/20 ${
-                  pathname === "/about"
-                    ? "bg-blue-900 text-white hover:bg-blue-600/80"
-                    : ""
-                } text-lg cursor-pointer`}
+                className={`
+                  text-sm font-black tracking-widest uppercase cursor-pointer
+                  bg-blue-800 hover:bg-blue-700 active:bg-blue-700
+                  border border-blue-400/30
+                  rounded-xl
+                  shadow-[0_0_24px_rgba(59,130,246,0.5)]
+                  hover:shadow-[0_0_40px_rgba(59,130,246,0.7)]
+                  transition-all duration-300
+                  ${pathname === "/about" ? "text-white" : ""}
+                `}
               >
                 Daftar Sekarang
               </Button>
@@ -153,9 +158,18 @@ export default function Navbar() {
             {/* Mobile Hamburger + Contact */}
             <div className="flex items-center gap-4 lg:hidden">
               <Button
-                className=" bg-blue-900 border border-white/20 text-sm px-4 py-1"
+                className="
+                  text-xs font-black tracking-widest uppercase
+                  bg-blue-800 hover:bg-blue-700 active:bg-blue-700
+                  border border-blue-400/30
+                  rounded-xl
+                  shadow-[0_0_24px_rgba(59,130,246,0.5)]
+                  hover:shadow-[0_0_40px_rgba(59,130,246,0.7)]
+                  transition-all duration-300
+                  cursor-pointer
+                "
               >
-               Daftar Sekarang
+                Daftar Sekarang
               </Button>
               <button onClick={toggleMobileMenu} className="">
                 {mobileMenuOpen ? (
@@ -165,7 +179,6 @@ export default function Navbar() {
                 )}
               </button>
             </div>
-
             {/* Mobile Menu */}
             <div
               className={`
