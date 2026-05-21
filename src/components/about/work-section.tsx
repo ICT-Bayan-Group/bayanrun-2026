@@ -1,490 +1,793 @@
 "use client";
 
-import {
-  Building2, Award, Clock, MapPin, Users,
-  AlertCircle, CheckCircle, Zap, Shield,
-} from "lucide-react";
-import React, { useRef, useEffect } from "react";
+import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import ScrollTrigger from "gsap/ScrollTrigger";
+import { Calendar, MapPin, Clock, X, Navigation, ExternalLink } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const categories = [
-  { title: "Half Marathon", sub: "21K",    age: "17+ tahun",   cutoff: "4 Jam",    color: "#D92B1A", tags: ["Nasional", "Medal", "Finisher Shirt"], num: "01" },
-  { title: "10K Run",       sub: "10K",    age: "17+ tahun",   cutoff: "2 Jam",    color: "#C97000", tags: ["Nasional", "Medal"],                    num: "02" },
-  { title: "5K Run",        sub: "5K",     age: "17+ tahun",   cutoff: "1 Jam",    color: "#1A8C38", tags: ["Nasional", "Medal"],                    num: "03" },
-  { title: "5K Teenagers",  sub: "Remaja", age: "13–16 tahun", cutoff: "1 Jam",    color: "#0057B8", tags: ["Remaja", "Medal"],                      num: "04" },
-  { title: "2.5K Kids",     sub: "Anak",   age: "6–12 tahun",  cutoff: "50 Menit", color: "#7B2DB0", tags: ["Anak-anak", "Medal"],                   num: "05" },
+// ── Design Tokens ─────────────────────────────────────────────────────────────
+// Font system — consistent dengan BayanRunInfo.tsx
+const FONT_DISPLAY = "'Bebas Neue', Arial Black, sans-serif";
+const FONT_BODY    = "'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif";
+
+const BLUE        = "#1D5FD4";
+const BLUE_BG     = "#EEF4FF";
+const BLUE_BORDER = "#C5D9F8";
+const BLUE_TEXT   = "#0C3E9B";
+
+// ── Venue definitions ─────────────────────────────────────────────────────────
+const VENUES = [
+  {
+    key: "lapangan",
+    label: "Lapangan Merdeka III",
+    date: "Sunday, 12 October 2026",
+    location: "Lapangan Merdeka III, Balikpapan",
+    color: "#2F4FB8",
+    textColor: "#1A2E7A",
+    bg: "#EEF0FF",
+    border: "#BCC5F4",
+    // Google Maps embed — hanya di-load saat modal dibuka (lazy)
+    mapsEmbed: "https://www.google.com/maps?q=Lapangan%20Merdeka%20Balikpapan&output=embed",
+    // Link untuk buka native Maps app di mobile
+    mapsLink: "https://maps.google.com/?q=Lapangan+Merdeka+Balikpapan",
+    // Static preview image dari Maps (tidak butuh iframe load)
+    mapsStaticPreview: "https://maps.googleapis.com/maps/api/staticmap?center=Lapangan+Merdeka+Balikpapan&zoom=15&size=600x200&markers=color:blue%7CLapangan+Merdeka+Balikpapan",
+    startTimes: [
+      { cat: "Half Marathon", time: "05:30 WITA", cot: "4 Jam",    color: "#1D5FD4", textColor: "#0C3E9B", bg: "#EEF4FF", border: "#C5D9F8" },
+      { cat: "10K",           time: "06:00 WITA", cot: "2 Jam",    color: "#0E7ABF", textColor: "#094F80", bg: "#E6F4FD", border: "#A8D8F5" },
+      { cat: "5K Open",       time: "06:10 WITA", cot: "1 Jam",    color: "#0B6B8A", textColor: "#073E50", bg: "#E3F2F7", border: "#9CD3E4" },
+      { cat: "5K Teens",      time: "06:10 WITA", cot: "1 Jam",    color: "#2F4FB8", textColor: "#1A2E7A", bg: "#EEF0FF", border: "#BCC5F4" },
+    ],
+  },
+  {
+    key: "bscc",
+    label: "BSCC Dome",
+    date: "Friday, 10 October 2026",
+    location: "BSCC Dome, Balikpapan",
+    color: "#DC2626",
+    textColor: "#991B1B",
+    bg: "#FEF2F2",
+    border: "#FECACA",
+    mapsEmbed: "https://www.google.com/maps?q=BSCC+Dome+Balikpapan&output=embed",
+    mapsLink: "https://maps.google.com/?q=BSCC+Dome+Balikpapan",
+    mapsStaticPreview: "https://maps.googleapis.com/maps/api/staticmap?center=BSCC+Dome+Balikpapan&zoom=15&size=600x200&markers=color:red%7CBSCC+Dome+Balikpapan",
+    startTimes: [
+      { cat: "2.5K Kid Dash", time: "06:20 WITA", cot: "50 Menit", color: "#DC2626", textColor: "#991B1B", bg: "#FEF2F2", border: "#FECACA" },
+    ],
+  },
 ];
 
-const importantRules = [
-  { icon: AlertCircle, title: "Non-Refundable",  desc: "Biaya pendaftaran tidak dapat dikembalikan dalam kondisi apapun", color: "#D92B1A", bg: "#FEF0EE" },
-  { icon: Users,       title: "Verifikasi Usia", desc: "Penyelenggara berhak memverifikasi usia peserta kapan saja",     color: "#C97000", bg: "#FEF7EC" },
-  { icon: Shield,      title: "RegNowOnline",    desc: "Pendaftaran hanya melalui website resmi bayanrun.com",           color: "#0057B8", bg: "#EDF3FF" },
-  { icon: Clock,       title: "Cut-Off Time",    desc: "Wajib finish sebelum waktu COT untuk mendapat medali",           color: "#1A8C38", bg: "#EDF7F0" },
+const events = [
+  {
+    id: 1,
+    tag: "Day 1",
+    title: "Racepack Collection",
+    date: "Saturday, 11 October 2025",
+    location: "Gedung Kesenian Balikpapan",
+    mapsLink: "https://maps.google.com/?q=Gedung+Kesenian+Balikpapan",
+    dayTime: "08:00 – 19:00 WITA",
+    video: "/video1.mp4",
+    color: BLUE,
+    textColor: BLUE_TEXT,
+    bg: BLUE_BG,
+    border: BLUE_BORDER,
+    mapsEmbed: "https://www.google.com/maps?q=Gedung%20Kesenian%20Balikpapan&output=embed",
+    isRaceDay: false,
+  },
+  {
+    id: 2,
+    tag: "Race Day",
+    title: "Race Day",
+    date: null,
+    location: null,
+    mapsLink: null,
+    dayTime: null,
+    video: "/video2.mp4",
+    color: "#2F4FB8",
+    textColor: "#1A2E7A",
+    bg: "#EEF0FF",
+    border: "#BCC5F4",
+    mapsEmbed: null,
+    isRaceDay: true,
+  },
 ];
 
-const TICKER_TEXT = "BAYAN RUN 2026 · BALIKPAPAN · 12 OKTOBER 2026 · HALF MARATHON · 10K · 5K · KIDS RUN · ";
+// ── Lazy Map Embed ─────────────────────────────────────────────────────────────
+// Iframe hanya di-mount ke DOM setelah user klik "Lihat Peta"
+// Ini mencegah browser load banyak iframe sekaligus saat halaman pertama render
+function LazyMapEmbed({
+  src,
+  mapsLink,
+  height = 200,
+}: {
+  src: string;
+  mapsLink: string;
+  height?: number;
+}) {
+  const [loaded, setLoaded] = useState(false);
 
-export default function BayanRunInfo() {
-  // Refs for scoped GSAP context
-  const containerRef = useRef<HTMLDivElement>(null);
-  const titleRef     = useRef<HTMLHeadingElement>(null);
-  const tickerRef    = useRef<HTMLDivElement>(null);
-  const rulesRef     = useRef<HTMLDivElement>(null);
-  const catsRef      = useRef<HTMLDivElement>(null);
-  const regRef       = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-
-      // ── 1. Hero title: letter-by-letter entrance ──────────────────────────
-      if (titleRef.current) {
-        const letters = titleRef.current.querySelectorAll<HTMLElement>(".ltr");
-        // Set initial state explicitly first
-        gsap.set(letters, { opacity: 0, y: 90, rotateX: -75 });
-        gsap.to(letters, {
-          opacity: 1,
-          y: 0,
-          rotateX: 0,
-          duration: 0.6,
-          stagger: 0.038,
-          ease: "back.out(1.6)",
-        });
-      }
-
-      // ── 2. Ticker: infinite left scroll ───────────────────────────────────
-      // Use ref instead of class selector to avoid global collisions
-      if (tickerRef.current) {
-        gsap.to(tickerRef.current, {
-          x: "-50%",
-          duration: 22,
-          ease: "none",
-          repeat: -1,
-        });
-      }
-
-      // ── 3. Rule cards: scroll-triggered fade + rise ───────────────────────
-      if (rulesRef.current) {
-        const cards = rulesRef.current.querySelectorAll<HTMLElement>(".rule-card");
-        gsap.set(cards, { opacity: 0, y: 44 });
-        ScrollTrigger.create({
-          trigger: rulesRef.current,
-          start: "top 82%",
-          once: true,
-          onEnter: () => {
-            gsap.to(cards, {
-              opacity: 1,
-              y: 0,
-              duration: 0.5,
-              stagger: 0.09,
-              ease: "power3.out",
-            });
-          },
-        });
-      }
-
-      // ── 4. Category rows: scroll-triggered slide from left ────────────────
-      if (catsRef.current) {
-        const rows = catsRef.current.querySelectorAll<HTMLElement>(".cat-row");
-        gsap.set(rows, { opacity: 0, x: -55 });
-        ScrollTrigger.create({
-          trigger: catsRef.current,
-          start: "top 82%",
-          once: true,
-          onEnter: () => {
-            gsap.to(rows, {
-              opacity: 1,
-              x: 0,
-              duration: 0.5,
-              stagger: 0.07,
-              ease: "power3.out",
-            });
-          },
-        });
-      }
-
-      // ── 5. Reg panels: scroll-triggered fade + rise ───────────────────────
-      if (regRef.current) {
-        const panels = regRef.current.querySelectorAll<HTMLElement>(".reg-panel");
-        gsap.set(panels, { opacity: 0, y: 38 });
-        ScrollTrigger.create({
-          trigger: regRef.current,
-          start: "top 82%",
-          once: true,
-          onEnter: () => {
-            gsap.to(panels, {
-              opacity: 1,
-              y: 0,
-              duration: 0.55,
-              stagger: 0.1,
-              ease: "power3.out",
-            });
-          },
-        });
-      }
-
-    }, containerRef); // scoped to containerRef — no global selector leakage
-
-    return () => ctx.revert();
-  }, []);
-
-  // ── Category row hover handlers ──────────────────────────────────────────
-  // Use data-color attr to avoid closure issues with stale refs
-  const onCatEnter = (el: HTMLElement, color: string) => {
-    // Animate the hovered row
-    gsap.to(el, { x: 9, duration: 0.2, ease: "power2.out" });
-    el.style.borderLeftColor = color;
-    el.style.backgroundColor = color + "0C";
-
-    // Dim sibling rows
-    const rows = containerRef.current?.querySelectorAll<HTMLElement>(".cat-row");
-    rows?.forEach((row) => {
-      if (row !== el) gsap.to(row, { opacity: 0.32, duration: 0.18 });
-    });
-
-    // Animate the number label color via JS (GSAP color anim needs plugin; use style directly)
-    const num = el.querySelector<HTMLElement>(".cat-num");
-    if (num) {
-      num.style.color = color;
-      gsap.to(num, { scale: 1.12, duration: 0.2, ease: "power2.out" });
-    }
-  };
-
-  const onCatLeave = (el: HTMLElement) => {
-    gsap.to(el, { x: 0, duration: 0.2, ease: "power2.out" });
-    el.style.borderLeftColor = "#E4E4E4";
-    el.style.backgroundColor = "#fff";
-
-    const rows = containerRef.current?.querySelectorAll<HTMLElement>(".cat-row");
-    rows?.forEach((row) => gsap.to(row, { opacity: 1, duration: 0.18 }));
-
-    const num = el.querySelector<HTMLElement>(".cat-num");
-    if (num) {
-      num.style.color = "#C8C8C8";
-      gsap.to(num, { scale: 1, duration: 0.2, ease: "power2.out" });
-    }
-  };
+  if (!loaded) {
+    return (
+      <button
+        onClick={() => setLoaded(true)}
+        style={{
+          width: "100%",
+          height,
+          borderRadius: 8,
+          border: "1.5px dashed #C5D9F8",
+          background: "#F4F7FB",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 8,
+          cursor: "pointer",
+          transition: "background 0.15s, border-color 0.15s",
+        }}
+        onMouseEnter={(e) => {
+          (e.currentTarget as HTMLElement).style.background = BLUE_BG;
+          (e.currentTarget as HTMLElement).style.borderColor = BLUE;
+        }}
+        onMouseLeave={(e) => {
+          (e.currentTarget as HTMLElement).style.background = "#F4F7FB";
+          (e.currentTarget as HTMLElement).style.borderColor = "#C5D9F8";
+        }}
+      >
+        <MapPin size={20} color={BLUE} />
+        <span style={{
+          fontFamily: FONT_DISPLAY,
+          fontSize: 13,
+          letterSpacing: "0.12em",
+          color: BLUE_TEXT,
+          textTransform: "uppercase",
+        }}>
+          Tap untuk Lihat Peta
+        </span>
+        <span style={{ fontFamily: FONT_BODY, fontSize: 11, color: "#8E9BAE" }}>
+          Maps akan dimuat saat diklik
+        </span>
+      </button>
+    );
+  }
 
   return (
+    <div style={{ position: "relative" }}>
+      <iframe
+        src={src}
+        style={{
+          width: "100%",
+          height,
+          borderRadius: 8,
+          border: "1px solid #DDEAF8",
+          display: "block",
+        }}
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+      />
+      {/* Shortcut buka Maps app native */}
+      <a
+        href={mapsLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          position: "absolute",
+          bottom: 8,
+          right: 8,
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 5,
+          background: "#fff",
+          border: `1px solid ${BLUE_BORDER}`,
+          borderRadius: 6,
+          padding: "5px 10px",
+          fontFamily: FONT_DISPLAY,
+          fontSize: 11,
+          letterSpacing: "0.1em",
+          color: BLUE_TEXT,
+          textDecoration: "none",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+          textTransform: "uppercase",
+        }}
+      >
+        <Navigation size={11} color={BLUE} />
+        Buka di Maps
+      </a>
+    </div>
+  );
+}
+
+// ── Venue Modal ────────────────────────────────────────────────────────────────
+function VenueModal({
+  venue,
+  onClose,
+}: {
+  venue: (typeof VENUES)[0];
+  onClose: () => void;
+}) {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
+
+  return createPortal(
     <div
-      ref={containerRef}
+      onClick={onClose}
       style={{
-        minHeight: "100vh",
-        background: "#f1f3f5",
-        color: "#111",
-        fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
-        overflowX: "hidden",
+        position: "fixed",
+        inset: 0,
+        zIndex: 9999,
+        background: "rgba(10,18,40,0.72)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "24px 16px",
+        backdropFilter: "blur(4px)",
+        WebkitBackdropFilter: "blur(4px)",
       }}
     >
-      {/* ── HERO ──────────────────────────────────────────────────────────── */}
-      <div style={{ background: "#fff", position: "relative", padding: "80px 40px 60px", borderBottom: "1px solid #E8E8E8", overflow: "hidden" }}>
-        {/* Decorative grid lines */}
-        <div style={{ position: "absolute", top: 0, right: 0, width: "52%", height: "100%", background: "repeating-linear-gradient(90deg,transparent,transparent 54px,rgba(217,43,26,0.055) 54px,rgba(217,43,26,0.055) 55px)", pointerEvents: "none" }} />
-
-        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          {/* Badge */}
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "#D92B1A", padding: "5px 15px", borderRadius: 4, marginBottom: 26 }}>
-            <Zap size={12} fill="#fff" stroke="none" />
-            <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.18em", color: "#fff", textTransform: "uppercase" }}>
-              Official Event Information
-            </span>
-          </div>
-
-          {/* Title — letters rendered individually for GSAP stagger */}
-          <h1
-            ref={titleRef}
-            style={{
-              fontSize: "clamp(50px, 10vw, 112px)",
-              fontWeight: 900,
-              lineHeight: 0.9,
-              letterSpacing: "-0.04em",
-              margin: "0 0 18px",
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          background: "#fff",
+          borderRadius: 14,
+          border: `1px solid ${venue.border}`,
+          borderTop: `3px solid ${venue.color}`,
+          width: "100%",
+          maxWidth: 560,
+          maxHeight: "88vh",
+          overflowY: "auto",
+          position: "relative",
+          boxShadow: "0 24px 60px rgba(10,18,60,0.18)",
+          fontFamily: FONT_BODY,
+        }}
+      >
+        {/* Modal header */}
+        <div
+          style={{
+            padding: "14px 20px",
+            background: venue.bg,
+            borderBottom: `1px solid ${venue.border}`,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            position: "sticky",
+            top: 0,
+            zIndex: 1,
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{
+              display: "inline-flex", alignItems: "center",
+              background: venue.color + "18",
+              border: `1px solid ${venue.border}`,
+              borderRadius: 4, padding: "2px 9px",
+            }}>
+              <span style={{
+                fontFamily: FONT_DISPLAY,
+                fontSize: 11, letterSpacing: "0.18em",
+                color: venue.textColor, textTransform: "uppercase",
+              }}>
+                Venue
+              </span>
+            </div>
+            <h3 style={{
+              fontFamily: FONT_DISPLAY,
+              fontSize: 20, letterSpacing: "0.04em",
               textTransform: "uppercase",
-              perspective: "700px",
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "0 5px",
+              color: "#111", margin: 0,
+            }}>
+              {venue.label}
+            </h3>
+          </div>
+          <button
+            onClick={onClose}
+            style={{
+              background: "none", border: "none", cursor: "pointer",
+              padding: 4, color: "#8E9BAE", display: "flex",
             }}
           >
-            {"BAYAN RUN 2026".split("").map((c, i) =>
-              c === " " ? (
-                <span key={i} style={{ display: "inline-block", width: 16 }} />
-              ) : (
-                <span
-                  key={i}
-                  className="ltr"
-                  style={{
-                    display: "inline-block",
-                    // opacity set to 0 via gsap.set in useEffect, not inline style
-                    // (inline opacity:0 here would be overridden by GSAP fine, but cleaner this way)
-                    color: i < 5 ? "#D92B1A" : "#2177c2",
-                  }}
-                >
-                  {c}
-                </span>
-              )
-            )}
-          </h1>
-
-          <p style={{ fontSize: 13, color: "#999", letterSpacing: "0.14em", textTransform: "uppercase", fontWeight: 600, margin: 0 }}>
-            Informasi & Ketentuan Lomba · Balikpapan, Kalimantan Timur
-          </p>
+            <X size={18} />
+          </button>
         </div>
-      </div>
 
-      {/* ── TICKER ────────────────────────────────────────────────────────── */}
-      <div style={{ background: "#D92B1A", padding: "9px 0", overflow: "hidden", whiteSpace: "nowrap" }}>
-        {/*
-          Width trick: render 4 copies so the strip is ~2× the viewport width.
-          GSAP animates x from 0 to -50%, which equals one full copy width,
-          then repeat:-1 seamlessly loops. ref is on this inner div.
-        */}
-        <div ref={tickerRef} style={{ display: "inline-flex" }}>
-          {[0, 1, 2, 3].map((i) => (
-            <span key={i} style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", color: "#fff", paddingRight: 0 }}>
-              {TICKER_TEXT}
-            </span>
-          ))}
-        </div>
-      </div>
+        {/* Modal body */}
+        <div>
+          <InfoRow
+            icon={<Calendar size={13} color="#AAB8CC" style={{ marginTop: 1, flexShrink: 0 }} />}
+            label="Tanggal"
+            value={venue.date}
+          />
+          <InfoRow
+            icon={<MapPin size={13} color="#AAB8CC" style={{ marginTop: 1, flexShrink: 0 }} />}
+            label="Lokasi"
+            value={venue.location}
+          />
 
-      {/* ── MAIN CONTENT ──────────────────────────────────────────────────── */}
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 40px" }}>
-
-        {/* ── NOTICE ── */}
-        <div style={{ margin: "52px 0", border: "1px solid #F2BCB8", borderLeft: "4px solid #D92B1A", borderRadius: 12, padding: "26px 34px", background: "#FEF5F4", display: "flex", gap: 18, alignItems: "flex-start" }}>
-          <AlertCircle size={24} color="#D92B1A" style={{ flexShrink: 0, marginTop: 2 }} />
-          <div>
-            <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.2em", color: "#D92B1A", textTransform: "uppercase", margin: "0 0 7px" }}>
-              Perhatian Penting
+          {/* Start times */}
+          <div style={{ padding: "14px 20px", borderTop: "1px solid #F0F4FA" }}>
+            <p style={{
+              fontFamily: FONT_DISPLAY,
+              fontSize: 13, letterSpacing: "0.16em",
+              textTransform: "uppercase", color: "#8E9BAE",
+              margin: "0 0 10px",
+            }}>
+              Jam Start
             </p>
-            <p style={{ fontSize: 14, color: "#444", lineHeight: 1.75, margin: 0 }}>
-              Peserta wajib membaca, memahami, dan mematuhi segala Informasi Penting, Syarat dan Ketentuan dan Peraturan Lomba secara seksama sebelum mengikuti lomba. Syarat, Ketentuan dan Peraturan Lomba dibuat untuk menciptakan perlombaan yang sistematis dan teratur, memastikan keselamatan untuk seluruh pihak yang terlibat, terutama keselamatan peserta lomba.
-            </p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+              {venue.startTimes.map((st, i) => (
+                <div key={i} style={{
+                  display: "flex", alignItems: "center",
+                  justifyContent: "space-between",
+                  background: st.bg, border: `1px solid ${st.border}`,
+                  borderRadius: 6, padding: "9px 13px", gap: 10,
+                }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <div style={{ width: 6, height: 6, borderRadius: "50%", background: st.color, flexShrink: 0 }} />
+                    <span style={{ fontFamily: FONT_DISPLAY, fontSize: 15, letterSpacing: "0.06em", color: st.textColor }}>
+                      {st.cat}
+                    </span>
+                  </div>
+                  <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
+                    <span style={{ fontFamily: FONT_BODY, fontSize: 13, color: st.textColor, fontWeight: 700 }}>
+                      {st.time}
+                    </span>
+                    <span style={{
+                      fontFamily: FONT_DISPLAY, fontSize: 11,
+                      color: st.color + "99", letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                    }}>
+                      COT {st.cot}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── Maps section — LAZY LOADED ── */}
+          <div style={{ padding: "14px 20px", borderTop: "1px solid #F0F4FA" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
+              <p style={{
+                fontFamily: FONT_DISPLAY,
+                fontSize: 13, letterSpacing: "0.16em",
+                textTransform: "uppercase", color: "#8E9BAE",
+                margin: 0,
+              }}>
+                Lokasi di Peta
+              </p>
+              {/* Get Directions — buka native Maps app */}
+              <a
+                href={venue.mapsLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: 5,
+                  fontFamily: FONT_DISPLAY, fontSize: 11,
+                  letterSpacing: "0.12em", textTransform: "uppercase",
+                  color: venue.textColor,
+                  background: venue.bg, border: `1px solid ${venue.border}`,
+                  borderRadius: 5, padding: "5px 11px",
+                  textDecoration: "none",
+                  transition: "opacity 0.15s",
+                }}
+                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.opacity = "0.75")}
+                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.opacity = "1")}
+              >
+                <Navigation size={11} color={venue.color} />
+                Get Directions
+              </a>
+            </div>
+
+            {/* LazyMapEmbed — iframe hanya mount setelah user klik */}
+            <LazyMapEmbed
+              src={venue.mapsEmbed}
+              mapsLink={venue.mapsLink}
+              height={210}
+            />
           </div>
         </div>
+      </div>
+    </div>,
+    document.body
+  );
+}
 
-        {/* ── KEY RULES ── */}
-        <div ref={rulesRef} style={{ marginBottom: 68 }}>
-          <SL>Aturan Utama</SL>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: 12, marginTop: 20 }}>
-            {importantRules.map((r, i) => (
-              <div
-                key={i}
-                className="rule-card"
-                style={{
-                  background: "#fff",
-                  border: "1px solid #E8E8E8",
-                  borderRadius: 12,
-                  padding: "24px 20px",
-                  // opacity intentionally NOT set here — gsap.set handles it
-                  transition: "border-color 0.2s, box-shadow 0.2s",
-                  cursor: "default",
-                }}
-                onMouseEnter={(e) => {
-                  const el = e.currentTarget as HTMLElement;
-                  el.style.borderColor = r.color + "55";
-                  el.style.boxShadow  = `0 4px 18px ${r.color}18`;
-                }}
-                onMouseLeave={(e) => {
-                  const el = e.currentTarget as HTMLElement;
-                  el.style.borderColor = "#E8E8E8";
-                  el.style.boxShadow   = "none";
-                }}
-              >
-                <div style={{ width: 40, height: 40, borderRadius: 9, background: r.bg, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 13 }}>
-                  <r.icon size={18} color={r.color} />
+// ── Race Day Card body ─────────────────────────────────────────────────────────
+function RaceDayBody() {
+  const [activeModal, setActiveModal] = useState<(typeof VENUES)[0] | null>(null);
+
+  return (
+    <>
+      <div style={{ padding: "14px 20px", borderTop: "1px solid #F0F4FA" }}>
+        {/* ── Consolidated venue overview — semua venue dalam satu panel ── */}
+        {/* Ini lebih UX-friendly dari maps terpisah per venue karena:        */}
+        {/* 1. User bisa scan semua lokasi sekaligus                           */}
+        {/* 2. Tidak ada iframe load di initial render                         */}
+        {/* 3. Detail + maps hanya dimuat saat user memilih venue              */}
+        <p style={{
+          fontFamily: FONT_DISPLAY,
+          fontSize: 13, letterSpacing: "0.16em",
+          textTransform: "uppercase", color: "#8E9BAE",
+          margin: "0 0 12px",
+        }}>
+          Venues
+        </p>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {VENUES.map((venue) => (
+            <button
+              key={venue.key}
+              onClick={() => setActiveModal(venue)}
+              style={{
+                display: "flex", alignItems: "center",
+                justifyContent: "space-between",
+                background: venue.bg, border: `1px solid ${venue.border}`,
+                borderRadius: 8, padding: "12px 14px",
+                cursor: "pointer", textAlign: "left",
+                width: "100%", gap: 12,
+                transition: "box-shadow 0.15s",
+                fontFamily: FONT_BODY,
+              }}
+              onMouseEnter={(e) =>
+                ((e.currentTarget as HTMLElement).style.boxShadow = `0 0 0 2px ${venue.color}44`)
+              }
+              onMouseLeave={(e) =>
+                ((e.currentTarget as HTMLElement).style.boxShadow = "none")
+              }
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <div style={{ width: 8, height: 8, borderRadius: "50%", background: venue.color, flexShrink: 0 }} />
+                <div>
+                  <div style={{ fontFamily: FONT_DISPLAY, fontSize: 16, letterSpacing: "0.04em", color: venue.textColor }}>
+                    {venue.label}
+                  </div>
+                  <div style={{ fontFamily: FONT_BODY, fontSize: 11, color: venue.color + "AA", marginTop: 2 }}>
+                    {venue.date}
+                  </div>
                 </div>
-                <h3 style={{ fontSize: 12, fontWeight: 800, letterSpacing: "0.05em", textTransform: "uppercase", marginBottom: 6, color: "#111" }}>
-                  {r.title}
-                </h3>
-                <p style={{ fontSize: 13, color: "#888", lineHeight: 1.6, margin: 0 }}>{r.desc}</p>
               </div>
-            ))}
-          </div>
-        </div>
 
-        {/* ── CATEGORIES ── */}
-        <div style={{ marginBottom: 68 }}>
-          <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 24 }}>
-            <SL>Kategori Lomba</SL>
-            <Award size={17} color="#C97000" />
-          </div>
-
-          {/* catsRef wraps ONLY the list, so the ScrollTrigger trigger is tight */}
-          <div ref={catsRef} style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-            {categories.map((cat, i) => (
-              <div
-                key={i}
-                className="cat-row"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  padding: "16px 20px",
-                  background: "#fff",
-                  // Split border so GSAP / JS can update borderLeftColor independently
-                  borderTop:    "1px solid #E8E8E8",
-                  borderRight:  "1px solid #E8E8E8",
-                  borderBottom: "1px solid #E8E8E8",
-                  borderLeft:   "3px solid #E4E4E4",
-                  borderRadius: 9,
-                  cursor: "default",
-                  gap: 18,
-                  // No inline opacity — gsap.set handles it
-                }}
-                onMouseEnter={(e) => onCatEnter(e.currentTarget, cat.color)}
-                onMouseLeave={(e) => onCatLeave(e.currentTarget)}
-              >
-                <span
-                  className="cat-num"
-                  style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.1em", color: "#C8C8C8", minWidth: 22, fontVariantNumeric: "tabular-nums" }}
-                >
-                  {cat.num}
-                </span>
-
-                <div style={{ background: cat.color + "14", border: `1px solid ${cat.color}30`, borderRadius: 5, padding: "3px 11px", minWidth: 56, textAlign: "center" }}>
-                  <span style={{ fontSize: 10, fontWeight: 900, color: cat.color, letterSpacing: "0.08em" }}>{cat.sub}</span>
-                </div>
-
-                <div style={{ flex: 1 }}>
-                  <span style={{ fontSize: 16, fontWeight: 800, letterSpacing: "-0.02em", color: "#111" }}>{cat.title}</span>
-                </div>
-
-                <div style={{ display: "flex", gap: 18, alignItems: "center", flexShrink: 0 }}>
-                  <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, color: "#999" }}>
-                    <Users size={12} />{cat.age}
-                  </span>
-                  <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, color: "#999" }}>
-                    <Clock size={12} />COT {cat.cutoff}
-                  </span>
-                </div>
-
-                <div style={{ display: "flex", gap: 5, flexShrink: 0 }}>
-                  {cat.tags.map((tag, j) => (
-                    <span key={j} style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#aaa", border: "1px solid #E4E4E4", borderRadius: 4, padding: "3px 9px", background: "#F5F4F1" }}>
-                      {tag}
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                {/* Category pills */}
+                <div style={{ display: "flex", gap: 4, flexWrap: "wrap", justifyContent: "flex-end" }}>
+                  {venue.startTimes.map((st, i) => (
+                    <span key={i} style={{
+                      fontFamily: FONT_DISPLAY, fontSize: 10,
+                      letterSpacing: "0.08em", textTransform: "uppercase",
+                      color: st.textColor,
+                      background: st.color + "18",
+                      border: `1px solid ${st.border}`,
+                      borderRadius: 3, padding: "2px 6px",
+                    }}>
+                      {st.cat}
                     </span>
                   ))}
                 </div>
+                <MapPin size={14} color={venue.color} />
               </div>
-            ))}
-          </div>
+            </button>
+          ))}
         </div>
 
-        {/* ── PENDAFTARAN & PERATURAN ── */}
-        <div ref={regRef} style={{ marginBottom: 68 }}>
-          <SL>Pendaftaran & Peraturan</SL>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(290px, 1fr))", gap: 14, marginTop: 20 }}>
+        <p style={{
+          fontFamily: FONT_BODY,
+          fontSize: 11, color: "#AAB8CC",
+          margin: "10px 0 0",
+          letterSpacing: "0.03em",
+        }}>
+          Tap venue untuk detail jadwal &amp; peta lokasi
+        </p>
+      </div>
 
-            {/* Pendaftaran */}
-            <div className="reg-panel" style={{ background: "#fff", border: "1px solid #E8E8E8", borderRadius: 14, padding: "30px 26px" }}>
-              <PanelHeader icon={<CheckCircle size={15} color="#0057B8" />} bg="#EDF3FF" color="#0057B8" label="Pendaftaran" />
-              <BulletList color="#0057B8" items={[
-                "Pendaftaran hanya melalui website RegNowOnline",
-                "Pilih kategori sesuai usia peserta",
-                "Tanda terima dikirim via email & WhatsApp",
-                "Ambil racepack dengan barcode & kartu identitas",
-                "Batas pembayaran: 15 hari setelah pendaftaran",
-              ]} />
-            </div>
+      {activeModal && (
+        <VenueModal venue={activeModal} onClose={() => setActiveModal(null)} />
+      )}
+    </>
+  );
+}
 
-            {/* Peraturan */}
-            <div className="reg-panel" style={{ background: "#fff", border: "1px solid #E8E8E8", borderRadius: 14, padding: "30px 26px" }}>
-              <PanelHeader icon={<AlertCircle size={15} color="#D92B1A" />} bg="#FEF0EE" color="#D92B1A" label="Peraturan Penting" />
-              <BulletList color="#D92B1A" items={[
-                "Biaya pendaftaran tidak dapat dikembalikan",
-                "Nomor bib & chip tidak dapat dialihkan",
-                "Wajib pakai nomor bib di dada & chip waktu",
-                "Shortcut atau potong rute akan didiskualifikasi",
-                "Penyelenggara berhak melakukan tes doping",
-              ]} />
-            </div>
+// ── Normal Event Map Section ────────────────────────────────────────────────────
+// Untuk event non-Race Day (misal: Racepack Collection)
+// Map juga lazy — hanya load setelah diklik
+function NormalEventMap({
+  mapsEmbed,
+  mapsLink,
+}: {
+  mapsEmbed: string;
+  mapsLink: string;
+}) {
+  return (
+    <div style={{ padding: "14px 20px", borderTop: "1px solid #F0F4FA" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
+        <p style={{
+          fontFamily: FONT_DISPLAY,
+          fontSize: 13, letterSpacing: "0.16em",
+          textTransform: "uppercase", color: "#8E9BAE",
+          margin: 0,
+        }}>
+          Lokasi di Peta
+        </p>
+        <a
+          href={mapsLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: "inline-flex", alignItems: "center", gap: 5,
+            fontFamily: FONT_DISPLAY, fontSize: 11,
+            letterSpacing: "0.12em", textTransform: "uppercase",
+            color: BLUE_TEXT,
+            background: BLUE_BG, border: `1px solid ${BLUE_BORDER}`,
+            borderRadius: 5, padding: "5px 11px",
+            textDecoration: "none",
+            transition: "opacity 0.15s",
+          }}
+          onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.opacity = "0.75")}
+          onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.opacity = "1")}
+        >
+          <Navigation size={11} color={BLUE} />
+          Get Directions
+        </a>
+      </div>
+      <LazyMapEmbed src={mapsEmbed} mapsLink={mapsLink} height={200} />
+    </div>
+  );
+}
 
-            {/* Race Pack */}
-            <div className="reg-panel" style={{ background: "#fff", border: "1px solid #E8E8E8", borderRadius: 14, padding: "30px 26px" }}>
-              <PanelHeader icon={<MapPin size={15} color="#C97000" />} bg="#FEF7EC" color="#C97000" label="Race Pack" />
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 7, marginBottom: 16 }}>
-                {["Kaos Lari", "Chip Waktu", "Nomor Bib", "Souvenir"].map((item, i) => (
-                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 7, background: "#F5F4F1", borderRadius: 7, padding: "9px 11px", border: "1px solid #E8E8E8" }}>
-                    <CheckCircle size={12} color="#1A8C38" />
-                    <span style={{ fontSize: 12, color: "#222", fontWeight: 700 }}>{item}</span>
-                  </div>
-                ))}
-              </div>
-              <p style={{ fontSize: 13, color: "#888", lineHeight: 1.7, margin: 0 }}>
-                Tunjukkan barcode & kartu identitas saat pengambilan. Pengambilan oleh pihak lain hanya dengan surat kuasa dari bayanrun.com
-              </p>
-            </div>
+// ── Main Component ─────────────────────────────────────────────────────────────
+export default function EventSchedule() {
+  const secRef = useRef<HTMLElement | null>(null);
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
 
+  useEffect(() => {
+    if (typeof window !== "undefined")
+      setIsLargeScreen(window.innerWidth >= 1024);
+  }, []);
+
+  useGSAP(
+    () => {
+      gsap.fromTo(
+        ".schedule-header",
+        { y: 36, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" }
+      );
+
+      ScrollTrigger.create({
+        trigger: secRef.current,
+        start: "top 76%",
+        onEnter: () =>
+          gsap.fromTo(
+            ".event-card",
+            { y: 52, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.58, stagger: 0.14, ease: "power3.out" }
+          ),
+        once: true,
+      });
+
+      if (!isLargeScreen) return;
+
+      const boxes  = secRef.current?.querySelectorAll<HTMLElement>(".animate_event_fade");
+      const videos = secRef.current?.querySelectorAll<HTMLElement>(".event-video");
+
+      const showVideo = (idx: number) => {
+        videos?.forEach((v, i) => {
+          if (i === idx)
+            gsap.fromTo(
+              v,
+              { x: 36, opacity: 0, rotate: 7 },
+              { x: 0, rotate: 0, opacity: 1, duration: 0.45, ease: "back.out(1.5)" }
+            );
+          else gsap.to(v, { opacity: 0, duration: 0.28 });
+        });
+      };
+
+      boxes?.forEach((box, index) => {
+        ScrollTrigger.create({
+          trigger: box,
+          start: "top center",
+          end: "bottom center",
+          onEnter: () => showVideo(index),
+          onEnterBack: () => showVideo(index),
+        });
+      });
+    },
+    { scope: secRef, dependencies: [isLargeScreen] }
+  );
+
+  return (
+    <section
+      ref={secRef}
+      style={{
+        background: "#F4F7FB",
+        padding: "80px 0 96px",
+        fontFamily: FONT_BODY,          // ← body font konsisten
+      }}
+    >
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 40px" }}>
+
+        {/* ── HEADER ── */}
+        <div className="schedule-header" style={{ marginBottom: 52 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 16 }}>
+            <div style={{ width: 3, height: 17, background: BLUE, borderRadius: 2 }} />
+            <span style={{
+              fontFamily: FONT_DISPLAY,
+              fontSize: 13, letterSpacing: "0.2em",
+              textTransform: "uppercase", color: "#8E9BAE",
+            }}>
+              Jadwal Acara
+            </span>
           </div>
-        </div>
-
-        {/* ── COT ── */}
-        <div style={{ marginBottom: 68 }}>
-          <SL>Waktu Cut-Off</SL>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(155px, 1fr))", gap: 9, marginTop: 20 }}>
-            {categories.map((cat, i) => (
-              <div
-                key={i}
-                style={{ background: "#fff", border: "1px solid #E8E8E8", borderTop: `3px solid ${cat.color}`, borderRadius: 11, padding: "20px 16px", textAlign: "center", transition: "box-shadow 0.2s", cursor: "default" }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = `0 6px 22px ${cat.color}22`; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = "none"; }}
-              >
-                <div style={{ fontSize: 24, fontWeight: 900, color: cat.color, lineHeight: 1, marginBottom: 7, letterSpacing: "-0.02em" }}>{cat.cutoff}</div>
-                <div style={{ fontSize: 11, fontWeight: 700, color: "#222", letterSpacing: "0.03em" }}>{cat.title}</div>
-                <div style={{ fontSize: 10, color: "#aaa", marginTop: 3 }}>{cat.age}</div>
-              </div>
-            ))}
-          </div>
-          <p style={{ fontSize: 12, color: "#C0C0C0", marginTop: 12, fontStyle: "italic" }}>
-            * Peserta yang melebihi COT tidak dianggap sebagai finisher dan tidak menerima medali maupun finisher shirt
+          <h2 style={{
+            fontFamily: FONT_DISPLAY,          // ← Bebas Neue, sesuai BayanRunInfo
+            fontSize: "clamp(52px, 9vw, 96px)",
+            fontWeight: 400,                   // Bebas Neue bawaan sudah bold
+            letterSpacing: "0.01em",
+            textTransform: "uppercase",
+            color: "#1a2540",
+            margin: "0 0 10px",
+            lineHeight: 0.93,
+          }}>
+            EVENT
+            <br />
+            <span style={{ color: BLUE }}>SCHEDULE</span>
+          </h2>
+          <p style={{ fontFamily: FONT_BODY, fontSize: 14, color: "#8E9BAE", margin: 0 }}>
+            Jangan lewatkan berbagai keseruan di Bayan Run 2026!
           </p>
         </div>
 
-        {/* ── FOOTER ── */}
+        {/* ── TIMELINE ── */}
+        <div style={{ position: "relative" }}>
+          {/* vertical line */}
+          <div style={{
+            position: "absolute", left: 0, top: 0, bottom: 0, width: 1,
+            background: `linear-gradient(to bottom,${BLUE},#2F4FB8 55%,transparent)`,
+            opacity: 0.2,
+          }} />
 
+          <div style={{ display: "flex", flexDirection: "column", gap: 24, paddingLeft: 30 }}>
+            {events.map((event) => (
+              <div
+                key={event.id}
+                className="animate_event_fade event-card"
+                style={{ opacity: 0, position: "relative" }}
+              >
+                {/* dot */}
+                <div style={{
+                  position: "absolute", left: -36, top: 28,
+                  width: 11, height: 11, borderRadius: "50%",
+                  background: event.color,
+                  boxShadow: `0 0 0 3px ${event.color}28`,
+                }} />
+
+                <div style={{
+                  background: "#fff",
+                  border: "1px solid #DDEAF8",
+                  borderTop: `3px solid ${event.color}`,
+                  borderRadius: 10, overflow: "hidden",
+                }}>
+                  {/* ── Card header ── */}
+                  <div style={{
+                    padding: "12px 20px",
+                    background: event.bg, borderBottom: `1px solid ${event.border}`,
+                    display: "flex", alignItems: "center",
+                    justifyContent: "space-between", gap: 14,
+                  }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <div style={{
+                        display: "inline-flex", alignItems: "center",
+                        background: event.color + "18",
+                        border: `1px solid ${event.border}`,
+                        borderRadius: 4, padding: "2px 9px",
+                      }}>
+                        <span style={{
+                          fontFamily: FONT_DISPLAY,
+                          fontSize: 11, letterSpacing: "0.18em",
+                          color: event.textColor, textTransform: "uppercase",
+                        }}>
+                          {event.tag}
+                        </span>
+                      </div>
+                      <h3 style={{
+                        fontFamily: FONT_DISPLAY,       // ← Bebas Neue, bukan monospace
+                        fontSize: "clamp(18px, 3vw, 26px)",
+                        fontWeight: 400,
+                        letterSpacing: "0.04em",
+                        textTransform: "uppercase",
+                        color: "#111", margin: 0,
+                      }}>
+                        {event.title}
+                      </h3>
+                    </div>
+                    <video
+                      className="event-video"
+                      src={event.video}
+                      autoPlay loop muted playsInline
+                      style={{
+                        width: 68, height: 68,
+                        objectFit: "cover", borderRadius: 7,
+                        opacity: 0,
+                        display: isLargeScreen ? "block" : "none",
+                        flexShrink: 0,
+                        border: `1px solid ${event.border}`,
+                      }}
+                    />
+                  </div>
+
+                  {/* ── Card body ── */}
+                  <div>
+                    {!event.isRaceDay ? (
+                      <>
+                        <InfoRow
+                          icon={<Calendar size={13} color="#AAB8CC" style={{ marginTop: 1, flexShrink: 0 }} />}
+                          label="Tanggal"
+                          value={event.date!}
+                        />
+                        <InfoRow
+                          icon={<MapPin size={13} color="#AAB8CC" style={{ marginTop: 1, flexShrink: 0 }} />}
+                          label="Lokasi"
+                          value={event.location!}
+                        />
+                        {event.dayTime && (
+                          <InfoRow
+                            icon={<Clock size={13} color="#AAB8CC" style={{ marginTop: 1, flexShrink: 0 }} />}
+                            label="Jam"
+                            value={event.dayTime}
+                          />
+                        )}
+                        {/* Maps — lazy loaded, dengan Get Directions CTA */}
+                        <NormalEventMap
+                          mapsEmbed={event.mapsEmbed!}
+                          mapsLink={event.mapsLink!}
+                        />
+                      </>
+                    ) : (
+                      <RaceDayBody />
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
 
-// ── Small reusable sub-components ─────────────────────────────────────────────
-
-function SL({ children }: { children: React.ReactNode }) {
+// ── InfoRow ────────────────────────────────────────────────────────────────────
+function InfoRow({
+  icon,
+  label,
+  value,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+}) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
-      <div style={{ width: 3, height: 17, background: "#D92B1A", borderRadius: 2 }} />
-      <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.2em", textTransform: "uppercase", color: "#B0B0B0" }}>
-        {children}
+    <div style={{
+      display: "grid",
+      gridTemplateColumns: "16px 110px 1fr",
+      gap: 10, alignItems: "center",
+      padding: "9px 20px",
+      borderTop: "1px solid #F0F4FA",
+      fontFamily: FONT_BODY,
+    }}>
+      {icon}
+      <span style={{
+        fontFamily: FONT_DISPLAY,   // ← label pakai Bebas Neue
+        fontSize: 13, letterSpacing: "0.12em",
+        textTransform: "uppercase", color: "#8E9BAE",
+      }}>
+        {label}
+      </span>
+      <span style={{ fontFamily: FONT_BODY, fontSize: 13, color: "#445", fontWeight: 500 }}>
+        {value}
       </span>
     </div>
-  );
-}
-
-function PanelHeader({ icon, bg, color, label }: { icon: React.ReactNode; bg: string; color: string; label: string }) {
-  return (
-    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
-      <div style={{ width: 32, height: 32, borderRadius: 7, background: bg, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        {icon}
-      </div>
-      <h3 style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.16em", textTransform: "uppercase", color, margin: 0 }}>
-        {label}
-      </h3>
-    </div>
-  );
-}
-
-function BulletList({ items, color }: { items: string[]; color: string }) {
-  return (
-    <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 11 }}>
-      {items.map((item, i) => (
-        <li key={i} style={{ display: "flex", gap: 9, alignItems: "flex-start" }}>
-          <span style={{ width: 4, height: 4, borderRadius: "50%", background: color, marginTop: 8, flexShrink: 0 }} />
-          <span style={{ fontSize: 13, color: "#555", lineHeight: 1.65 }}>{item}</span>
-        </li>
-      ))}
-    </ul>
   );
 }
