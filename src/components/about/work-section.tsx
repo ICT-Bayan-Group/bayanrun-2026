@@ -3,14 +3,13 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import { Calendar, MapPin, Clock, X, Navigation, ExternalLink } from "lucide-react";
+import { Calendar, MapPin, Clock, X, Navigation } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 gsap.registerPlugin(ScrollTrigger);
 
 // ── Design Tokens ─────────────────────────────────────────────────────────────
-// Font system — consistent dengan BayanRunInfo.tsx
 const FONT_DISPLAY = "'Bebas Neue', Arial Black, sans-serif";
 const FONT_BODY    = "'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif";
 
@@ -30,12 +29,8 @@ const VENUES = [
     textColor: "#1A2E7A",
     bg: "#EEF0FF",
     border: "#BCC5F4",
-    // Google Maps embed — hanya di-load saat modal dibuka (lazy)
     mapsEmbed: "https://www.google.com/maps?q=Lapangan%20Merdeka%20Balikpapan&output=embed",
-    // Link untuk buka native Maps app di mobile
     mapsLink: "https://maps.google.com/?q=Lapangan+Merdeka+Balikpapan",
-    // Static preview image dari Maps (tidak butuh iframe load)
-    mapsStaticPreview: "https://maps.googleapis.com/maps/api/staticmap?center=Lapangan+Merdeka+Balikpapan&zoom=15&size=600x200&markers=color:blue%7CLapangan+Merdeka+Balikpapan",
     startTimes: [
       { cat: "Half Marathon", time: "05:30 WITA", cot: "4 Jam",    color: "#1D5FD4", textColor: "#0C3E9B", bg: "#EEF4FF", border: "#C5D9F8" },
       { cat: "10K",           time: "06:00 WITA", cot: "2 Jam",    color: "#0E7ABF", textColor: "#094F80", bg: "#E6F4FD", border: "#A8D8F5" },
@@ -54,7 +49,6 @@ const VENUES = [
     border: "#FECACA",
     mapsEmbed: "https://www.google.com/maps?q=BSCC+Dome+Balikpapan&output=embed",
     mapsLink: "https://maps.google.com/?q=BSCC+Dome+Balikpapan",
-    mapsStaticPreview: "https://maps.googleapis.com/maps/api/staticmap?center=BSCC+Dome+Balikpapan&zoom=15&size=600x200&markers=color:red%7CBSCC+Dome+Balikpapan",
     startTimes: [
       { cat: "2.5K Kid Dash", time: "06:20 WITA", cot: "50 Menit", color: "#DC2626", textColor: "#991B1B", bg: "#FEF2F2", border: "#FECACA" },
     ],
@@ -96,64 +90,22 @@ const events = [
   },
 ];
 
-// ── Lazy Map Embed ─────────────────────────────────────────────────────────────
-// Iframe hanya di-mount ke DOM setelah user klik "Lihat Peta"
-// Ini mencegah browser load banyak iframe sekaligus saat halaman pertama render
-function LazyMapEmbed({
+// ── Map Embed — langsung tampil, tanpa gate button ────────────────────────────
+function MapEmbed({
   src,
   mapsLink,
   height = 200,
+  accentColor = BLUE,
+  accentBorder = BLUE_BORDER,
+  accentText = BLUE_TEXT,
 }: {
   src: string;
   mapsLink: string;
   height?: number;
+  accentColor?: string;
+  accentBorder?: string;
+  accentText?: string;
 }) {
-  const [loaded, setLoaded] = useState(false);
-
-  if (!loaded) {
-    return (
-      <button
-        onClick={() => setLoaded(true)}
-        style={{
-          width: "100%",
-          height,
-          borderRadius: 8,
-          border: "1.5px dashed #C5D9F8",
-          background: "#F4F7FB",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 8,
-          cursor: "pointer",
-          transition: "background 0.15s, border-color 0.15s",
-        }}
-        onMouseEnter={(e) => {
-          (e.currentTarget as HTMLElement).style.background = BLUE_BG;
-          (e.currentTarget as HTMLElement).style.borderColor = BLUE;
-        }}
-        onMouseLeave={(e) => {
-          (e.currentTarget as HTMLElement).style.background = "#F4F7FB";
-          (e.currentTarget as HTMLElement).style.borderColor = "#C5D9F8";
-        }}
-      >
-        <MapPin size={20} color={BLUE} />
-        <span style={{
-          fontFamily: FONT_DISPLAY,
-          fontSize: 13,
-          letterSpacing: "0.12em",
-          color: BLUE_TEXT,
-          textTransform: "uppercase",
-        }}>
-          Tap untuk Lihat Peta
-        </span>
-        <span style={{ fontFamily: FONT_BODY, fontSize: 11, color: "#8E9BAE" }}>
-          Maps akan dimuat saat diklik
-        </span>
-      </button>
-    );
-  }
-
   return (
     <div style={{ position: "relative" }}>
       <iframe
@@ -167,6 +119,7 @@ function LazyMapEmbed({
         }}
         loading="lazy"
         referrerPolicy="no-referrer-when-downgrade"
+        title="Lokasi di Google Maps"
       />
       {/* Shortcut buka Maps app native */}
       <a
@@ -181,19 +134,19 @@ function LazyMapEmbed({
           alignItems: "center",
           gap: 5,
           background: "#fff",
-          border: `1px solid ${BLUE_BORDER}`,
+          border: `1px solid ${accentBorder}`,
           borderRadius: 6,
           padding: "5px 10px",
           fontFamily: FONT_DISPLAY,
           fontSize: 11,
           letterSpacing: "0.1em",
-          color: BLUE_TEXT,
+          color: accentText,
           textDecoration: "none",
           boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-          textTransform: "uppercase",
+          textTransform: "uppercase" as const,
         }}
       >
-        <Navigation size={11} color={BLUE} />
+        <Navigation size={11} color={accentColor} />
         Buka di Maps
       </a>
     </div>
@@ -348,7 +301,7 @@ function VenueModal({
             </div>
           </div>
 
-          {/* ── Maps section — LAZY LOADED ── */}
+          {/* ── Maps — langsung tampil ── */}
           <div style={{ padding: "14px 20px", borderTop: "1px solid #F0F4FA" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
               <p style={{
@@ -359,7 +312,6 @@ function VenueModal({
               }}>
                 Lokasi di Peta
               </p>
-              {/* Get Directions — buka native Maps app */}
               <a
                 href={venue.mapsLink}
                 target="_blank"
@@ -382,11 +334,13 @@ function VenueModal({
               </a>
             </div>
 
-            {/* LazyMapEmbed — iframe hanya mount setelah user klik */}
-            <LazyMapEmbed
+            <MapEmbed
               src={venue.mapsEmbed}
               mapsLink={venue.mapsLink}
               height={210}
+              accentColor={venue.color}
+              accentBorder={venue.border}
+              accentText={venue.textColor}
             />
           </div>
         </div>
@@ -403,11 +357,6 @@ function RaceDayBody() {
   return (
     <>
       <div style={{ padding: "14px 20px", borderTop: "1px solid #F0F4FA" }}>
-        {/* ── Consolidated venue overview — semua venue dalam satu panel ── */}
-        {/* Ini lebih UX-friendly dari maps terpisah per venue karena:        */}
-        {/* 1. User bisa scan semua lokasi sekaligus                           */}
-        {/* 2. Tidak ada iframe load di initial render                         */}
-        {/* 3. Detail + maps hanya dimuat saat user memilih venue              */}
         <p style={{
           fontFamily: FONT_DISPLAY,
           fontSize: 13, letterSpacing: "0.16em",
@@ -452,7 +401,6 @@ function RaceDayBody() {
               </div>
 
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                {/* Category pills */}
                 <div style={{ display: "flex", gap: 4, flexWrap: "wrap", justifyContent: "flex-end" }}>
                   {venue.startTimes.map((st, i) => (
                     <span key={i} style={{
@@ -491,8 +439,6 @@ function RaceDayBody() {
 }
 
 // ── Normal Event Map Section ────────────────────────────────────────────────────
-// Untuk event non-Race Day (misal: Racepack Collection)
-// Map juga lazy — hanya load setelah diklik
 function NormalEventMap({
   mapsEmbed,
   mapsLink,
@@ -532,7 +478,11 @@ function NormalEventMap({
           Get Directions
         </a>
       </div>
-      <LazyMapEmbed src={mapsEmbed} mapsLink={mapsLink} height={200} />
+      <MapEmbed
+        src={mapsEmbed}
+        mapsLink={mapsLink}
+        height={200}
+      />
     </div>
   );
 }
@@ -603,7 +553,7 @@ export default function EventSchedule() {
       style={{
         background: "#F4F7FB",
         padding: "80px 0 96px",
-        fontFamily: FONT_BODY,          // ← body font konsisten
+        fontFamily: FONT_BODY,
       }}
     >
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 40px" }}>
@@ -621,9 +571,9 @@ export default function EventSchedule() {
             </span>
           </div>
           <h2 style={{
-            fontFamily: FONT_DISPLAY,          // ← Bebas Neue, sesuai BayanRunInfo
+            fontFamily: FONT_DISPLAY,
             fontSize: "clamp(52px, 9vw, 96px)",
-            fontWeight: 400,                   // Bebas Neue bawaan sudah bold
+            fontWeight: 400,
             letterSpacing: "0.01em",
             textTransform: "uppercase",
             color: "#1a2540",
@@ -692,7 +642,7 @@ export default function EventSchedule() {
                         </span>
                       </div>
                       <h3 style={{
-                        fontFamily: FONT_DISPLAY,       // ← Bebas Neue, bukan monospace
+                        fontFamily: FONT_DISPLAY,
                         fontSize: "clamp(18px, 3vw, 26px)",
                         fontWeight: 400,
                         letterSpacing: "0.04em",
@@ -738,7 +688,6 @@ export default function EventSchedule() {
                             value={event.dayTime}
                           />
                         )}
-                        {/* Maps — lazy loaded, dengan Get Directions CTA */}
                         <NormalEventMap
                           mapsEmbed={event.mapsEmbed!}
                           mapsLink={event.mapsLink!}
@@ -779,7 +728,7 @@ function InfoRow({
     }}>
       {icon}
       <span style={{
-        fontFamily: FONT_DISPLAY,   // ← label pakai Bebas Neue
+        fontFamily: FONT_DISPLAY,
         fontSize: 13, letterSpacing: "0.12em",
         textTransform: "uppercase", color: "#8E9BAE",
       }}>
