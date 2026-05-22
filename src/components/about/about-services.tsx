@@ -27,13 +27,14 @@ const categories = [
   { title: "10K Run",       sub: "10K",    age: "17+ tahun",   cutoff: "2 Jam",    color: "#0E7ABF", textColor: "#094F80", bg: "#E6F4FD",  border: "#A8D8F5",   tags: ["Nasional", "Medal"],                    num: "02" },
   { title: "5K Run",        sub: "5K",     age: "17+ tahun",   cutoff: "1 Jam",    color: "#0B6B8A", textColor: "#073E50", bg: "#E3F2F7",  border: "#9CD3E4",   tags: ["Nasional", "Medal"],                    num: "03" },
   { title: "5K Teenagers",  sub: "Remaja", age: "13–16 tahun", cutoff: "1 Jam",    color: "#2F4FB8", textColor: "#1A2E7A", bg: "#EEF0FF",  border: "#BCC5F4",   tags: ["Remaja", "Medal"],                      num: "04" },
-  { title: "2.5K Kids",     sub: "Anak",   age: "6–12 tahun",  cutoff: "50 Menit", color: RED,       textColor: RED_TEXT,  bg: RED_BG,     border: RED_BORDER,  tags: ["Anak-anak", "Medal"],                   num: "05" },
+  { title: "2.5K Kid Dash",     sub: "Anak",   age: "6–12 tahun",  cutoff: "50 Menit", color: RED,       textColor: RED_TEXT,  bg: RED_BG,     border: RED_BORDER,  tags: ["Anak-anak", "Medal"],                   num: "05" },
+    { title: "700M Kids= Dash",     sub: "Anak",   age: "6–12 tahun",  cutoff: "50 Menit", color: RED,       textColor: RED_TEXT,  bg: RED_BG,     border: RED_BORDER,  tags: ["Anak-anak", "Medal"],                   num: "06" },
 ];
 
 const importantRules = [
   { icon: AlertCircle, title: "Non-Refundable",  desc: "Biaya pendaftaran tidak dapat dikembalikan dalam kondisi apapun", color: BLUE,      bg: BLUE_BG,   tag: "CRITICAL" },
   { icon: Users,       title: "Verifikasi Usia", desc: "Penyelenggara berhak memverifikasi usia peserta kapan saja",     color: "#0E7ABF", bg: "#E6F4FD", tag: "WARNING"  },
-  { icon: Shield,      title: "RegNowOnline",    desc: "Pendaftaran hanya melalui website resmi bayanrun.com",           color: "#2F4FB8", bg: "#EEF0FF", tag: "INFO"     },
+  { icon: Shield,      title: "RegNowOnline",    desc: "Pendaftaran hanya melalui website resmi bayanrun.com",           color: "#b82f2f", bg: "#ffeeee", tag: "INFO"     },
   { icon: Clock,       title: "Cut-Off Time",    desc: "Wajib finish sebelum waktu COT untuk mendapat medali",           color: "#0B6B8A", bg: "#E3F2F7", tag: "REQUIRED" },
 ];
 
@@ -522,9 +523,9 @@ export default function BayanRunInfo() {
             gap: 12,
             marginTop: 20,
           }}>
-            <div className="reg-panel" style={{ background: "#fff", border: "1px solid #DDEAF8", borderRadius: 10, overflow: "hidden" }}>
-              <PanelHeader icon={<CheckCircle size={14} color={BLUE} />} bg={BLUE_BG} color={BLUE} border={BLUE_BORDER} label="Pendaftaran" />
-              <BulletList color={BLUE} items={[
+            <div className="reg-panel" style={{ background: "#fff", border: "1px solid #f8dddd", borderRadius: 10, overflow: "hidden" }}>
+              <PanelHeader icon={<CheckCircle size={14} color={RED} />} bg={RED_BG} color={RED_TEXT} border={RED_BORDER} label="Pendaftaran" />
+              <BulletList color={RED_TEXT} items={[
                 "Pendaftaran hanya melalui website RegNowOnline",
                 "Pilih kategori sesuai usia peserta",
                 "Tanda terima dikirim via email & WhatsApp",
@@ -543,7 +544,7 @@ export default function BayanRunInfo() {
               ]} />
             </div>
             <div className="reg-panel" style={{ background: "#fff", border: "1px solid #DDEAF8", borderRadius: 10, overflow: "hidden" }}>
-              <PanelHeader icon={<Package size={14} color="#2F4FB8" />} bg="#EEF0FF" color="#2F4FB8" border="#BCC5F4" label="Race Pack" />
+              <PanelHeader icon={<Package size={14} color="#b82f2f" />} bg="#ffeeee" color="#b82f2f" border="#f4bcbc" label="Race Pack" />
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6, padding: "12px 14px 4px" }}>
                 {["Kaos Lari", "Chip Waktu", "Nomor Bib", "Souvenir"].map((item, i) => (
                   <div key={i} style={{ display: "flex", alignItems: "center", gap: 7, background: "#F4F7FB", borderRadius: 6, padding: "8px 10px", border: "1px solid #DDEAF8" }}>

@@ -13,7 +13,7 @@ const categories = [
     sub: "Kids",
     accent: "#09a30e",
     accentBg: "#e6f7e6",
-    distance: "±1 KM",
+    distance: "700 M & 2.5 KM",
     tagline: "Mulai dari yang kecil!",
     desc: "Saatnya si kecil mengeksplorasi kegembiraan bergerak. Dengan lintasan yang aman dan suasana ceria, kategori ini dirancang khusus untuk menumbuhkan rasa percaya diri serta semangat berolahraga sejak dini.",
   },

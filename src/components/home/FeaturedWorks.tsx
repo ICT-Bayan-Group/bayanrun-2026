@@ -3,13 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
 import { works } from "@/lib/constant";
 import { useGSAP } from "@gsap/react";
 import Link from "next/link";
 import { slugify } from "@/lib/utils";
 import { Navigation } from "swiper/modules";
-import "swiper/css/navigation";
 import { Roboto } from "next/font/google";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 

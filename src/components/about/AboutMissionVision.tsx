@@ -21,18 +21,18 @@ const sections = [
     kicker: "WHAT DRIVES US",
     heading: "Misi Kami",
     body: "Mendorong setiap pelari untuk melampaui batas diri, mempertemukan komunitas dari berbagai latar belakang, dan menjadikan setiap langkah sebagai wujud nyata persatuan. Setiap langkah mendekatkan kita satu sama lain.",
-    iconBg: "bg-teal-50",
-    iconColor: "text-teal-700",
-    accentColor: "bg-teal-500",
+    iconBg: "bg-blue-50",
+    iconColor: "text-blue-700",
+    accentColor: "bg-blue-500",
   },
   {
     icon: Star,
     kicker: "WHERE WE'RE HEADED",
     heading: "Visi Kami",
     body: "Menjadi event lari ikonik bertaraf internasional yang berpusat di Kalimantan — membangun warisan prestasi, menginspirasi generasi berikutnya, dan menempatkan Bayan Run sebagai simbol kebanggaan Borneo di peta lari dunia.",
-    iconBg: "bg-amber-50",
-    iconColor: "text-amber-700",
-    accentColor: "bg-amber-500",
+    iconBg: "bg-blue-50",
+    iconColor: "text-blue-700",
+    accentColor: "bg-blue-500",
   },
 ];
 
@@ -86,10 +86,10 @@ const BayanRunAboutMissionVision = () => {
             <span className="w-2 h-2 rounded-full bg-blue-500 inline-block" />
             Bayan Run 2026 · Kalimantan
           </div>
-          <h1 className="text-4xl lg:text-5xl font-semibold text-gray-900 tracking-tight leading-tight mb-3">
-            Who We Are
+          <h1 className="text-4xl lg:text-5xl font-semibold text-blue-800 tracking-tight leading-tight mb-3">
+           WHO WE ARE
           </h1>
-          <p className="text-base text-gray-400 leading-relaxed">
+          <p className="text-base font-medium text-gray-500 leading-relaxed">
             Mengenal lebih dekat semangat, misi, dan visi Bayan Run 2026
           </p>
         </div>
@@ -140,8 +140,7 @@ const BayanRunAboutMissionVision = () => {
 
         {/* Highlight card */}
         <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-          <div className="inline-flex items-center gap-1.5 bg-amber-50 text-amber-700 text-xs font-medium px-3 py-1 rounded-full mb-3 w-fit">
-            <Star className="w-3 h-3" />
+          <div className="inline-flex items-center gap-1.5 bg-red-50 text-red-700 text-xs font-medium px-3 py-1 rounded-full mb-3 w-fit">
             Pencapaian Terbesar
           </div>
           <h2 className="text-lg font-semibold text-gray-900 mb-2 leading-snug">
