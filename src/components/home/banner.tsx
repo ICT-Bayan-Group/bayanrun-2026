@@ -136,7 +136,7 @@ export default function AboutBanner() {
                   Secure Your Spot Early &<br />Get Exclusive Perks
                 </h2>
                 <p className="text-white/60 text-sm mb-6 leading-relaxed">
-                  Daftarkan diri sekarang dan dapatkan race pack eksklusif, finisher medal, dan akses ke post-run festival!
+                  Daftarkan diri sekarang dan dapatkan race pack eksklusif, finisher medal, dan berbagai hiburan lainnya !
                 </p>
 
                 {/* Details */}

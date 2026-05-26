@@ -108,7 +108,7 @@ const Footer: React.FC = () => {
                                 <Link href="/about" className=" hover:text-blue-900 transition-colors text-base md:text-lg font-medium">About</Link>
                                 <Link href="/schedule-rules" className="hover:text-blue-900 transition-colors text-base md:text-lg font-medium">Schedule & Rules</Link>
                                 <Link href="/faq" className="hover:text-blue-900 transition-colors text-base md:text-lg font-medium">FAQ</Link>
-                                <p className="cursor-pointer hover:text-blue-900 transition-colors text-base md:text-lg font-medium" onClick={() => setIsContactOpen(true)}>Contact</p>
+                                  <Link href="https://results.scorenow.co.id/Results.aspx?CId=19723&RId=280" className="hover:text-blue-900 transition-colors text-base md:text-lg font-medium">Race Results</Link>
                             </div>
                             <p className="text-gray-600 text-sm md:text-base font-medium">© 2026 PT BAYAN RESOURCES TBK</p>
                         </div>
