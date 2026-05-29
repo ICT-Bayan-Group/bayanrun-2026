@@ -5,17 +5,17 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 const faqData = [
   {
     title: "Kapan BAYAN RUN 2026 akan diadakan?",
-    content: "Lomba akan diadakan pada Minggu, 12 Oktober 2026",
+    content: "Lomba akan diadakan pada Sabtu & Minggu, 10 & 11 Oktober 2026",
     category: "Event"
   },
   {
     title: "Di mana BAYAN RUN 2026 akan diadakan?",
-    content: "Lokasi lomba adalah di Lapangan Merdeka 3, Balikpapan Kalimantan Timur",
+    content: "Lokasi lomba adalah di BSCC Dome dan Lapangan Merdeka 3, Balikpapan Kalimantan Timur",
     category: "Event"
   },
   {
     title: "Kapan Pendaftaran BAYAN RUN 2026 di buka?",
-    content: "Sabtu, 5 Juli 2026 pada pukul 15.00 WITA",
+    content: "Sabtu, 13 Juni 2026 pada pukul 15.00 WITA",
     category: "Pendaftaran"
   },
   {
@@ -24,23 +24,23 @@ const faqData = [
     category: "Kategori"
   },
   {
-    title: "Apakah akan ada acara pengambilan paket lomba?",
+    title: "Apakah akan ada acara pengambilan Race Pack?",
     content: "Ya, akan ada acara pengambilan paket lomba BAYAN RUN 2026. Waktu dan lokasi akan diumumkan kemudian.",
     category: "Race Pack"
   },
   {
-    title: "Apa saja isi dari paket lomba?",
-    content: "• Running Jersey untuk seluruh kategori\n• Jacket & Bag (convertible) untuk seluruh kategori\n• Foldable Bottle untuk seluruh kategori\n• Race BIB + Timming Chip untuk seluruh kategori\n• BIB Pin untuk seluruh kategori\n• Running Cap khusus untuk peserta 10K dan Half Marathon\n• Running Belt khusus untuk peserta Half Marathon",
+    title: "Apa saja isi dari Race Pack?",
+    content: "• Medal untuk semua kategori\n• Running Jersey untuk seluruh kategori\n• Multi Function Bag untuk seluruh kategori\n• Soft Flask untuk seluruh kategori\n• Race BIB + Timming Chip untuk seluruh kategori\n• BIB Pin untuk seluruh kategori\n• Suplemen EJ Sport & Fitbar untuk seluruh kategori\n• Running Cap khusus untuk peserta 10K dan Half Marathon\n• Jersey Finisher & Running Belt khusus untuk peserta Half Marathon",
     category: "Race Pack"
   },
   {
-    title: "Apakah boleh mengambil racepack pada hari lomba di tanggal 12 Oktober 2026?",
+    title: "Apakah boleh mengambil racepack pada hari lomba di tanggal 11 Oktober 2026?",
     content: "Tidak. Paket lomba (race pack) hanya dapat diambil pada acara pengambilan paket lomba yang diselenggarakan sebelum lomba.",
     category: "Race Pack"
   },
   {
     title: "Berapa biaya pendaftaran lomba BAYAN RUN 2026?",
-    content: "• Half Marathon: Rp. 375.000\n• 10K: Rp. 275.000\n• 5K: Rp. 220.000\n• 5K teens: Rp. 200.000\n• KIDS 2.5K: Rp. 150.000",
+    content: "• Half Marathon: Rp. 450.000\n• 10K: Rp. 325.000\n• 5K: Rp. 275.000\n• 5K teens: Rp. 200.000\n• KIDS 2.5K: Rp. 150.000\n• KIDS 700M: Rp. 150.000",
     category: "Pendaftaran"
   },
   {

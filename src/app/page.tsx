@@ -2,11 +2,13 @@ import AboutSection from "@/components/home/abuout-section";
 import Banner from "@/components/home/banner";
 import HowWeWork from "@/components/home/how-we-work";
 import VideoSection from "@/components/home/video";
+import YoutubeSection from "@/components/home/youtube";
 import StackedSlider from "@/components/home/work-slider";
 import RacePack from "@/components/home/racepack";
 import AboutStats from "@/components/about/about-stats";
 import AboutMissionVision from "@/components/about/AboutMissionVision";
 import Testimonial from "@/components/about/testimonial";
+import { Young_Serif } from "next/font/google";
 export const metadata = {
   title: "Bayan Run – The Biggest Running Event in Kalimantan",
   description:
@@ -75,8 +77,9 @@ export default function Home() {
        {/* <AboutSection />*/}
        <AboutStats/>
       <HowWeWork />
+      <YoutubeSection />
       {/* <ServiceSection /> */}
-          <RacePack />
+         {/*   <RacePack />*/}
       <StackedSlider />
       <VideoSection />
          <AboutMissionVision />

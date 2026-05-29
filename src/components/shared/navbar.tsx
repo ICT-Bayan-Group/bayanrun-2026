@@ -2,19 +2,61 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "../ui/button";
 import { usePathname } from "next/navigation";
 import { navLinks } from "@/lib/constant";
 import { Menu, X } from "lucide-react";
 import { useContact } from "@/lib/contact-context";
 
+const REG_OPEN_ISO = "2026-06-13T00:00:00";
+
+function useRegOpen() {
+  const [regOpen, setRegOpen] = useState(false);
+  useEffect(() => {
+    const check = () => setRegOpen(new Date(REG_OPEN_ISO).getTime() <= Date.now());
+    check();
+    const id = setInterval(check, 1000);
+    return () => clearInterval(id);
+  }, []);
+  return regOpen;
+}
+
 export default function Navbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const {} = useContact();
+  const regOpen = useRegOpen();
 
   const toggleMobileMenu = () => setMobileMenuOpen((prev) => !prev);
+
+  /* Shared button styles */
+  const btnActive = `
+    text-sm font-black tracking-widest uppercase cursor-pointer
+    bg-blue-800 hover:bg-blue-700 active:bg-blue-700
+    border border-blue-400/30 rounded-xl
+    shadow-[0_0_24px_rgba(59,130,246,0.5)]
+    hover:shadow-[0_0_40px_rgba(59,130,246,0.7)]
+    transition-all duration-300 text-white
+  `;
+  const btnDisabled = `
+    text-sm font-black tracking-wider uppercase cursor-not-allowed
+    bg-white/10 border border-blue-400/20 rounded-xl
+    text-blue-900/50 transition-all duration-300
+  `;
+  const btnActiveMobile = `
+    text-xs font-black tracking-widest uppercase cursor-pointer
+    bg-blue-800 hover:bg-blue-700 active:bg-blue-700
+    border border-blue-400/30 rounded-xl
+    shadow-[0_0_24px_rgba(59,130,246,0.5)]
+    hover:shadow-[0_0_40px_rgba(59,130,246,0.7)]
+    transition-all duration-300 text-white
+  `;
+  const btnDisabledMobile = `
+    text-[10px] font-black tracking-wide uppercase cursor-not-allowed
+    bg-white/10 border border-blue-400/20 rounded-xl
+    text-blue-900/50 transition-all duration-300 px-2
+  `;
 
   return (
     <>
@@ -77,37 +119,38 @@ export default function Navbar() {
                 </ul>
               </div>
 
-              {/* Desktop Contact Button */}
+              {/* Desktop Registration Button */}
               <div className="nav-contact hidden lg:block">
-                <Button
-                  className={`
-                    text-sm font-black tracking-widest uppercase cursor-pointer
-                    bg-blue-800 hover:bg-blue-700 active:bg-blue-700
-                    border border-blue-400/30 rounded-xl
-                    shadow-[0_0_24px_rgba(59,130,246,0.5)]
-                    hover:shadow-[0_0_40px_rgba(59,130,246,0.7)]
-                    transition-all duration-300
-                    ${pathname === "/about" ? "text-white" : ""}
-                  `}
-                >
-                  Daftar Sekarang
-                </Button>
+                {regOpen ? (
+                  <Button
+                    // TODO: Uncomment onClick below once registration link is live
+                    // onClick={() => window.open("https://your-registration-url.com", "_blank")}
+                    className={btnActive}
+                  >
+                    Daftar Sekarang
+                  </Button>
+                ) : (
+                  <Button disabled className={btnDisabled}>
+                    Pendaftaran Dibuka 13 Juni 2026
+                  </Button>
+                )}
               </div>
 
-              {/* Mobile Hamburger + Contact */}
+              {/* Mobile Hamburger + Registration Button */}
               <div className="flex items-center gap-4 lg:hidden">
-                <Button
-                  className="
-                    text-xs font-black tracking-widest uppercase
-                    bg-blue-800 hover:bg-blue-700 active:bg-blue-700
-                    border border-blue-400/30 rounded-xl
-                    shadow-[0_0_24px_rgba(59,130,246,0.5)]
-                    hover:shadow-[0_0_40px_rgba(59,130,246,0.7)]
-                    transition-all duration-300 cursor-pointer
-                  "
-                >
-                  Daftar Sekarang
-                </Button>
+                {regOpen ? (
+                  <Button
+                    // TODO: Uncomment onClick below once registration link is live
+                    // onClick={() => window.open("https://your-registration-url.com", "_blank")}
+                    className={btnActiveMobile}
+                  >
+                    Daftar Sekarang
+                  </Button>
+                ) : (
+                  <Button disabled className={btnDisabledMobile}>
+                    Dibuka 13 Juni 2026
+                  </Button>
+                )}
                 <button onClick={toggleMobileMenu}>
                   {mobileMenuOpen ? (
                     <X className="w-6 h-6" />
