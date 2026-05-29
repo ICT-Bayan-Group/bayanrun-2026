@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { FaLinkedin, FaInstagram, FaWhatsapp } from 'react-icons/fa';
+import { FaYoutube, FaInstagram, FaWhatsapp } from 'react-icons/fa';
 import { useContact } from "@/lib/contact-context";
 import { Allison } from 'next/font/google';
 
@@ -74,7 +74,7 @@ const Footer: React.FC = () => {
 
             <div className="flex-1 flex flex-col justify-center items-end mt-12 md:mt-0 text-right max-md:items-center max-md:text-center">
               <div className="uppercase text-sm md:text-base font-bold tracking-widest mb-3 text-gray-600">
-                11 OKTOBER 2026
+               10 - 11 OKTOBER 2026
               </div>
               <h2 className="text-5xl md:text-6xl font-bold mb-6 text-black">Balikpapan</h2>
             </div>
@@ -105,9 +105,9 @@ const Footer: React.FC = () => {
               {/* Social Links */}
               <div className="flex flex-col items-end max-md:items-center max-md:text-center space-y-4">
                 <div className="flex items-center space-x-5 mb-2">
-                  <SocialLink href="https://id.linkedin.com/company/pt-bayan-resources-tbk" label="LinkedIn" Icon={FaLinkedin} />
                   <SocialLink href="https://www.instagram.com/bayan_open/" label="Instagram" Icon={FaInstagram} />
                   <SocialLink href="https://api.whatsapp.com/send/?phone=6282154815113&text&type=phone_number&app_absent=0" label="WhatsApp" Icon={FaWhatsapp} />
+                  <SocialLink href="https://www.youtube.com/@BAYANOPEN" label="YouTube" Icon={FaYoutube} />
                 </div>
                 <Link
                   href="/infos"
