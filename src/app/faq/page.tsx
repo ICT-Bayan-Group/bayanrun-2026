@@ -1,7 +1,6 @@
 "use client"
-import { useState, useRef } from "react";
-import { ChevronDown, ChevronUp, HelpCircle, MessageCircle, Mail, Instagram, Phone } from "lucide-react";
-import gsap from "gsap";
+import { useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 const faqData = [
   {
@@ -138,7 +137,6 @@ const faqData = [
 
 export default function FAQPage() {
   const [openSections, setOpenSections] = useState<number[]>([]);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   const toggleSection = (index: number) => {
     setOpenSections((prev) =>
@@ -146,42 +144,50 @@ export default function FAQPage() {
     );
   };
 
-  const handleShow = (el: gsap.TweenTarget) => {
-    const items = containerRef.current?.querySelectorAll(".faq-item") || [];
+  const FAQItem = ({ faq, idx }: { faq: typeof faqData[0]; idx: number }) => {
+    const isOpen = openSections.includes(idx);
+    return (
+      <div
+        className={`bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm transition-all duration-300 hover:shadow-md hover:scale-[1.02]`}
+      >
+        <button
+          className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-gray-50 transition-colors duration-300"
+          onClick={() => toggleSection(idx)}
+        >
+          <div className="flex-1 pr-4">
+            <div className="flex items-center gap-3 mb-2">
+              <span className="px-2.5 py-1 bg-blue-50 border border-blue-200 text-blue-700 rounded-full text-xs tracking-wide">
+                {faq.category}
+              </span>
+            </div>
+            <h2 className="text-lg font-semibold text-gray-900 leading-tight">
+              {faq.title}
+            </h2>
+          </div>
 
-    items.forEach((item) => {
-      if (item !== el) {
-        gsap.to(item, {
-          opacity: 0.4,
-          duration: 0.3,
-          ease: "power3.out",
-        });
-      }
-    });
+          <div className="flex-shrink-0">
+            {isOpen ? (
+              <ChevronUp className="w-5 h-5 text-blue-600 transition-transform duration-300" />
+            ) : (
+              <ChevronDown className="w-5 h-5 text-blue-600 transition-transform duration-300" />
+            )}
+          </div>
+        </button>
 
-    gsap.to(el, {
-      scale: 1.02,
-      duration: 0.3,
-      ease: "power3.out",
-    });
-  };
-
-  const handleHide = (el: gsap.TweenTarget) => {
-    const items = containerRef.current?.querySelectorAll(".faq-item") || [];
-
-    items.forEach((item) => {
-      gsap.to(item, {
-        opacity: 1,
-        duration: 0.3,
-        ease: "power2.out",
-      });
-    });
-
-    gsap.to(el, {
-      scale: 1,
-      duration: 0.3,
-      ease: "power2.out",
-    });
+        <div
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            isOpen ? "max-h-[2000px] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
+          <div className="px-6 pb-5 pt-2 bg-blue-600">
+            <div className="h-px bg-white/30 mb-4"></div>
+            <p className="text-white whitespace-pre-line leading-relaxed text-base">
+              {faq.content}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -190,8 +196,6 @@ export default function FAQPage() {
 
         {/* Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-3 mb-6">
-          </div>
           <h1 className="text-5xl lg:text-7xl font-bold mb-4 text-gray-900">FAQ</h1>
           <p className="text-xl text-gray-500">Pertanyaan yang Sering Diajukan</p>
           <p className="text-gray-600 mt-2 max-w-3xl mx-auto">
@@ -200,52 +204,10 @@ export default function FAQPage() {
         </div>
 
         {/* FAQ Items - Desktop (2 Columns) */}
-        <div className="hidden lg:block mb-16" ref={containerRef}>
+        <div className="hidden lg:block mb-16">
           <div className="grid grid-cols-2 gap-6">
             {faqData.map((faq, idx) => (
-              <div
-                key={idx}
-                className="faq-item bg-white border border-gray-200 rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 shadow-sm hover:shadow-md"
-                onMouseEnter={(e) => handleShow(e.currentTarget)}
-                onMouseLeave={(e) => handleHide(e.currentTarget)}
-              >
-                <button
-                  className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-gray-50 transition-all duration-300"
-                  onClick={() => toggleSection(idx)}
-                >
-                  <div className="flex-1 pr-4">
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className="px-2.5 py-1 bg-blue-50 border border-blue-200 text-blue-700 rounded-full text-xs tracking-wide">
-                        {faq.category}
-                      </span>
-                    </div>
-                    <h2 className="text-lg font-semibold text-gray-900 leading-tight">
-                      {faq.title}
-                    </h2>
-                  </div>
-
-                  <div className="flex-shrink-0">
-                    {openSections.includes(idx) ? (
-                      <ChevronUp className="w-5 h-5 text-blue-600 transition-transform duration-300" />
-                    ) : (
-                      <ChevronDown className="w-5 h-5 text-blue-600 transition-transform duration-300" />
-                    )}
-                  </div>
-                </button>
-
-                <div
-                  className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                    openSections.includes(idx) ? "max-h-[2000px] opacity-100" : "max-h-0 opacity-0"
-                  }`}
-                >
-                  <div className="px-6 pb-5 pt-2 bg-blue-600">
-                    <div className="h-px bg-white/30 mb-4"></div>
-                    <p className="text-white whitespace-pre-line leading-relaxed text-base">
-                      {faq.content}
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <FAQItem key={idx} faq={faq} idx={idx} />
             ))}
           </div>
         </div>
@@ -253,49 +215,9 @@ export default function FAQPage() {
         {/* FAQ Items - Mobile */}
         <div className="lg:hidden space-y-4 mb-16">
           {faqData.map((faq, idx) => (
-            <div
-              key={idx}
-              className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm"
-            >
-              <button
-                className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-gray-50 transition-all duration-300"
-                onClick={() => toggleSection(idx)}
-              >
-                <div className="flex-1 pr-4">
-                  <span className="px-3 py-1 bg-blue-50 border border-blue-200 text-blue-700 rounded-full text-xs tracking-wide mb-2 inline-block">
-                    {faq.category}
-                  </span>
-                  <h2 className="text-lg font-semibold text-gray-900">
-                    {faq.title}
-                  </h2>
-                </div>
-
-                <div className="flex-shrink-0">
-                  {openSections.includes(idx) ? (
-                    <ChevronUp className="w-5 h-5 text-blue-600" />
-                  ) : (
-                    <ChevronDown className="w-5 h-5 text-blue-600" />
-                  )}
-                </div>
-              </button>
-
-              <div
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                  openSections.includes(idx) ? "max-h-[2000px] opacity-100" : "max-h-0 opacity-0"
-                }`}
-              >
-                <div className="px-6 pb-5 pt-2 bg-blue-600">
-                  <div className="h-px bg-white/30 mb-4"></div>
-                  <p className="text-white whitespace-pre-line leading-relaxed">
-                    {faq.content}
-                  </p>
-                </div>
-              </div>
-            </div>
+            <FAQItem key={idx} faq={faq} idx={idx} />
           ))}
         </div>
-
-        {/* Contact Section */}
 
       </div>
     </div>

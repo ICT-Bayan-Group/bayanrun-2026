@@ -54,59 +54,27 @@ export const services = [
 export const testimonials = [
   {
     id: 1,
-    name: "Dina Kartika Sari",
-    role: "Pegawai Swasta & Running Enthusiast",
+    name: "donyarcapada",
+    role: "Peserta Bayan Run",
     comment:
-      "Bayan Run adalah event lari terbaik yang pernah saya ikuti! Rutenya melewati keindahan alam Balikpapan yang luar biasa. Organisasinya sangat profesional dan suasananya sangat mendukung para pelari pemula seperti saya. Panitia sangat responsif dan membantu di setiap pos. Tahun depan saya pasti ikut lagi!",
-    image: "/images/dina.jpg",
+      "Asli pecah eventnya! Vibesnya kayak event-event di luar sana. Tahun depan harus ikut lagi, pokoknya ga mau tau!",
+    image: "/images/peserta1.jpg",
   },
   {
     id: 2,
-    name: "Rizky Permana",
-    role: "Atlet Lari & Pelatih Olahraga",
+    name: "sabbars_1921",
+    role: "Peserta Bayan Run 2025",
     comment:
-      "Sebagai pelari rutin, saya sangat menghargai bagaimana Bayan Run menggabungkan olahraga dengan pelestarian lingkungan. Setiap kilometer yang kita tempuh memberi kontribusi untuk penghijauan kota. Ini bukan sekadar lari, tapi gerakan positif untuk Balikpapan!",
-    image: "/images/rizky.jpg",
+      "Bayan Run 2025 keep moving finish strong! Semoga tahun depan semakin keren.",
+    image: "/images/peserta2.jpg",
   },
   {
     id: 3,
-    name: "Sari Wijayanti",
-    role: "Founder, Balikpapan Runners Club",
+    name: "damunachmad67",
+    role: "Peserta & Sahabat Komunitas Lari",
     comment:
-      "Bayan Run sukses menyatukan komunitas lari di Balikpapan. Event ini memberikan platform yang sempurna untuk bersosialisasi sambil berolahraga. Medalinya juga keren sekali!",
-    image: "/images/sari.jpg",
-  },
-  {
-    id: 4,
-    name: "Budi Santoso",
-    role: "Guru SMA Negeri 5 Balikpapan",
-    comment:
-      "Pertama kali ikut fun run dan memilih Bayan Run adalah keputusan terbaik. Panitia sangat membantu, ada banyak pos hidrasi, dan finisher pack-nya lengkap. Pengalaman yang luar biasa menyenangkan!",
-    image: "/images/budi.jpg",
-  },
-  {
-    id: 5,
-    name: "Maya Lestari Putri",
-    role: "Content Creator & Health Advocate",
-    comment:
-      "Bayan Run bukan hanya tentang berlari, tapi tentang membangun gaya hidup sehat bersama komunitas. Saya sudah mengikuti event ini 3 kali dan selalu ada inovasi baru yang membuat setiap tahun lebih menarik. Dokumentasi dan live coverage-nya juga sangat profesional. Terima kasih Bayan Run!",
-    image: "/images/maya.jpg",
-  },
-  {
-    id: 6,
-    name: "Arief Budiman",
-    role: "Regional Manager, PT Kaltim Prima Coal",
-    comment:
-      "Sebagai sponsor, kami melihat Bayan Run sebagai event yang berdampak positif bagi masyarakat. Antusiasme peserta sangat tinggi dan ini adalah investasi yang tepat!",
-    image: "/images/arief.jpg",
-  },
-  {
-    id: 7,
-    name: "Fajar Ramadhan",
-    role: "Pengusaha & Marathon Runner",
-    comment:
-      "Event yang sangat terorganisir dengan baik. Rute yang menantang tapi aman, dan timing system yang akurat. Sangat direkomendasikan untuk semua kalangan!",
-    image: "/images/fajar.jpg",
+      "Insyaa Allah kita masih diberi kekuatan dan kesehatan agar bisa ketemu lagi di Bayan Run tahun depan. Terima kasih buat teman-teman dan sahabat-sahabat di Balikpapan yang baik dan ramah. Semoga Bayan Run bisa menjadi event lari nasional yang menjadi ikon Balikpapan.",
+    image: "/images/peserta3.jpg",
   },
 ];
 
