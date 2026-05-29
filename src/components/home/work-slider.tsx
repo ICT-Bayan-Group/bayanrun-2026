@@ -1,11 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, Workflow } from "lucide-react";
-import { Button } from "../ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const slideImages = [
   "https://res.cloudinary.com/djs5pi7ev/image/upload/q_auto/f_auto/v1767765529/20251012070224_-_BOM_8032_qy3ajc.jpg",
@@ -17,139 +15,54 @@ const slideImages = [
   "https://res.cloudinary.com/djs5pi7ev/image/upload/q_auto/f_auto/v1767765497/DJI_20251012090310_0032_D_nm8eit.jpg",
   "https://res.cloudinary.com/djs5pi7ev/image/upload/q_auto/f_auto/v1767765514/20251012061107_-_BOM_7070_nah0u9.jpg",
   "https://res.cloudinary.com/djs5pi7ev/image/upload/q_auto/f_auto/v1767765537/20251012065145_-_BOM_0769_xlklog.jpg",
-
 ];
+
+const total = slideImages.length;
+
+function getOrder(i: number, cur: number) {
+  return (i - cur + total) % total;
+}
+
+function getCardStyle(order: number): React.CSSProperties {
+  if (order > 4) {
+    return {
+      transform: `translateY(${order * 14}px) scale(${1 - order * 0.04}) rotateZ(${order % 2 === 0 ? order * 0.8 : -order * 0.8}deg)`,
+      zIndex: total - order,
+      opacity: 0,
+      transition: "all 0.5s cubic-bezier(0.4,0,0.2,1)",
+    };
+  }
+  return {
+    transform: `translateY(${order * 14}px) scale(${1 - order * 0.04}) rotateZ(${order === 0 ? 0 : order % 2 === 0 ? order * 0.8 : -order * 0.8}deg)`,
+    zIndex: total - order,
+    opacity: 1 - order * 0.15,
+    transition: "all 0.5s cubic-bezier(0.4,0,0.2,1)",
+  };
+}
 
 export default function StackedSlider() {
   const [current, setCurrent] = useState(0);
+  const [exiting, setExiting] = useState<number | null>(null);
+  const [exitDir, setExitDir] = useState<"next" | "prev">("next");
   const [isAnimating, setIsAnimating] = useState(false);
-  const slidesRef = useRef<(HTMLDivElement | null)[]>([]);
-  const total = slideImages.length;
 
-  const getOrder = (i: number, cur: number) =>
-    (i - cur + total) % total;
-
-  useEffect(() => {
-    slidesRef.current.forEach((card, i) => {
-      if (!card) return;
-      const order = getOrder(i, current);
-      gsap.set(card, {
-        x: 0,
-        y: order * 14,
-        scale: 1 - order * 0.04,
-        zIndex: total - order,
-        opacity: order > 4 ? 0 : 1 - order * 0.15,
-        rotateZ: order === 0 ? 0 : order % 2 === 0 ? order * 0.8 : -order * 0.8,
-      });
-    });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const animateToState = (nextCurrent: number) => {
+  const triggerTransition = (nextCurrent: number, dir: "next" | "prev") => {
     if (isAnimating) return;
     setIsAnimating(true);
-
-    slidesRef.current.forEach((card, i) => {
-      if (!card) return;
-      const order = getOrder(i, nextCurrent);
-      const isOutgoing = getOrder(i, current) === 0;
-
-      if (isOutgoing) {
-        gsap.to(card, {
-          x: 600,
-          y: -100,
-          rotate: 20,
-          opacity: 0,
-          scale: 0.8,
-          duration: 0.5,
-          ease: "power3.in",
-          onComplete: () => {
-            gsap.set(card, {
-              x: 0,
-              y: order * 14,
-              scale: 1 - order * 0.04,
-              zIndex: total - order,
-              opacity: order > 4 ? 0 : 1 - order * 0.15,
-              rotateZ: order % 2 === 0 ? order * 0.8 : -order * 0.8,
-              rotate: 0,
-            });
-          },
-        });
-      } else {
-        gsap.to(card, {
-          x: 0,
-          y: order * 14,
-          scale: 1 - order * 0.04,
-          zIndex: total - order,
-          opacity: order > 4 ? 0 : 1 - order * 0.15,
-          rotateZ: order === 0 ? 0 : order % 2 === 0 ? order * 0.8 : -order * 0.8,
-          duration: 0.5,
-          ease: "power3.out",
-          delay: 0.1,
-        });
-      }
-    });
-
+    setExiting(current);
+    setExitDir(dir);
     setTimeout(() => {
+      setExiting(null);
       setCurrent(nextCurrent);
       setIsAnimating(false);
-    }, 600);
+    }, 500);
   };
 
-  const moveNext = () => {
-    if (isAnimating) return;
-    animateToState((current + 1) % total);
-  };
-
-  const movePrev = () => {
-    if (isAnimating) return;
-    const prevCurrent = (current - 1 + total) % total;
-
-    slidesRef.current.forEach((card, i) => {
-      if (!card) return;
-      const order = getOrder(i, prevCurrent);
-      const isIncoming = getOrder(i, current) === total - 1;
-
-      if (isIncoming) {
-        gsap.fromTo(
-          card,
-          { x: -600, y: -100, rotate: -20, opacity: 0, scale: 0.8 },
-          {
-            x: 0,
-            y: 0,
-            rotate: 0,
-            opacity: 1,
-            scale: 1,
-            zIndex: total,
-            duration: 0.5,
-            ease: "power3.out",
-          }
-        );
-      } else {
-        gsap.to(card, {
-          x: 0,
-          y: order * 14,
-          scale: 1 - order * 0.04,
-          zIndex: total - order,
-          opacity: order > 4 ? 0 : 1 - order * 0.15,
-          rotateZ: order === 0 ? 0 : order % 2 === 0 ? order * 0.8 : -order * 0.8,
-          duration: 0.5,
-          ease: "power3.out",
-          delay: 0.05,
-        });
-      }
-    });
-
-    setTimeout(() => {
-      setCurrent(prevCurrent);
-      setIsAnimating(false);
-    }, 600);
-  };
+  const moveNext = () => triggerTransition((current + 1) % total, "next");
+  const movePrev = () => triggerTransition((current - 1 + total) % total, "prev");
 
   return (
     <section className="py-16 lg:py-24 bg-gray-200 overflow-hidden relative">
-
-      {/* Subtle background decoration */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-100/60 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-amber-100/60 rounded-full blur-3xl" />
@@ -168,45 +81,51 @@ export default function StackedSlider() {
         <p className="text-blue-900/70 mt-4 text-sm font-semibold tracking-widest uppercase">
           Moment terbaik Bayan Run
         </p>
-        <div className="mt-6 flex justify-center">
-          <Link href="/gallery">
-           {/* <Button
-              className="group flex items-center gap-2 px-6 h-11 border border-blue-900/20 bg-white hover:bg-blue-900 text-blue-900 hover:text-white shadow-sm transition-all duration-300"
-            >
-              <Workflow className="w-4 h-4" />
-              <span>Galeri</span>
-            </Button> */}
-          </Link>
-        </div>
       </div>
 
       {/* Slider */}
       <div className="relative max-w-2xl mx-auto px-4">
-        {/* Stack container */}
         <div className="relative h-[55svh] w-full">
-          {slideImages.map((src, i) => (
-            <div
-              key={i}
-              ref={(el) => { slidesRef.current[i] = el; }}
-              className="slide absolute inset-0 rounded-2xl overflow-hidden shadow-xl cursor-pointer will-change-transform border border-black/5"
-              onClick={moveNext}
-            >
-              <Image
-                src={src}
-                alt={`slide-${i + 1}`}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 672px"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+          {slideImages.map((src, i) => {
+            const isExiting = exiting === i;
+            const order = getOrder(i, current);
 
-              {getOrder(i, current) === 0 && (
-                <div className="absolute bottom-4 left-4 text-white/80 text-xs tracking-widest uppercase font-mono">
-                  {String(current + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
-                </div>
-              )}
-            </div>
-          ))}
+            let style: React.CSSProperties = getCardStyle(order);
+
+            if (isExiting) {
+              style = {
+                transform: exitDir === "next"
+                  ? "translateX(600px) translateY(-100px) rotate(20deg) scale(0.8)"
+                  : "translateX(-600px) translateY(-100px) rotate(-20deg) scale(0.8)",
+                zIndex: total + 1,
+                opacity: 0,
+                transition: "all 0.5s cubic-bezier(0.4,0,0.2,1)",
+              };
+            }
+
+            return (
+              <div
+                key={i}
+                className="absolute inset-0 rounded-2xl overflow-hidden shadow-xl cursor-pointer will-change-transform border border-black/5"
+                style={style}
+                onClick={moveNext}
+              >
+                <Image
+                  src={src}
+                  alt={`slide-${i + 1}`}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 672px"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                {order === 0 && !isExiting && (
+                  <div className="absolute bottom-4 left-4 text-white/80 text-xs tracking-widest uppercase font-mono">
+                    {String(current + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
 
         {/* Controls */}
@@ -219,12 +138,14 @@ export default function StackedSlider() {
             <ChevronLeft className="w-5 h-5" />
           </button>
 
-          {/* Dots */}
           <div className="flex gap-2 items-center">
             {slideImages.map((_, i) => (
               <button
                 key={i}
-                onClick={() => !isAnimating && animateToState(i)}
+                onClick={() => {
+                  if (isAnimating || i === current) return;
+                  triggerTransition(i, i > current ? "next" : "prev");
+                }}
                 className={`rounded-full transition-all duration-300 ${
                   i === current
                     ? "w-6 h-2 bg-blue-900"

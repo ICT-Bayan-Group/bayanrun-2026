@@ -1,12 +1,6 @@
 "use client";
 
-import React, { useLayoutEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
+import React, { useEffect, useRef } from "react";
 
 const STATS = [
   { value: "2026", label: "Year" },
@@ -15,42 +9,52 @@ const STATS = [
   { value: "21K", label: "Max Distance" },
 ];
 
+function animateCounter(el: HTMLElement) {
+  const raw = el.dataset.value ?? "0";
+  const num = parseFloat(raw.replace(/\D/g, ""));
+  const suffix = raw.replace(/[\d.]/g, "");
+  if (isNaN(num)) return;
+
+  const duration = 1600; // ms
+  const start = performance.now();
+
+  function tick(now: number) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    // ease-out: 1 - (1-t)^3
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(eased * num) + suffix;
+    if (progress < 1) requestAnimationFrame(tick);
+  }
+
+  requestAnimationFrame(tick);
+}
+
 export default function AboutStats() {
   const rootRef = useRef<HTMLDivElement | null>(null);
 
-  useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      document.querySelectorAll<HTMLElement>(".amv-stat-num").forEach((el) => {
-        const raw = el.dataset.value ?? "0";
-        const num = parseFloat(raw.replace(/\D/g, ""));
-        const suffix = raw.replace(/[\d.]/g, "");
-        if (!isNaN(num)) {
-          gsap.fromTo(
-            el,
-            { innerText: "0" },
-            {
-              innerText: num,
-              duration: 1.6,
-              ease: "power2.out",
-              snap: { innerText: 1 },
-              scrollTrigger: { trigger: el, start: "top 85%", once: true },
-              onUpdate() {
-                el.innerText = Math.round(parseFloat(el.innerText)) + suffix;
-              },
-            }
-          );
-        }
-      });
-    }, rootRef);
+  useEffect(() => {
+    const els = rootRef.current?.querySelectorAll<HTMLElement>(".amv-stat-num");
+    if (!els) return;
 
-    return () => ctx.revert();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animateCounter(entry.target as HTMLElement);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    els.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
   }, []);
 
   return (
-    <section
-      ref={rootRef}
-      className="relative w-full bg-gray-200 text-blue-900"
-    >
+    <section ref={rootRef} className="relative w-full bg-gray-200 text-blue-900">
       <div className="mx-auto max-w-6xl px-6 pt-14 pb-4">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-0 border border-blue-900/15 divide-x divide-y md:divide-y-0 divide-blue-900/15">
           {STATS.map((s) => (
@@ -72,9 +76,7 @@ export default function AboutStats() {
         </div>
       </div>
 
-      {/* Editorial label */}
-      <div className="mx-auto max-w-6xl px-6 pt-6 pb-2 flex items-center gap-4">
-      </div>
+      <div className="mx-auto max-w-6xl px-6 pt-6 pb-2 flex items-center gap-4" />
     </section>
   );
 }
