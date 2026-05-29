@@ -5,10 +5,6 @@ import {
   AlertCircle, CheckCircle, Zap, Shield, ChevronRight, Timer, Package,
 } from "lucide-react";
 import React, { useRef, useEffect, useState } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const BLUE        = "#1D5FD4";
 const BLUE_BG     = "#EEF4FF";
@@ -20,15 +16,15 @@ const RED_BG      = "#FEF2F2";
 const RED_BORDER  = "#FECACA";
 const BEBAS       = "'Bebas Neue', Arial Black, sans-serif";
 
-const VIDEO_SRC = "https://res.cloudinary.com/djs5pi7ev/video/upload/v1775095878/about-video_pmag3j.mp4";
+const PHOTO_SRC = "https://res.cloudinary.com/djs5pi7ev/image/upload/v1767765516/20251012060936_-_BOM_7023_uzwd7f.jpg";
 
 const categories = [
   { title: "Half Marathon", sub: "21K",    age: "17+ tahun",   cutoff: "4 Jam",    color: BLUE,      textColor: BLUE_TEXT, bg: BLUE_BG,    border: BLUE_BORDER, tags: ["Nasional", "Medal", "Finisher Shirt"], num: "01" },
   { title: "10K Run",       sub: "10K",    age: "17+ tahun",   cutoff: "2 Jam",    color: "#0E7ABF", textColor: "#094F80", bg: "#E6F4FD",  border: "#A8D8F5",   tags: ["Nasional", "Medal"],                    num: "02" },
   { title: "5K Run",        sub: "5K",     age: "17+ tahun",   cutoff: "1 Jam",    color: "#0B6B8A", textColor: "#073E50", bg: "#E3F2F7",  border: "#9CD3E4",   tags: ["Nasional", "Medal"],                    num: "03" },
   { title: "5K Teenagers",  sub: "Remaja", age: "13–16 tahun", cutoff: "1 Jam",    color: "#2F4FB8", textColor: "#1A2E7A", bg: "#EEF0FF",  border: "#BCC5F4",   tags: ["Remaja", "Medal"],                      num: "04" },
-  { title: "2.5K Kid Dash",     sub: "Anak",   age: "6–12 tahun",  cutoff: "50 Menit", color: RED,       textColor: RED_TEXT,  bg: RED_BG,     border: RED_BORDER,  tags: ["Anak-anak", "Medal"],                   num: "05" },
-    { title: "700M Kids= Dash",     sub: "Anak",   age: "6–12 tahun",  cutoff: "50 Menit", color: RED,       textColor: RED_TEXT,  bg: RED_BG,     border: RED_BORDER,  tags: ["Anak-anak", "Medal"],                   num: "06" },
+  { title: "2.5K Kid Dash", sub: "Anak",   age: "6–12 tahun",  cutoff: "50 Menit", color: RED,       textColor: RED_TEXT,  bg: RED_BG,     border: RED_BORDER,  tags: ["Anak-anak", "Medal"],                   num: "05" },
+  { title: "700M Kids Dash",sub: "Anak",   age: "6–12 tahun",  cutoff: "50 Menit", color: RED,       textColor: RED_TEXT,  bg: RED_BG,     border: RED_BORDER,  tags: ["Anak-anak", "Medal"],                   num: "06" },
 ];
 
 const importantRules = [
@@ -152,100 +148,74 @@ function CategoryCard({ cat }: { cat: typeof categories[0] }) {
   );
 }
 
+// ─── Ticker ──────────────────────────────────────────────────────────────────
+function Ticker() {
+  return (
+    <div className="relative bg-gray-200 py-4 md:py-6 lg:py-8 overflow-hidden">
+      <style>{`
+        @keyframes ticker-scroll {
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .ticker-track {
+          display: flex;
+          width: max-content;
+          animation: ticker-scroll 20s linear infinite;
+        }
+      `}</style>
+      <div className="ticker-track">
+        {[...Array(4)].map((_, index) => (
+          <div key={index} className="flex items-center flex-shrink-0">
+            <span className="text-2xl md:text-4xl lg:text-5xl font-black text-blue-900 tracking-tight uppercase mx-6 md:mx-8">
+              THE NEXT LEVEL
+            </span>
+            <span className="text-2xl md:text-4xl lg:text-7xl font-black text-blue-900 mx-3 md:mx-4">•</span>
+            <span className="text-2xl md:text-4xl lg:text-5xl font-black text-red-600 tracking-tight uppercase mx-6 md:mx-8">
+              KEEP MOVING KEEP STRONG
+            </span>
+            <span className="text-2xl md:text-4xl lg:text-7xl font-black text-red-600 mx-3 md:mx-4">•</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function BayanRunInfo() {
   useBayanFont();
   const isMobile = useIsMobile(640);
   const isTablet = useIsMobile(900);
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const titleRef     = useRef<HTMLHeadingElement>(null);
-  const topTextRef   = useRef<HTMLDivElement>(null);
-  const rulesRef     = useRef<HTMLDivElement>(null);
-  const catsRef      = useRef<HTMLDivElement>(null);
-  const regRef       = useRef<HTMLDivElement>(null);
-
   // Desktop cols
   const catDesktopCols = "36px 76px 1fr 120px 100px 1fr";
   const catTabletCols  = "36px 76px 1fr 100px";
-  const catMobileCols  = "none"; // card mode on mobile
 
   const cotDesktopCols = "36px 76px 1fr 120px 110px";
   const cotTabletCols  = "36px 76px 1fr 110px";
 
-  // ── Banner-style ticker animation ──────────────────────────────────────────
-  useEffect(() => {
-    const topText = topTextRef.current;
-    if (topText) {
-      gsap.fromTo(topText,
-        { x: "-50%" },
-        { x: "0%", duration: 20, ease: "none", repeat: -1 }
-      );
-    }
-    return () => {
-      gsap.killTweensOf(topTextRef.current);
-    };
-  }, []);
-
-  // ── Scroll-triggered animations ────────────────────────────────────────────
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      if (titleRef.current) {
-        const letters = titleRef.current.querySelectorAll<HTMLElement>(".ltr");
-        gsap.set(letters, { opacity: 0, y: 90, rotateX: -75 });
-        gsap.to(letters, { opacity: 1, y: 0, rotateX: 0, duration: 0.6, stagger: 0.038, ease: "back.out(1.6)" });
-      }
-      if (rulesRef.current) {
-        const cards = rulesRef.current.querySelectorAll<HTMLElement>(".rule-card");
-        gsap.set(cards, { opacity: 0, y: 44 });
-        ScrollTrigger.create({
-          trigger: rulesRef.current, start: "top 82%", once: true,
-          onEnter: () => gsap.to(cards, { opacity: 1, y: 0, duration: 0.5, stagger: 0.09, ease: "power3.out" }),
-        });
-      }
-      if (catsRef.current) {
-        const rows = catsRef.current.querySelectorAll<HTMLElement>(".cat-row");
-        gsap.set(rows, { opacity: 0, x: -55 });
-        ScrollTrigger.create({
-          trigger: catsRef.current, start: "top 82%", once: true,
-          onEnter: () => gsap.to(rows, { opacity: 1, x: 0, duration: 0.5, stagger: 0.07, ease: "power3.out" }),
-        });
-      }
-      if (regRef.current) {
-        const panels = regRef.current.querySelectorAll<HTMLElement>(".reg-panel");
-        gsap.set(panels, { opacity: 0, y: 38 });
-        ScrollTrigger.create({
-          trigger: regRef.current, start: "top 82%", once: true,
-          onEnter: () => gsap.to(panels, { opacity: 1, y: 0, duration: 0.55, stagger: 0.1, ease: "power3.out" }),
-        });
-      }
-    }, containerRef);
-    return () => ctx.revert();
-  }, []);
-
   const onCatEnter = (el: HTMLElement, color: string) => {
-    gsap.to(el, { x: 9, duration: 0.2, ease: "power2.out" });
+    el.style.transform = "translateX(9px)";
     el.style.borderLeftColor = color;
     el.style.backgroundColor = color + "0C";
-    containerRef.current?.querySelectorAll<HTMLElement>(".cat-row").forEach((row) => {
-      if (row !== el) gsap.to(row, { opacity: 0.32, duration: 0.18 });
-    });
+    const siblings = el.parentElement?.querySelectorAll<HTMLElement>(".cat-row") ?? [];
+    siblings.forEach((row) => { if (row !== el) row.style.opacity = "0.32"; });
     const num = el.querySelector<HTMLElement>(".cat-num");
-    if (num) { num.style.color = color; gsap.to(num, { scale: 1.12, duration: 0.2, ease: "power2.out" }); }
+    if (num) num.style.color = color;
   };
 
   const onCatLeave = (el: HTMLElement) => {
-    gsap.to(el, { x: 0, duration: 0.2, ease: "power2.out" });
+    el.style.transform = "translateX(0)";
     el.style.borderLeftColor = "#D8E4F5";
     el.style.backgroundColor = "#fff";
-    containerRef.current?.querySelectorAll<HTMLElement>(".cat-row").forEach((row) => gsap.to(row, { opacity: 1, duration: 0.18 }));
+    const siblings = el.parentElement?.querySelectorAll<HTMLElement>(".cat-row") ?? [];
+    siblings.forEach((row) => { row.style.opacity = "1"; });
     const num = el.querySelector<HTMLElement>(".cat-num");
-    if (num) { num.style.color = "#BCC8DC"; gsap.to(num, { scale: 1, duration: 0.2, ease: "power2.out" }); }
+    if (num) num.style.color = "#BCC8DC";
   };
 
   return (
     <div
-      ref={containerRef}
       style={{
         minHeight: "100vh",
         background: "#F4F7FB",
@@ -254,8 +224,22 @@ export default function BayanRunInfo() {
         overflowX: "hidden",
       }}
     >
+      <style>{`
+        @keyframes hero-fade-in {
+          from { opacity: 0; transform: translateY(30px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes scroll-bounce {
+          0%, 100% { transform: translateY(0) rotate(45deg); }
+          50%       { transform: translateY(8px) rotate(45deg); }
+        }
+        .hero-content { animation: hero-fade-in 0.9s ease forwards; }
+        .hero-subtitle { animation: hero-fade-in 0.9s 0.3s ease both; }
+        .scroll-arrow-el { animation: scroll-bounce 1.2s ease-in-out infinite; }
+        .cat-row { transition: transform 0.18s ease, background-color 0.18s ease, border-left-color 0.18s ease, opacity 0.18s ease; }
+      `}</style>
 
-      {/* ── HERO with video background ── */}
+      {/* ── HERO with photo background ── */}
       <div style={{
         position: "relative",
         width: "100%",
@@ -266,13 +250,10 @@ export default function BayanRunInfo() {
         alignItems: "center",
         justifyContent: "center",
       }}>
-        {/* Background video */}
-        <video
-          src={VIDEO_SRC}
-          autoPlay
-          loop
-          muted
-          playsInline
+        {/* Background photo */}
+        <img
+          src={PHOTO_SRC}
+          alt="Bayan Run 2026"
           style={{
             position: "absolute", inset: 0,
             width: "100%", height: "100%",
@@ -307,7 +288,7 @@ export default function BayanRunInfo() {
           padding: "0 clamp(16px, 4vw, 40px)",
         }}>
           <h1
-            ref={titleRef}
+            className="hero-content"
             style={{
               fontFamily: BEBAS,
               fontSize: "clamp(52px, 11vw, 108px)",
@@ -316,7 +297,6 @@ export default function BayanRunInfo() {
               letterSpacing: "0.01em",
               margin: "0 0 18px",
               textTransform: "uppercase",
-              perspective: "700px",
               display: "flex",
               flexWrap: "wrap",
               justifyContent: "center",
@@ -326,49 +306,42 @@ export default function BayanRunInfo() {
           >
             {"BAYAN RUN 2026".split("").map((c, i) =>
               c === " " ? <span key={i} style={{ display: "inline-block", width: isMobile ? 10 : 18 }} /> : (
-                <span key={i} className="ltr" style={{ display: "inline-block", color: i < 5 ? BLUE : "#fff" }}>
+                <span key={i} style={{ display: "inline-block", color: i < 5 ? BLUE : "#fff" }}>
                   {c}
                 </span>
               )
             )}
           </h1>
 
-          <p style={{
-            fontFamily: "'Inter', sans-serif",
-            fontSize: isMobile ? 10 : 13,
-            color: "#ffffff",
-            letterSpacing: "0.18em",
-            textTransform: "uppercase",
-            fontWeight: 600,
-            margin: 0,
-            textAlign: "center",
-          }}>
+          <p
+            className="hero-subtitle"
+            style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: isMobile ? 10 : 13,
+              color: "#ffffff",
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              fontWeight: 600,
+              margin: 0,
+              textAlign: "center",
+            }}
+          >
             Informasi & Ketentuan Lomba · Balikpapan, Kalimantan Timur
           </p>
+        </div>
+
+        {/* Scroll indicator */}
+        <div style={{
+          position: "absolute", bottom: 36, left: "50%", transform: "translateX(-50%)",
+          zIndex: 4, display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
+        }}>
+          <span style={{ fontSize: 10, letterSpacing: "0.3em", color: "rgba(255,255,255,0.4)", textTransform: "uppercase" }}>Scroll</span>
+          <div className="scroll-arrow-el" style={{ width: 18, height: 18, borderRight: "2px solid rgba(255,255,255,0.5)", borderBottom: "2px solid rgba(255,255,255,0.5)" }} />
         </div>
       </div>
 
       {/* ── TICKER ── */}
-      <div className="relative bg-gray-200 py-4 md:py-6 lg:py-8 overflow-hidden">
-        <div
-          ref={topTextRef}
-          className="flex whitespace-nowrap"
-          style={{ width: "200%" }}
-        >
-          {[...Array(4)].map((_, index) => (
-            <div key={index} className="flex items-center flex-shrink-0">
-              <span className="text-2xl md:text-4xl lg:text-5xl font-black text-blue-900 tracking-tight uppercase mx-6 md:mx-8">
-                THE NEXT LEVEL
-              </span>
-              <span className="text-2xl md:text-4xl lg:text-7xl font-black text-blue-900 mx-3 md:mx-4">•</span>
-              <span className="text-2xl md:text-4xl lg:text-5xl font-black text-red-600 tracking-tight uppercase mx-6 md:mx-8">
-                KEEP MOVING KEEP STRONG
-              </span>
-              <span className="text-2xl md:text-4xl lg:text-7xl font-black text-red-600 mx-3 md:mx-4">•</span>
-            </div>
-          ))}
-        </div>
-      </div>
+      <Ticker />
 
       {/* ── MAIN ── */}
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: `0 clamp(16px, 4vw, 40px)` }}>
@@ -395,20 +368,17 @@ export default function BayanRunInfo() {
         </div>
 
         {/* ── KEY RULES ── */}
-        <div ref={rulesRef} style={{ marginBottom: isMobile ? 44 : 68 }}>
+        <div style={{ marginBottom: isMobile ? 44 : 68 }}>
           <SL>Aturan Utama</SL>
           <div style={{
             display: "grid",
-            gridTemplateColumns: isMobile
-              ? "repeat(2, 1fr)"
-              : "repeat(auto-fit, minmax(200px, 1fr))",
+            gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(auto-fit, minmax(200px, 1fr))",
             gap: 10,
             marginTop: 20,
           }}>
             {importantRules.map((r, i) => (
               <div
                 key={i}
-                className="rule-card"
                 style={{
                   background: "#fff", border: "1px solid #DDEAF8",
                   borderRadius: 10, overflow: "hidden",
@@ -447,21 +417,15 @@ export default function BayanRunInfo() {
             <Award size={16} color={BLUE} />
           </div>
 
-          {/* Mobile: card layout */}
           {isMobile ? (
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              {categories.map((cat, i) => (
-                <CategoryCard key={i} cat={cat} />
-              ))}
+              {categories.map((cat, i) => <CategoryCard key={i} cat={cat} />)}
             </div>
           ) : (
-            /* Tablet & Desktop: table layout */
-            <div ref={catsRef} style={{ border: "1px solid #DDEAF8", borderRadius: 10, overflow: "hidden" }}>
-              {/* Header */}
+            <div style={{ border: "1px solid #DDEAF8", borderRadius: 10, overflow: "hidden" }}>
               <div style={{
                 display: "grid",
                 gridTemplateColumns: isTablet ? catTabletCols : catDesktopCols,
-                gap: 0,
                 background: "#F0F6FF",
                 borderBottom: "1px solid #DDEAF8",
                 padding: "8px 16px",
@@ -473,7 +437,6 @@ export default function BayanRunInfo() {
                   <span key={i} style={{ fontFamily: BEBAS, fontSize: 12, color: "#8E9BAE", textTransform: "uppercase", letterSpacing: "0.14em" }}>{h}</span>
                 ))}
               </div>
-              {/* Rows */}
               {categories.map((cat, i) => (
                 <div
                   key={i}
@@ -485,14 +448,13 @@ export default function BayanRunInfo() {
                     padding: "11px 16px",
                     background: "#fff",
                     borderTop: i > 0 ? "1px solid #F0F4FA" : "none",
-                    borderRight: "none", borderBottom: "none",
                     borderLeft: "3px solid #D8E4F5",
-                    cursor: "default", transition: "background 0.12s",
+                    cursor: "default",
                   }}
                   onMouseEnter={(e) => onCatEnter(e.currentTarget, cat.color)}
                   onMouseLeave={(e) => onCatLeave(e.currentTarget)}
                 >
-                  <span className="cat-num" style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.1em", color: "#BCC8DC", fontVariantNumeric: "tabular-nums" }}>{cat.num}</span>
+                  <span className="cat-num" style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.1em", color: "#BCC8DC", fontVariantNumeric: "tabular-nums", transition: "color 0.18s" }}>{cat.num}</span>
                   <div style={{ background: cat.bg, border: `1px solid ${cat.border}`, borderRadius: 4, padding: "2px 9px", width: "fit-content" }}>
                     <span style={{ fontFamily: BEBAS, fontSize: 12, color: cat.textColor, letterSpacing: "0.08em" }}>{cat.sub}</span>
                   </div>
@@ -515,7 +477,7 @@ export default function BayanRunInfo() {
         </div>
 
         {/* ── PENDAFTARAN & PERATURAN ── */}
-        <div ref={regRef} style={{ marginBottom: isMobile ? 44 : 68 }}>
+        <div style={{ marginBottom: isMobile ? 44 : 68 }}>
           <SL>Pendaftaran & Peraturan</SL>
           <div style={{
             display: "grid",
@@ -523,7 +485,7 @@ export default function BayanRunInfo() {
             gap: 12,
             marginTop: 20,
           }}>
-            <div className="reg-panel" style={{ background: "#fff", border: "1px solid #f8dddd", borderRadius: 10, overflow: "hidden" }}>
+            <div style={{ background: "#fff", border: "1px solid #f8dddd", borderRadius: 10, overflow: "hidden" }}>
               <PanelHeader icon={<CheckCircle size={14} color={RED} />} bg={RED_BG} color={RED_TEXT} border={RED_BORDER} label="Pendaftaran" />
               <BulletList color={RED_TEXT} items={[
                 "Pendaftaran hanya melalui website RegNowOnline",
@@ -533,7 +495,7 @@ export default function BayanRunInfo() {
                 "Batas pembayaran: 15 hari setelah pendaftaran",
               ]} />
             </div>
-            <div className="reg-panel" style={{ background: "#fff", border: "1px solid #DDEAF8", borderRadius: 10, overflow: "hidden" }}>
+            <div style={{ background: "#fff", border: "1px solid #DDEAF8", borderRadius: 10, overflow: "hidden" }}>
               <PanelHeader icon={<AlertCircle size={14} color="#0E7ABF" />} bg="#E6F4FD" color="#0E7ABF" border="#A8D8F5" label="Peraturan Penting" />
               <BulletList color="#0E7ABF" items={[
                 "Biaya pendaftaran tidak dapat dikembalikan",
@@ -543,7 +505,7 @@ export default function BayanRunInfo() {
                 "Penyelenggara berhak melakukan tes doping",
               ]} />
             </div>
-            <div className="reg-panel" style={{ background: "#fff", border: "1px solid #DDEAF8", borderRadius: 10, overflow: "hidden" }}>
+            <div style={{ background: "#fff", border: "1px solid #DDEAF8", borderRadius: 10, overflow: "hidden" }}>
               <PanelHeader icon={<Package size={14} color="#b82f2f" />} bg="#ffeeee" color="#b82f2f" border="#f4bcbc" label="Race Pack" />
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6, padding: "12px 14px 4px" }}>
                 {["Kaos Lari", "Chip Waktu", "Nomor Bib", "Souvenir"].map((item, i) => (
@@ -564,21 +526,16 @@ export default function BayanRunInfo() {
         <div style={{ marginBottom: isMobile ? 44 : 68 }}>
           <SL>Waktu Cut-Off</SL>
 
-          {/* Mobile: card layout */}
           {isMobile ? (
             <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 20 }}>
               {categories.map((cat, i) => (
                 <div
                   key={i}
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 10,
-                    background: "#fff",
-                    border: "1px solid #DDEAF8",
+                    display: "flex", alignItems: "center", gap: 10,
+                    background: "#fff", border: "1px solid #DDEAF8",
                     borderLeft: `4px solid ${cat.color}`,
-                    borderRadius: 10,
-                    padding: "12px 14px",
+                    borderRadius: 10, padding: "12px 14px",
                   }}
                 >
                   <div style={{ background: cat.bg, border: `1px solid ${cat.border}`, borderRadius: 4, padding: "2px 9px", flexShrink: 0 }}>
@@ -593,7 +550,6 @@ export default function BayanRunInfo() {
               ))}
             </div>
           ) : (
-            /* Tablet & Desktop: table layout */
             <div style={{ border: "1px solid #DDEAF8", borderRadius: 10, overflow: "hidden", marginTop: 20 }}>
               <div style={{
                 display: "grid",

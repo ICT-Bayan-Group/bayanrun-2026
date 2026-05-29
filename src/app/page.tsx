@@ -1,6 +1,7 @@
 import AboutSection from "@/components/home/abuout-section";
 import Banner from "@/components/home/banner";
 import HowWeWork from "@/components/home/how-we-work";
+import VideoSection from "@/components/home/video";
 import StackedSlider from "@/components/home/work-slider";
 import RacePack from "@/components/home/racepack";
 import AboutStats from "@/components/about/about-stats";
@@ -77,6 +78,7 @@ export default function Home() {
       {/* <ServiceSection /> */}
           <RacePack />
       <StackedSlider />
+      <VideoSection />
          <AboutMissionVision />
          <Testimonial />
     </main>

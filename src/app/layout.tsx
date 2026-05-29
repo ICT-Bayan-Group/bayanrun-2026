@@ -5,7 +5,6 @@ import SmoothScrollProvider from "@/providers/smooth-scroll-provider";
 import Navbar from "@/components/shared/navbar";
 import Footer from "@/components/shared/Footer";
 import { ContactProvider } from "@/lib/contact-context";
-import ContactForm from "@/components/shared/contact-form";
 import { Toaster } from "sonner";
 import TrackingProvider from "@/providers/tracking-provider";
 import { Analytics } from "@vercel/analytics/next"
@@ -101,7 +100,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Navbar />
             {children}
             <Toaster position="top-right" />
-            <ContactForm />
             <Footer />
           </ContactProvider>
         </SmoothScrollProvider>
