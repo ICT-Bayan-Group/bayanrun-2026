@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const slideImages = [
@@ -24,19 +23,15 @@ function getOrder(i: number, cur: number) {
 }
 
 function getCardStyle(order: number): React.CSSProperties {
-  if (order > 4) {
-    return {
-      transform: `translateY(${order * 14}px) scale(${1 - order * 0.04}) rotateZ(${order % 2 === 0 ? order * 0.8 : -order * 0.8}deg)`,
-      zIndex: total - order,
-      opacity: 0,
-      transition: "all 0.5s cubic-bezier(0.4,0,0.2,1)",
-    };
-  }
   return {
-    transform: `translateY(${order * 14}px) scale(${1 - order * 0.04}) rotateZ(${order === 0 ? 0 : order % 2 === 0 ? order * 0.8 : -order * 0.8}deg)`,
+    transform: `translateY(${order * 14}px) scale(${1 - order * 0.04}) rotateZ(${
+      order === 0 ? 0 : order % 2 === 0 ? order * 0.8 : -order * 0.8
+    }deg)`,
     zIndex: total - order,
     opacity: 1 - order * 0.15,
     transition: "all 0.5s cubic-bezier(0.4,0,0.2,1)",
+    // FIX: will-change hanya pada card yang visible, bukan semua 9 card
+    willChange: order <= 1 ? "transform, opacity" : "auto",
   };
 }
 
@@ -63,9 +58,10 @@ export default function StackedSlider() {
 
   return (
     <section className="py-16 lg:py-24 bg-gray-200 overflow-hidden relative">
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-100/60 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-amber-100/60 rounded-full blur-3xl" />
+
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-100/40 rounded-full" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-amber-100/40 rounded-full" />
       </div>
 
       {/* Header */}
@@ -77,7 +73,7 @@ export default function StackedSlider() {
           <span className="text-blue-900">OUR</span>
           <span className="text-red-700">GALLERY</span>
         </p>
-        <div className="mx-auto mt-3 h-[2px] w-12 bg-amber-400" />
+        <div className="mx-auto mt-3 h-[2px] w-12 bg-amber-400" aria-hidden="true" />
         <p className="text-blue-900/70 mt-4 text-sm font-semibold tracking-widest uppercase">
           Moment terbaik Bayan Run
         </p>
@@ -85,10 +81,19 @@ export default function StackedSlider() {
 
       {/* Slider */}
       <div className="relative max-w-2xl mx-auto px-4">
-        <div className="relative h-[55svh] w-full">
+  
+        <div
+          className="relative h-[55svh] w-full"
+          style={{ contain: "layout style" }}
+          role="region"
+          aria-label="Gallery foto Bayan Run 2025"
+          aria-roledescription="carousel"
+        >
           {slideImages.map((src, i) => {
             const isExiting = exiting === i;
             const order = getOrder(i, current);
+
+            if (!isExiting && order > 4) return null;
 
             let style: React.CSSProperties = getCardStyle(order);
 
@@ -100,26 +105,35 @@ export default function StackedSlider() {
                 zIndex: total + 1,
                 opacity: 0,
                 transition: "all 0.5s cubic-bezier(0.4,0,0.2,1)",
+                willChange: "transform, opacity",
               };
             }
 
             return (
               <div
                 key={i}
-                className="absolute inset-0 rounded-2xl overflow-hidden shadow-xl cursor-pointer will-change-transform border border-black/5"
+                className="absolute inset-0 rounded-2xl overflow-hidden shadow-xl cursor-pointer border border-black/5"
                 style={style}
                 onClick={moveNext}
+                // FIX ACCESSIBILITY: hanya card aktif yang interactive untuk screen reader
+                role={order === 0 ? "group" : "presentation"}
+                aria-roledescription={order === 0 ? "slide" : undefined}
+                aria-label={order === 0 ? `Foto ${current + 1} dari ${total}` : undefined}
+                tabIndex={order === 0 ? 0 : -1}
               >
                 <Image
                   src={src}
-                  alt={`slide-${i + 1}`}
+                  alt={`Foto Bayan Run 2025 nomor ${i + 1}`}
                   fill
+                  // FIX PERF: hanya gambar aktif & berikutnya yang eager
+                  loading={order <= 1 ? "eager" : "lazy"}
+                  priority={order === 0}
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 672px"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
                 {order === 0 && !isExiting && (
-                  <div className="absolute bottom-4 left-4 text-white/80 text-xs tracking-widest uppercase font-mono">
+                  <div className="absolute bottom-4 left-4 text-white/80 text-xs tracking-widest uppercase font-mono" aria-hidden="true">
                     {String(current + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
                   </div>
                 )}
@@ -129,19 +143,24 @@ export default function StackedSlider() {
         </div>
 
         {/* Controls */}
-        <div className="flex items-center justify-center gap-4 mt-10">
+        <div className="flex items-center justify-center gap-4 mt-10" role="group" aria-label="Kontrol gallery">
+          {/* FIX ACCESSIBILITY: tambah aria-label pada semua button navigasi */}
           <button
             onClick={movePrev}
             disabled={isAnimating}
+            aria-label="Foto sebelumnya"
             className="w-12 h-12 rounded-full border border-blue-900/20 bg-white hover:bg-blue-900 text-blue-900 hover:text-white flex items-center justify-center shadow-sm transition-all duration-300 disabled:opacity-40 hover:scale-105 active:scale-95"
           >
-            <ChevronLeft className="w-5 h-5" />
+            <ChevronLeft className="w-5 h-5" aria-hidden="true" />
           </button>
 
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-2 items-center" role="tablist" aria-label="Pilih foto">
             {slideImages.map((_, i) => (
               <button
                 key={i}
+                role="tab"
+                aria-selected={i === current}
+                aria-label={`Foto ${i + 1}`}
                 onClick={() => {
                   if (isAnimating || i === current) return;
                   triggerTransition(i, i > current ? "next" : "prev");
@@ -158,9 +177,10 @@ export default function StackedSlider() {
           <button
             onClick={moveNext}
             disabled={isAnimating}
+            aria-label="Foto berikutnya"
             className="w-12 h-12 rounded-full border border-blue-900/20 bg-white hover:bg-blue-900 text-blue-900 hover:text-white flex items-center justify-center shadow-sm transition-all duration-300 disabled:opacity-40 hover:scale-105 active:scale-95"
           >
-            <ChevronRight className="w-5 h-5" />
+            <ChevronRight className="w-5 h-5" aria-hidden="true" />
           </button>
         </div>
 
