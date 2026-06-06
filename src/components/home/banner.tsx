@@ -78,7 +78,7 @@ function CountdownBlock({
    Main component
 ───────────────────────────────────────── */
 export default function AboutBanner() {
-  const REG_OPEN_ISO = "2026-06-13T00:00:00";
+  const REG_OPEN_ISO = "2026-06-06T00:00:00";
   const RACE_DAY_ISO = "2026-10-10T06:00:00";
 
   const [regOpen, setRegOpen] = useState(false);
@@ -233,7 +233,8 @@ export default function AboutBanner() {
 
                 {/* ── Button ── */}
                 {regOpen ? (
-                  <Button
+                <Button
+                    asChild
                     className="w-full py-4 sm:py-5 text-base sm:text-lg font-black tracking-widest uppercase
                       bg-blue-800 hover:bg-blue-700 active:bg-blue-700
                       border border-blue-400/30
@@ -242,7 +243,9 @@ export default function AboutBanner() {
                       hover:shadow-[0_0_40px_rgba(59,130,246,0.7)]
                       transition-all duration-300 cursor-pointer"
                   >
-                    Daftar Sekarang
+                    <a href="https://bayanrun.com" target="_blank" rel="noopener noreferrer">
+                      Daftar Sekarang
+                    </a>
                   </Button>
                 ) : (
                   <Button

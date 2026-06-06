@@ -9,7 +9,7 @@ import { navLinks } from "@/lib/constant";
 import { Menu, X } from "lucide-react";
 import { useContact } from "@/lib/contact-context";
 
-const REG_OPEN_ISO = "2026-06-13T00:00:00";
+const REG_OPEN_ISO = "2026-06-06T00:00:00";
 
 function useRegOpen() {
   const [regOpen, setRegOpen] = useState(false);
@@ -122,12 +122,10 @@ export default function Navbar() {
               {/* Desktop Registration Button */}
               <div className="nav-contact hidden lg:block">
                 {regOpen ? (
-                  <Button
-                    // TODO: Uncomment onClick below once registration link is live
-                    // onClick={() => window.open("https://your-registration-url.com", "_blank")}
-                    className={btnActive}
-                  >
-                    Daftar Sekarang
+                  <Button asChild className={btnActive}>
+                    <a href="https://bayanrun.com" target="_blank" rel="noopener noreferrer">
+                      Daftar Sekarang
+                    </a>
                   </Button>
                 ) : (
                   <Button disabled className={btnDisabled}>
@@ -137,14 +135,12 @@ export default function Navbar() {
               </div>
 
               {/* Mobile Hamburger + Registration Button */}
-              <div className="flex items-center gap-4 lg:hidden">
+             <div className="flex items-center gap-4 lg:hidden">
                 {regOpen ? (
-                  <Button
-                    // TODO: Uncomment onClick below once registration link is live
-                    // onClick={() => window.open("https://your-registration-url.com", "_blank")}
-                    className={btnActiveMobile}
-                  >
-                    Daftar Sekarang
+                  <Button asChild className={btnActiveMobile}>
+                    <a href="https://bayanrun.com" target="_blank" rel="noopener noreferrer">
+                      Daftar Sekarang
+                    </a>
                   </Button>
                 ) : (
                   <Button disabled className={btnDisabledMobile}>
