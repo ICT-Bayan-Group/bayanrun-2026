@@ -94,7 +94,6 @@ const Footer: React.FC = () => {
                     Menu
                   </span>
                   <Link href="/" className="hover:text-blue-900 transition-colors text-base md:text-lg font-medium">Home</Link>
-                  <Link href="/about" className="hover:text-blue-900 transition-colors text-base md:text-lg font-medium">About</Link>
                   <Link href="/schedule-rules" className="hover:text-blue-900 transition-colors text-base md:text-lg font-medium">Schedule & Rules</Link>
                   <Link href="/faq" className="hover:text-blue-900 transition-colors text-base md:text-lg font-medium">FAQ</Link>
                   <Link href="https://results.scorenow.co.id/Results.aspx?CId=19723&RId=280" className="hover:text-blue-900 transition-colors text-base md:text-lg font-medium">Race Results</Link>

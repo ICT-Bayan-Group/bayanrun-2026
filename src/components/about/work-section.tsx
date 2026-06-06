@@ -32,16 +32,16 @@ const VENUES = [
     mapsEmbed: "https://www.google.com/maps?q=Lapangan%20Merdeka%20Balikpapan&output=embed",
     mapsLink: "https://maps.google.com/?q=Lapangan+Merdeka+Balikpapan",
     startTimes: [
-      { cat: "Half Marathon", time: "05:15 WITA", cot: "4 Jam",    color: "#1D5FD4", textColor: "#0C3E9B", bg: "#EEF4FF", border: "#C5D9F8" },
-      { cat: "10K",           time: "06:00 WITA", cot: "2 Jam",    color: "#0E7ABF", textColor: "#094F80", bg: "#E6F4FD", border: "#A8D8F5" },
-      { cat: "5K Open",       time: "06:10 WITA", cot: "1 Jam",    color: "#0B6B8A", textColor: "#073E50", bg: "#E3F2F7", border: "#9CD3E4" },
-      { cat: "5K Teens",      time: "06:10 WITA", cot: "1 Jam",    color: "#2F4FB8", textColor: "#1A2E7A", bg: "#EEF0FF", border: "#BCC5F4" },
+      { cat: "Half Marathon", time: "05:15 WITA", cot: "3 Jam 30 Menit", color: "#1D5FD4", textColor: "#0C3E9B", bg: "#EEF4FF", border: "#C5D9F8" },
+      { cat: "10K",           time: "06:00 WITA", cot: "2 Jam",          color: "#0E7ABF", textColor: "#094F80", bg: "#E6F4FD", border: "#A8D8F5" },
+      { cat: "5K Open",       time: "06:10 WITA", cot: "1 Jam",          color: "#0B6B8A", textColor: "#073E50", bg: "#E3F2F7", border: "#9CD3E4" },
+      { cat: "5K Teens",      time: "06:10 WITA", cot: "1 Jam",          color: "#2F4FB8", textColor: "#1A2E7A", bg: "#EEF0FF", border: "#BCC5F4" },
     ],
   },
   {
     key: "bscc",
     label: "BSCC Dome",
-    date: "Friday, 10 October 2026",
+    date: "Sabtu, 10 Oktober 2026",
     location: "BSCC Dome, Balikpapan",
     color: "#DC2626",
     textColor: "#991B1B",
@@ -50,7 +50,8 @@ const VENUES = [
     mapsEmbed: "https://www.google.com/maps?q=BSCC+Dome+Balikpapan&output=embed",
     mapsLink: "https://maps.google.com/?q=BSCC+Dome+Balikpapan",
     startTimes: [
-      { cat: "2.5K Kid Dash", time: "06:20 WITA", cot: "50 Menit", color: "#DC2626", textColor: "#991B1B", bg: "#FEF2F2", border: "#FECACA" },
+      { cat: "Kids Dash 2.5K (8–12 yo)", time: "06:20 WITA", cot: "30 Menit", color: "#DC2626", textColor: "#991B1B", bg: "#FEF2F2", border: "#FECACA" },
+      { cat: "Kids Dash 800m (5–7 yo)",  time: "06:30 WITA", cot: "10 Menit", color: "#B91C1C", textColor: "#7F1D1D", bg: "#FFF5F5", border: "#FECACA" },
     ],
   },
 ];
@@ -60,7 +61,7 @@ const events = [
     id: 1,
     tag: "Day 1",
     title: "Racepack Collection",
-    date: "Saturday, 9 & 10 October 2025",
+    date: "9 & 10 October 2026",
     location: "BSCC Dome, Balikpapan",
     mapsLink: "https://maps.google.com/?q=BSCC+Dome+Balikpapan",
     dayTime: "--",
@@ -121,7 +122,6 @@ function MapEmbed({
         referrerPolicy="no-referrer-when-downgrade"
         title="Lokasi di Google Maps"
       />
-      {/* Shortcut buka Maps app native */}
       <a
         href={mapsLink}
         target="_blank"
@@ -301,7 +301,7 @@ function VenueModal({
             </div>
           </div>
 
-          {/* ── Maps — langsung tampil ── */}
+          {/* Maps */}
           <div style={{ padding: "14px 20px", borderTop: "1px solid #F0F4FA" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
               <p style={{
