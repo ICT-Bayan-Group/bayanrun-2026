@@ -16,7 +16,7 @@ const RED_BG      = "#FEF2F2";
 const RED_BORDER  = "#FECACA";
 const BEBAS       = "'Bebas Neue', Arial Black, sans-serif";
 
-const PHOTO_SRC = "https://res.cloudinary.com/djs5pi7ev/image/upload/v1767765516/20251012060936_-_BOM_7023_uzwd7f.jpg";
+const PHOTO_SRC = "https://res.cloudinary.com/djs5pi7ev/image/upload/v1780711905/20251012064855_-_BOM_0690_f1v4kw_8_11zon_sm9ipn.webp";
 
 const categories = [
   {

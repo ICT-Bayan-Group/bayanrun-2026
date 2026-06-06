@@ -4,31 +4,31 @@ import Image from "next/image";
 
 const racePackItems = [
   {
-    src: "https://res.cloudinary.com/djs5pi7ev/image/upload/v1780645028/BR_BIB_PIN_p0ucmk.png",
+    src: "https://res.cloudinary.com/djs5pi7ev/image/upload/v1780709156/BR_BIB_PIN_pbwogf.webp",
     name: "Magnetic Pin BIB",
   },
   {
-    src: "https://res.cloudinary.com/djs5pi7ev/image/upload/v1780641482/jersey-removebg-preview_o6rpom.png",
+    src: "https://res.cloudinary.com/djs5pi7ev/image/upload/v1780709156/jersey-removebg-preview_mlqcdm.webp",
     name: "Jersey Runners",
   },
   {
-    src: "https://res.cloudinary.com/djs5pi7ev/image/upload/v1780641294/contoh_bib_xeh6jw.png",
+    src: "https://res.cloudinary.com/djs5pi7ev/image/upload/v1780709156/contoh_bib_opqp4i.webp",
     name: "BIB Number",
   },
   {
-    src: "https://res.cloudinary.com/djs5pi7ev/image/upload/v1780641314/tas_multifungsi_black_vxe7pm.png",
+    src: "https://res.cloudinary.com/djs5pi7ev/image/upload/v1780709157/tas_multifungsi_black_am9pnv.webp",
     name: "Multifunction Bag",
   },
   {
-    src: "https://res.cloudinary.com/djs5pi7ev/image/upload/v1780641296/RUNNING_BELT_oe7eu2.png",
+    src: "https://res.cloudinary.com/djs5pi7ev/image/upload/v1780709156/RUNNING_BELT_i0zhie.webp",
     name: "Running Belt",
   },
   {
-    src: "https://res.cloudinary.com/djs5pi7ev/image/upload/v1780641295/soft_flask_br2026_w4rtma.png",
+    src: "https://res.cloudinary.com/djs5pi7ev/image/upload/v1780709156/soft_flask_br2026_cfxayd.webp",
     name: "Soft Flask",
   },
   {
-    src: "https://res.cloudinary.com/djs5pi7ev/image/upload/v1780645030/Medali_BR2026_oga4zx.png",
+    src: "https://res.cloudinary.com/djs5pi7ev/image/upload/v1780709158/Medali_BR2026_zzg1as.webp",
     name: "Medal",
   },
 ];
@@ -46,10 +46,7 @@ const RacePackCarousel: React.FC = () => {
           to   { transform: translateX(-50%); }
         }
         .racepack-track {
-          animation: marquee 40s linear infinite;
-        }
-        .racepack-track:hover {
-          animation-play-state: paused;
+          animation: marquee 20s linear infinite;
         }
       `}</style>
 
@@ -71,18 +68,16 @@ const RacePackCarousel: React.FC = () => {
             className="flex-shrink-0 flex flex-col items-center gap-3"
             style={{ width: 300 }}
           >
-            {/* Image */}
-            <div className="w-[260px] h-[260px] flex items-center justify-center">
+            <div className="w-[300px] h-[300px] flex items-center justify-center">
               <Image
                 src={item.src}
                 alt={item.name}
-                width={260}
-                height={260}
+                width={300}
+                height={300}
                 className="object-contain w-full h-full"
               />
             </div>
 
-            {/* Name label */}
             <div
               className="px-4 py-1 rounded"
               style={{

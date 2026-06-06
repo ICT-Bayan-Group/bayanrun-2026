@@ -5,15 +5,15 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const slideImages = [
-  "https://res.cloudinary.com/djs5pi7ev/image/upload/q_auto/f_auto/v1767765529/20251012070224_-_BOM_8032_qy3ajc.jpg",
-  "https://res.cloudinary.com/djs5pi7ev/image/upload/q_auto/f_auto/v1767765525/20251012064855_-_BOM_0690_f1v4kw.jpg",
-  "https://res.cloudinary.com/djs5pi7ev/image/upload/q_auto/f_auto/v1767765525/AR__4961_njqhws.jpg",
-  "https://res.cloudinary.com/djs5pi7ev/image/upload/q_auto/f_auto/v1767765516/20251012060936_-_BOM_7023_uzwd7f.jpg",
-  "https://res.cloudinary.com/djs5pi7ev/image/upload/q_auto/f_auto/v1767765516/DJI_20251012054325_0006_D_p3yx0k.jpg",
-  "https://res.cloudinary.com/djs5pi7ev/image/upload/q_auto/f_auto/v1767765513/20251012061749_-_BOM_0335_tssmcb.jpg",
-  "https://res.cloudinary.com/djs5pi7ev/image/upload/q_auto/f_auto/v1767765497/DJI_20251012090310_0032_D_nm8eit.jpg",
-  "https://res.cloudinary.com/djs5pi7ev/image/upload/q_auto/f_auto/v1767765514/20251012061107_-_BOM_7070_nah0u9.jpg",
-  "https://res.cloudinary.com/djs5pi7ev/image/upload/q_auto/f_auto/v1767765537/20251012065145_-_BOM_0769_xlklog.jpg",
+  "https://res.cloudinary.com/djs5pi7ev/image/upload/v1780711905/20251012061749_-_BOM_0335_tssmcb_4_11zon_glqpnp.webp",
+  "https://res.cloudinary.com/djs5pi7ev/image/upload/v1780711905/20251012060936_-_BOM_7023_uzwd7f_6_11zon_jtyqr0.webp",
+  "https://res.cloudinary.com/djs5pi7ev/image/upload/v1780711906/AR__4961_njqhws_7_11zon_p01pyk.webp",
+  "https://res.cloudinary.com/djs5pi7ev/image/upload/v1780711905/20251012061107_-_BOM_7070_nah0u9_2_11zon_qaipyv.webp",
+  "https://res.cloudinary.com/djs5pi7ev/image/upload/v1780711906/20251012070224_-_BOM_8032_qy3ajc_9_11zon_w2cbpi.webp",
+  "https://res.cloudinary.com/djs5pi7ev/image/upload/v1780711905/20251012064855_-_BOM_0690_f1v4kw_8_11zon_sm9ipn.webp",
+  "https://res.cloudinary.com/djs5pi7ev/image/upload/v1780711907/20251012065145_-_BOM_0769_xlklog_1_11zon_hvnyek.webp",
+  "https://res.cloudinary.com/djs5pi7ev/image/upload/v1780711910/DJI_20251012054325_0006_D_p3yx0k_1__5_11zon_sud0tx.webp",
+  "https://res.cloudinary.com/djs5pi7ev/image/upload/v1780711910/DJI_20251012090310_0032_D_nm8eit_3_11zon_tqey3t.webp",
 ];
 
 const total = slideImages.length;
