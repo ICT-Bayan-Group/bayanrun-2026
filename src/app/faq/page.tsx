@@ -40,7 +40,7 @@ const faqData = [
   },
   {
     title: "Berapa biaya pendaftaran lomba BAYAN RUN 2026?",
-    content: "• Half Marathon: Rp. 450.000\n• 10K: Rp. 325.000\n• 5K: Rp. 275.000\n• 5K teens: Rp. 200.000\n• KIDS 2.5K: Rp. 150.000\n• KIDS 700M: Rp. 150.000",
+    content: "• Half Marathon: Rp. 450.000\n• 10K: Rp. 325.000\n• 5K: Rp. 275.000\n• 5K teens: Rp. 200.000\n• KIDS 2.5K: Rp. 150.000\n• KIDS 800M: Rp. 150.000",
     category: "Pendaftaran"
   },
   {
