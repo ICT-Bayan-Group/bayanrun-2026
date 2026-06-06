@@ -163,7 +163,7 @@ export default function Navbar() {
               {/* Mobile Menu */}
               <div
                 className={`
-                  fixed top-0 h-screen w-full lg:hidden bg-black/90 backdrop-blur-2xl pt-20
+                  fixed top-0 h-screen w-full lg:hidden bg-white/90 backdrop-blur-2xl pt-20
                   transition-all duration-500 ease-in-out
                   ${mobileMenuOpen ? "left-0" : "left-[-100%]"}
                 `}
@@ -176,7 +176,7 @@ export default function Navbar() {
                         key={link.link}
                         href={link.link}
                         className={`text-2xl ${
-                          isActive ? "text-blue-900" : "text-blue-900/60"
+                          isActive ? "text-blue-900 font-semibold" : "text-blue-900/60 font-semibold hover:text-blue-900"
                         }`}
                         onClick={toggleMobileMenu}
                       >

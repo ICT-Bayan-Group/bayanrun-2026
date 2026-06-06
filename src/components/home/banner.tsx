@@ -93,16 +93,6 @@ export default function AboutBanner() {
 
   return (
     <>
-      {/*
-        FIX PERF: Hapus bgKenBurns — animasi ini non-composited (transform + scale
-        pada <img> tanpa isolation layer) dan menjadi penyebab utama "element render delay"
-        4.6 detik pada LCP. Diganti dengan background statis — gambar tetap menarik
-        tanpa mengorbankan LCP.
-
-        FIX PERF: Hapus animasi cardFloat (akan-transform non-composited juga).
-        Animations yang tersisa (fadeUp, ticker, pulseDot, shimmerBadge) sudah composited
-        atau tidak menyentuh LCP element.
-      */}
       <style global jsx>{`
         @keyframes bannerFadeUp {
           from { opacity: 0; transform: translateY(60px); }
@@ -145,16 +135,6 @@ export default function AboutBanner() {
         {/* ── Hero ── */}
         <div className="relative flex items-center justify-center min-h-screen overflow-hidden">
 
-          {/*
-            FIX LCP #1: fetchpriority="high" → browser prioritaskan fetch ini
-            FIX LCP #2: Tidak ada loading="lazy" (default eager)
-            FIX LCP #3: Hilangkan className about-bg (animasi Ken Burns dihapus)
-            FIX LCP #4: Tambah width/height eksplisit → browser bisa hitung layout
-                        tanpa nunggu gambar selesai (penting untuk CLS juga)
-            FIX ACCESSIBILITY: alt sudah ada ✓
-            NOTE: Pasangkan dengan <link rel="preload"> di _document.tsx / layout.tsx:
-              <link rel="preload" as="image" href="https://res.cloudinary.com/..." fetchpriority="high" />
-          */}
           <img
             src="https://res.cloudinary.com/djs5pi7ev/image/upload/v1780041585/DJI_20251012054325_0006_D_p3yx0k_edwqb7.webp"
             alt="Bayan RUN 2026 Background"

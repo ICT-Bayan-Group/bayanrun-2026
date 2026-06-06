@@ -19,12 +19,41 @@ const BEBAS       = "'Bebas Neue', Arial Black, sans-serif";
 const PHOTO_SRC = "https://res.cloudinary.com/djs5pi7ev/image/upload/v1767765516/20251012060936_-_BOM_7023_uzwd7f.jpg";
 
 const categories = [
-  { title: "Half Marathon", sub: "21K",    age: "17+ tahun",   cutoff: "4 Jam",    color: BLUE,      textColor: BLUE_TEXT, bg: BLUE_BG,    border: BLUE_BORDER, tags: ["Nasional", "Medal", "Finisher Shirt"], num: "01" },
-  { title: "10K Run",       sub: "10K",    age: "17+ tahun",   cutoff: "2 Jam",    color: "#0E7ABF", textColor: "#094F80", bg: "#E6F4FD",  border: "#A8D8F5",   tags: ["Nasional", "Medal"],                    num: "02" },
-  { title: "5K Run",        sub: "5K",     age: "17+ tahun",   cutoff: "1 Jam",    color: "#0B6B8A", textColor: "#073E50", bg: "#E3F2F7",  border: "#9CD3E4",   tags: ["Nasional", "Medal"],                    num: "03" },
-  { title: "5K Teenagers",  sub: "Remaja", age: "13–16 tahun", cutoff: "1 Jam",    color: "#2F4FB8", textColor: "#1A2E7A", bg: "#EEF0FF",  border: "#BCC5F4",   tags: ["Remaja", "Medal"],                      num: "04" },
-  { title: "2.5K Kid Dash", sub: "Anak",   age: "6–12 tahun",  cutoff: "50 Menit", color: RED,       textColor: RED_TEXT,  bg: RED_BG,     border: RED_BORDER,  tags: ["Anak-anak", "Medal"],                   num: "05" },
-  { title: "700M Kids Dash",sub: "Anak",   age: "6–12 tahun",  cutoff: "50 Menit", color: RED,       textColor: RED_TEXT,  bg: RED_BG,     border: RED_BORDER,  tags: ["Anak-anak", "Medal"],                   num: "06" },
+  {
+    title: "Half Marathon",   sub: "21K",    age: "17+ tahun",   cutoff: "3 Jam 30 Menit", price: "IDR 450.000",
+    subCats: ["Open (17–44)", "Master (≥45)"],
+    color: BLUE,      textColor: BLUE_TEXT, bg: BLUE_BG,    border: BLUE_BORDER, tags: ["Nasional", "Medal", "Finisher Shirt"], num: "01",
+  },
+  {
+    title: "10K Run",         sub: "10K",    age: "17+ tahun",   cutoff: "2 Jam",           price: "IDR 325.000",
+    subCats: ["Open (17–44)", "Master (≥45)", "TNI/POLRI (17+)"],
+    color: "#0E7ABF", textColor: "#094F80", bg: "#E6F4FD",  border: "#A8D8F5",   tags: ["Nasional", "Medal"],                    num: "02",
+  },
+  {
+    title: "5K Open",         sub: "5K",     age: "17+ tahun",   cutoff: "1 Jam",           price: "IDR 275.000",
+    subCats: ["Open (17–44)", "Master (≥45)"],
+    color: "#0B6B8A", textColor: "#073E50", bg: "#E3F2F7",  border: "#9CD3E4",   tags: ["Nasional", "Medal"],                    num: "03",
+  },
+  {
+    title: "5K Teenagers",    sub: "Remaja", age: "13–16 tahun", cutoff: "1 Jam",           price: "IDR 200.000",
+    subCats: ["Teens (13–16)"],
+    color: "#2F4FB8", textColor: "#1A2E7A", bg: "#EEF0FF",  border: "#BCC5F4",   tags: ["Remaja", "Medal"],                      num: "04",
+  },
+  {
+    title: "Kids Dash 2.5K",  sub: "Anak",   age: "8–12 tahun",  cutoff: "30 Menit",        price: "IDR 150.000",
+    subCats: ["2.5K (8–12 yo)"],
+    color: RED,       textColor: RED_TEXT,  bg: RED_BG,     border: RED_BORDER,  tags: ["Anak-anak", "Medal"],                   num: "05",
+  },
+  {
+    title: "Kids Dash 800m",  sub: "Anak",   age: "5–7 tahun",   cutoff: "10 Menit",        price: "IDR 150.000",
+    subCats: ["800m (5–7 yo)"],
+    color: "#B91C1C", textColor: "#7F1D1D", bg: "#FFF5F5",  border: "#FECACA",   tags: ["Anak-anak", "Medal"],                   num: "06",
+  },
+];
+
+const raceBenefits = [
+  "BIB Number", "Jersey Runners", "Multifunction Bag", "Magnetic Pin BIB",
+  "Soft Flask", "Running Belt", "Running Cap", "Suplemen", "Jersey Finisher", "Medal", "Insurance",
 ];
 
 const importantRules = [
@@ -34,7 +63,6 @@ const importantRules = [
   { icon: Clock,       title: "Cut-Off Time",    desc: "Wajib finish sebelum waktu COT untuk mendapat medali",           color: "#0B6B8A", bg: "#E3F2F7", tag: "REQUIRED" },
 ];
 
-// ─── Hooks ───────────────────────────────────────────────────────────────────
 function useBayanFont() {
   useEffect(() => {
     if (document.getElementById("bayan-run-font")) return;
@@ -57,7 +85,6 @@ function useIsMobile(breakpoint = 640) {
   return isMobile;
 }
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
 function StatusBadge({ label, color, bg, border }: { label: string; color: string; bg: string; border: string }) {
   return (
     <span style={{
@@ -108,7 +135,6 @@ function BulletList({ items, color }: { items: string[]; color: string }) {
   );
 }
 
-// ─── Category Card (mobile view) ─────────────────────────────────────────────
 function CategoryCard({ cat }: { cat: typeof categories[0] }) {
   return (
     <div style={{
@@ -134,10 +160,13 @@ function CategoryCard({ cat }: { cat: typeof categories[0] }) {
         <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, color: "#778" }}>
           <Users size={11} />{cat.age}
         </span>
-        <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: cat.bg, border: `1px solid ${cat.border}`, borderRadius: 6, padding: "4px 10px" }}>
-          <Timer size={12} color={cat.color} />
-          <span style={{ fontFamily: BEBAS, fontSize: 14, letterSpacing: "0.04em", color: cat.textColor }}>COT {cat.cutoff}</span>
-        </div>
+        {/* Mobile card: tampilkan harga, bukan COT */}
+        <span style={{ fontFamily: BEBAS, fontSize: 13, color: cat.textColor, letterSpacing: "0.04em" }}>{cat.price}</span>
+      </div>
+      <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+        {cat.subCats.map((sc, j) => (
+          <span key={j} style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: cat.textColor, border: `1px solid ${cat.border}`, borderRadius: 3, padding: "2px 7px", background: cat.bg }}>{sc}</span>
+        ))}
       </div>
       <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
         {cat.tags.map((tag, j) => (
@@ -148,7 +177,6 @@ function CategoryCard({ cat }: { cat: typeof categories[0] }) {
   );
 }
 
-// ─── Ticker ──────────────────────────────────────────────────────────────────
 function Ticker() {
   return (
     <div className="relative bg-gray-200 py-4 md:py-6 lg:py-8 overflow-hidden">
@@ -181,16 +209,16 @@ function Ticker() {
   );
 }
 
-// ─── Main Component ───────────────────────────────────────────────────────────
 export default function BayanRunInfo() {
   useBayanFont();
   const isMobile = useIsMobile(640);
   const isTablet = useIsMobile(900);
 
-  // Desktop cols
-  const catDesktopCols = "36px 76px 1fr 120px 100px 1fr";
-  const catTabletCols  = "36px 76px 1fr 100px";
+  // Kategori Lomba: hapus COT, ada Harga & Sub-Kategori
+  const catDesktopCols = "36px 76px 1fr 120px 110px 1fr";
+  const catTabletCols  = "36px 76px 1fr 110px";
 
+  // Waktu Cut-Off: hapus Harga, ada COT
   const cotDesktopCols = "36px 76px 1fr 120px 110px";
   const cotTabletCols  = "36px 76px 1fr 110px";
 
@@ -239,102 +267,29 @@ export default function BayanRunInfo() {
         .cat-row { transition: transform 0.18s ease, background-color 0.18s ease, border-left-color 0.18s ease, opacity 0.18s ease; }
       `}</style>
 
-      {/* ── HERO with photo background ── */}
+      {/* ── HERO ── */}
       <div style={{
-        position: "relative",
-        width: "100%",
-        height: "100vh",
-        minHeight: 480,
-        overflow: "hidden",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
+        position: "relative", width: "100%", height: "100vh", minHeight: 480,
+        overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center",
       }}>
-        {/* Background photo */}
-        <img
-          src={PHOTO_SRC}
-          alt="Bayan Run 2026"
-          style={{
-            position: "absolute", inset: 0,
-            width: "100%", height: "100%",
-            objectFit: "cover", zIndex: 0,
-          }}
-        />
-        {/* Dark overlay */}
-        <div style={{
-          position: "absolute", inset: 0,
-          background: "rgba(0,0,0,0.58)", zIndex: 1,
-          pointerEvents: "none",
-        }} />
-        {/* Grid overlay — only on desktop */}
+        <img src={PHOTO_SRC} alt="Bayan Run 2026" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
+        <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.58)", zIndex: 1, pointerEvents: "none" }} />
         {!isMobile && (
-          <div style={{
-            position: "absolute", top: 0, right: 0, width: "52%", height: "100%",
-            background: `repeating-linear-gradient(90deg,transparent,transparent 54px,${BLUE}09 54px,${BLUE}09 55px)`,
-            pointerEvents: "none", zIndex: 2,
-          }} />
+          <div style={{ position: "absolute", top: 0, right: 0, width: "52%", height: "100%", background: `repeating-linear-gradient(90deg,transparent,transparent 54px,${BLUE}09 54px,${BLUE}09 55px)`, pointerEvents: "none", zIndex: 2 }} />
         )}
-
-        <div style={{
-          maxWidth: 1100,
-          margin: "0 auto",
-          position: "relative",
-          zIndex: 3,
-          textAlign: "center",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: 18,
-          padding: "0 clamp(16px, 4vw, 40px)",
-        }}>
-          <h1
-            className="hero-content"
-            style={{
-              fontFamily: BEBAS,
-              fontSize: "clamp(52px, 11vw, 108px)",
-              fontWeight: 400,
-              lineHeight: 0.92,
-              letterSpacing: "0.01em",
-              margin: "0 0 18px",
-              textTransform: "uppercase",
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "center",
-              gap: "0 6px",
-              color: "#fff",
-            }}
-          >
+        <div style={{ maxWidth: 1100, margin: "0 auto", position: "relative", zIndex: 3, textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 18, padding: "0 clamp(16px, 4vw, 40px)" }}>
+          <h1 className="hero-content" style={{ fontFamily: BEBAS, fontSize: "clamp(52px, 11vw, 108px)", fontWeight: 400, lineHeight: 0.92, letterSpacing: "0.01em", margin: "0 0 18px", textTransform: "uppercase", display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "0 6px", color: "#fff" }}>
             {"BAYAN RUN 2026".split("").map((c, i) =>
               c === " " ? <span key={i} style={{ display: "inline-block", width: isMobile ? 10 : 18 }} /> : (
-                <span key={i} style={{ display: "inline-block", color: i < 5 ? BLUE : "#fff" }}>
-                  {c}
-                </span>
+                <span key={i} style={{ display: "inline-block", color: i < 5 ? BLUE : "#fff" }}>{c}</span>
               )
             )}
           </h1>
-
-          <p
-            className="hero-subtitle"
-            style={{
-              fontFamily: "'Inter', sans-serif",
-              fontSize: isMobile ? 10 : 13,
-              color: "#ffffff",
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              fontWeight: 600,
-              margin: 0,
-              textAlign: "center",
-            }}
-          >
+          <p className="hero-subtitle" style={{ fontFamily: "'Inter', sans-serif", fontSize: isMobile ? 10 : 13, color: "#ffffff", letterSpacing: "0.18em", textTransform: "uppercase", fontWeight: 600, margin: 0, textAlign: "center" }}>
             Informasi & Ketentuan Lomba · Balikpapan, Kalimantan Timur
           </p>
         </div>
-
-        {/* Scroll indicator */}
-        <div style={{
-          position: "absolute", bottom: 36, left: "50%", transform: "translateX(-50%)",
-          zIndex: 4, display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
-        }}>
+        <div style={{ position: "absolute", bottom: 36, left: "50%", transform: "translateX(-50%)", zIndex: 4, display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
           <span style={{ fontSize: 10, letterSpacing: "0.3em", color: "rgba(255,255,255,0.4)", textTransform: "uppercase" }}>Scroll</span>
           <div className="scroll-arrow-el" style={{ width: 18, height: 18, borderRight: "2px solid rgba(255,255,255,0.5)", borderBottom: "2px solid rgba(255,255,255,0.5)" }} />
         </div>
@@ -347,17 +302,10 @@ export default function BayanRunInfo() {
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: `0 clamp(16px, 4vw, 40px)` }}>
 
         {/* ── NOTICE ── */}
-        <div style={{
-          margin: isMobile ? "32px 0" : "52px 0",
-          border: `1px solid ${BLUE_BORDER}`, borderLeft: `4px solid ${BLUE}`,
-          borderRadius: 10, padding: isMobile ? "16px 14px" : "22px 28px", background: BLUE_BG,
-          display: "flex", gap: 12, alignItems: "flex-start",
-        }}>
+        <div style={{ margin: isMobile ? "32px 0" : "52px 0", border: `1px solid ${BLUE_BORDER}`, borderLeft: `4px solid ${BLUE}`, borderRadius: 10, padding: isMobile ? "16px 14px" : "22px 28px", background: BLUE_BG, display: "flex", gap: 12, alignItems: "flex-start" }}>
           <AlertCircle size={18} color={BLUE} style={{ flexShrink: 0, marginTop: 2 }} />
           <div>
-            <p style={{ fontFamily: BEBAS, fontSize: 13, letterSpacing: "0.16em", color: BLUE_TEXT, textTransform: "uppercase", margin: "0 0 6px" }}>
-              Perhatian Penting
-            </p>
+            <p style={{ fontFamily: BEBAS, fontSize: 13, letterSpacing: "0.16em", color: BLUE_TEXT, textTransform: "uppercase", margin: "0 0 6px" }}>Perhatian Penting</p>
             <p style={{ fontSize: 12, color: "#334", lineHeight: 1.75, margin: 0 }}>
               Peserta wajib membaca, memahami, dan mematuhi segala Informasi Penting, Syarat dan Ketentuan dan
               Peraturan Lomba secara seksama sebelum mengikuti lomba. Syarat, Ketentuan dan Peraturan Lomba
@@ -370,38 +318,17 @@ export default function BayanRunInfo() {
         {/* ── KEY RULES ── */}
         <div style={{ marginBottom: isMobile ? 44 : 68 }}>
           <SL>Aturan Utama</SL>
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(auto-fit, minmax(200px, 1fr))",
-            gap: 10,
-            marginTop: 20,
-          }}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(auto-fit, minmax(200px, 1fr))", gap: 10, marginTop: 20 }}>
             {importantRules.map((r, i) => (
-              <div
-                key={i}
-                style={{
-                  background: "#fff", border: "1px solid #DDEAF8",
-                  borderRadius: 10, overflow: "hidden",
-                  transition: "border-color 0.2s, box-shadow 0.2s", cursor: "default",
-                }}
-                onMouseEnter={(e) => {
-                  const el = e.currentTarget as HTMLElement;
-                  el.style.borderColor = r.color + "55";
-                  el.style.boxShadow = `0 4px 18px ${r.color}14`;
-                }}
-                onMouseLeave={(e) => {
-                  const el = e.currentTarget as HTMLElement;
-                  el.style.borderColor = "#DDEAF8";
-                  el.style.boxShadow = "none";
-                }}
+              <div key={i} style={{ background: "#fff", border: "1px solid #DDEAF8", borderRadius: 10, overflow: "hidden", transition: "border-color 0.2s, box-shadow 0.2s", cursor: "default" }}
+                onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = r.color + "55"; el.style.boxShadow = `0 4px 18px ${r.color}14`; }}
+                onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "#DDEAF8"; el.style.boxShadow = "none"; }}
               >
                 <div style={{ padding: "10px 12px", background: r.bg, borderBottom: "1px solid #E8F0FB", display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
                   <div style={{ width: 24, height: 24, borderRadius: 6, background: r.color + "18", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                     <r.icon size={13} color={r.color} />
                   </div>
-                  <h3 style={{ fontFamily: BEBAS, fontSize: 13, letterSpacing: "0.12em", textTransform: "uppercase", margin: 0, color: r.color }}>
-                    {r.title}
-                  </h3>
+                  <h3 style={{ fontFamily: BEBAS, fontSize: 13, letterSpacing: "0.12em", textTransform: "uppercase", margin: 0, color: r.color }}>{r.title}</h3>
                   {!isMobile && <StatusBadge label={r.tag} color={r.color} bg={r.bg} border={r.color + "30"} />}
                 </div>
                 <p style={{ fontSize: 11, color: "#556", lineHeight: 1.65, margin: 0, padding: "10px 12px" }}>{r.desc}</p>
@@ -410,7 +337,7 @@ export default function BayanRunInfo() {
           </div>
         </div>
 
-        {/* ── CATEGORIES ── */}
+        {/* ── CATEGORIES — tanpa COT, ada Harga & Sub-Kategori ── */}
         <div style={{ marginBottom: isMobile ? 44 : 68 }}>
           <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 20 }}>
             <SL>Kategori Lomba</SL>
@@ -423,16 +350,10 @@ export default function BayanRunInfo() {
             </div>
           ) : (
             <div style={{ border: "1px solid #DDEAF8", borderRadius: 10, overflow: "hidden" }}>
-              <div style={{
-                display: "grid",
-                gridTemplateColumns: isTablet ? catTabletCols : catDesktopCols,
-                background: "#F0F6FF",
-                borderBottom: "1px solid #DDEAF8",
-                padding: "8px 16px",
-              }}>
+              <div style={{ display: "grid", gridTemplateColumns: isTablet ? catTabletCols : catDesktopCols, background: "#F0F6FF", borderBottom: "1px solid #DDEAF8", padding: "8px 16px" }}>
                 {(isTablet
-                  ? ["#", "Kode", "Nama Kategori", "COT"]
-                  : ["#", "Kode", "Nama Kategori", "Usia", "COT", "Tags"]
+                  ? ["#", "Kode", "Nama Kategori", "Harga"]
+                  : ["#", "Kode", "Nama Kategori", "Usia", "Harga", "Sub-Kategori"]
                 ).map((h, i) => (
                   <span key={i} style={{ fontFamily: BEBAS, fontSize: 12, color: "#8E9BAE", textTransform: "uppercase", letterSpacing: "0.14em" }}>{h}</span>
                 ))}
@@ -441,16 +362,7 @@ export default function BayanRunInfo() {
                 <div
                   key={i}
                   className="cat-row"
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: isTablet ? catTabletCols : catDesktopCols,
-                    alignItems: "center",
-                    padding: "11px 16px",
-                    background: "#fff",
-                    borderTop: i > 0 ? "1px solid #F0F4FA" : "none",
-                    borderLeft: "3px solid #D8E4F5",
-                    cursor: "default",
-                  }}
+                  style={{ display: "grid", gridTemplateColumns: isTablet ? catTabletCols : catDesktopCols, alignItems: "center", padding: "11px 16px", background: "#fff", borderTop: i > 0 ? "1px solid #F0F4FA" : "none", borderLeft: "3px solid #D8E4F5", cursor: "default" }}
                   onMouseEnter={(e) => onCatEnter(e.currentTarget, cat.color)}
                   onMouseLeave={(e) => onCatLeave(e.currentTarget)}
                 >
@@ -462,11 +374,12 @@ export default function BayanRunInfo() {
                   {!isTablet && (
                     <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, color: "#778" }}><Users size={11} />{cat.age}</span>
                   )}
-                  <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, color: "#778" }}><Clock size={11} />COT {cat.cutoff}</span>
+                  {/* Harga — tanpa COT */}
+                  <span style={{ fontFamily: BEBAS, fontSize: 13, color: cat.textColor, letterSpacing: "0.04em" }}>{cat.price}</span>
                   {!isTablet && (
-                    <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
-                      {cat.tags.map((tag, j) => (
-                        <span key={j} style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#8E9BAE", border: "1px solid #D8E4F5", borderRadius: 3, padding: "2px 7px", background: "#F4F7FB" }}>{tag}</span>
+                    <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+                      {cat.subCats.map((sc, j) => (
+                        <span key={j} style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: cat.textColor, border: `1px solid ${cat.border}`, borderRadius: 3, padding: "2px 6px", background: cat.bg }}>{sc}</span>
                       ))}
                     </div>
                   )}
@@ -479,12 +392,7 @@ export default function BayanRunInfo() {
         {/* ── PENDAFTARAN & PERATURAN ── */}
         <div style={{ marginBottom: isMobile ? 44 : 68 }}>
           <SL>Pendaftaran & Peraturan</SL>
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(270px, 1fr))",
-            gap: 12,
-            marginTop: 20,
-          }}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(270px, 1fr))", gap: 12, marginTop: 20 }}>
             <div style={{ background: "#fff", border: "1px solid #f8dddd", borderRadius: 10, overflow: "hidden" }}>
               <PanelHeader icon={<CheckCircle size={14} color={RED} />} bg={RED_BG} color={RED_TEXT} border={RED_BORDER} label="Pendaftaran" />
               <BulletList color={RED_TEXT} items={[
@@ -493,6 +401,7 @@ export default function BayanRunInfo() {
                 "Tanda terima dikirim via email & WhatsApp",
                 "Ambil racepack dengan barcode & kartu identitas",
                 "Batas pembayaran: 15 hari setelah pendaftaran",
+                "Kids Dash 5–7 yo wajib didampingi 1 orang dewasa (+IDR 50.000)",
               ]} />
             </div>
             <div style={{ background: "#fff", border: "1px solid #DDEAF8", borderRadius: 10, overflow: "hidden" }}>
@@ -506,42 +415,35 @@ export default function BayanRunInfo() {
               ]} />
             </div>
             <div style={{ background: "#fff", border: "1px solid #DDEAF8", borderRadius: 10, overflow: "hidden" }}>
-              <PanelHeader icon={<Package size={14} color="#b82f2f" />} bg="#ffeeee" color="#b82f2f" border="#f4bcbc" label="Race Pack" />
+              <PanelHeader icon={<Package size={14} color="#b82f2f" />} bg="#ffeeee" color="#b82f2f" border="#f4bcbc" label="Race Benefit" />
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6, padding: "12px 14px 4px" }}>
-                {["Kaos Lari", "Chip Waktu", "Nomor Bib", "Souvenir"].map((item, i) => (
+                {raceBenefits.map((item, i) => (
                   <div key={i} style={{ display: "flex", alignItems: "center", gap: 7, background: "#F4F7FB", borderRadius: 6, padding: "8px 10px", border: "1px solid #DDEAF8" }}>
                     <CheckCircle size={12} color={BLUE} />
                     <span style={{ fontSize: 12, color: "#222", fontWeight: 700 }}>{item}</span>
                   </div>
                 ))}
               </div>
-              <p style={{ fontSize: 12, color: "#778", lineHeight: 1.7, margin: 0, padding: "10px 14px 14px" }}>
-                Tunjukkan barcode & kartu identitas saat pengambilan. Pengambilan oleh pihak lain hanya dengan surat kuasa dari bayanrun.com
+              <p style={{ fontSize: 11, color: "#778", lineHeight: 1.7, margin: 0, padding: "10px 14px 14px" }}>
+                * Paket yang diterima disesuaikan dengan kategori lomba yang dipilih. Images for illustration purposes only, actual product may vary.
               </p>
             </div>
           </div>
         </div>
 
-        {/* ── COT TABLE ── */}
+        {/* ── COT TABLE — tanpa Harga ── */}
         <div style={{ marginBottom: isMobile ? 44 : 68 }}>
           <SL>Waktu Cut-Off</SL>
 
           {isMobile ? (
             <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 20 }}>
               {categories.map((cat, i) => (
-                <div
-                  key={i}
-                  style={{
-                    display: "flex", alignItems: "center", gap: 10,
-                    background: "#fff", border: "1px solid #DDEAF8",
-                    borderLeft: `4px solid ${cat.color}`,
-                    borderRadius: 10, padding: "12px 14px",
-                  }}
-                >
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, background: "#fff", border: "1px solid #DDEAF8", borderLeft: `4px solid ${cat.color}`, borderRadius: 10, padding: "12px 14px" }}>
                   <div style={{ background: cat.bg, border: `1px solid ${cat.border}`, borderRadius: 4, padding: "2px 9px", flexShrink: 0 }}>
                     <span style={{ fontFamily: BEBAS, fontSize: 12, color: cat.textColor }}>{cat.sub}</span>
                   </div>
                   <span style={{ fontFamily: BEBAS, fontSize: 15, color: "#111", flex: 1 }}>{cat.title}</span>
+                  {/* COT saja, tanpa harga */}
                   <div style={{ display: "inline-flex", alignItems: "center", gap: 5, background: cat.bg, border: `1px solid ${cat.border}`, borderRadius: 6, padding: "4px 10px", flexShrink: 0 }}>
                     <Timer size={11} color={cat.color} />
                     <span style={{ fontFamily: BEBAS, fontSize: 14, color: cat.textColor }}>{cat.cutoff}</span>
@@ -551,13 +453,7 @@ export default function BayanRunInfo() {
             </div>
           ) : (
             <div style={{ border: "1px solid #DDEAF8", borderRadius: 10, overflow: "hidden", marginTop: 20 }}>
-              <div style={{
-                display: "grid",
-                gridTemplateColumns: isTablet ? cotTabletCols : cotDesktopCols,
-                background: "#F0F6FF",
-                borderBottom: "1px solid #DDEAF8",
-                padding: "8px 16px",
-              }}>
+              <div style={{ display: "grid", gridTemplateColumns: isTablet ? cotTabletCols : cotDesktopCols, background: "#F0F6FF", borderBottom: "1px solid #DDEAF8", padding: "8px 16px" }}>
                 {(isTablet
                   ? ["#", "Kode", "Kategori", "Cut-Off Time"]
                   : ["#", "Kode", "Kategori", "Usia", "Cut-Off Time"]
@@ -568,16 +464,7 @@ export default function BayanRunInfo() {
               {categories.map((cat, i) => (
                 <div
                   key={i}
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: isTablet ? cotTabletCols : cotDesktopCols,
-                    alignItems: "center",
-                    padding: "11px 16px",
-                    background: "#fff",
-                    borderTop: i > 0 ? "1px solid #F0F4FA" : "none",
-                    cursor: "default",
-                    transition: "background 0.12s",
-                  }}
+                  style={{ display: "grid", gridTemplateColumns: isTablet ? cotTabletCols : cotDesktopCols, alignItems: "center", padding: "11px 16px", background: "#fff", borderTop: i > 0 ? "1px solid #F0F4FA" : "none", cursor: "default", transition: "background 0.12s" }}
                   onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#F4F7FB"; }}
                   onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "#fff"; }}
                 >
@@ -589,6 +476,7 @@ export default function BayanRunInfo() {
                   {!isTablet && (
                     <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, color: "#778" }}><Users size={11} />{cat.age}</span>
                   )}
+                  {/* COT saja, tanpa harga */}
                   <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: cat.bg, border: `1px solid ${cat.border}`, borderRadius: 6, padding: "5px 10px", width: "fit-content" }}>
                     <Timer size={12} color={cat.color} />
                     <span style={{ fontFamily: BEBAS, fontSize: 15, letterSpacing: "0.04em", color: cat.textColor }}>{cat.cutoff}</span>
@@ -599,7 +487,8 @@ export default function BayanRunInfo() {
           )}
 
           <p style={{ fontSize: 11, color: "#AAB8CC", marginTop: 10, fontStyle: "italic" }}>
-            * Peserta yang melebihi COT tidak dianggap sebagai finisher dan tidak menerima medali maupun finisher shirt
+            * Peserta yang melebihi COT tidak dianggap sebagai finisher dan tidak menerima medali maupun finisher shirt.
+            Kids Dash 5–7 yo wajib didampingi 1 orang dewasa dengan biaya tambahan IDR 50.000.
           </p>
         </div>
 
