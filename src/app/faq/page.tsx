@@ -19,9 +19,9 @@ const faqData = [
     category: "Pendaftaran"
   },
   {
-    title: "Kategori apa saja yang akan diperlombakan di BAYAN RUN 2026?",
-    content: "Half Marathon, 10K, 5K, 5K teens dan 2.5K Kids",
-    category: "Kategori"
+    "title": "Kategori apa saja yang akan diperlombakan di BAYAN RUN 2026?",
+    "content": "Half Marathon, 10K, 5K, 5K Teens, Kids Dash 2.5K (usia 8–12 tahun), dan Kids Dash 800m (usia 5–7 tahun).",
+    "category": "Kategori"
   },
   {
     title: "Apakah akan ada acara pengambilan Race Pack?",
@@ -29,9 +29,9 @@ const faqData = [
     category: "Race Pack"
   },
   {
-    title: "Apa saja isi dari Race Pack?",
-    content: "• Medal untuk semua kategori\n• Running Jersey untuk seluruh kategori\n• Multi Function Bag untuk seluruh kategori\n• Soft Flask untuk seluruh kategori\n• Race BIB + Timming Chip untuk seluruh kategori\n• BIB Pin untuk seluruh kategori\n• Suplemen EJ Sport & Fitbar untuk seluruh kategori\n• Running Cap khusus untuk peserta 10K dan Half Marathon\n• Jersey Finisher & Running Belt khusus untuk peserta Half Marathon",
-    category: "Race Pack"
+  "title": "Apa saja isi dari Race Pack?",
+  "content": "• Medal untuk semua kategori\n• Running Jersey untuk seluruh kategori\n• Multi Function Bag untuk seluruh kategori\n• Race BIB + Timing Chip untuk seluruh kategori\n• BIB Pin untuk seluruh kategori\n• Suplemen EJ Sport & Fitbar khusus untuk peserta 5K, 10K, dan Half Marathon\n• Soft Flask khusus untuk peserta 5K, 10K, dan Half Marathon\n• Running Cap khusus untuk peserta 10K dan Half Marathon\n• Jersey Finisher & Running Belt khusus untuk peserta Half Marathon",
+  "category": "Race Pack"
   },
   {
     title: "Apakah boleh mengambil racepack pada hari lomba di tanggal 11 Oktober 2026?",
@@ -69,14 +69,14 @@ const faqData = [
     category: "Kategori"
   },
   {
-    title: "Berapa waktu maksimum (cut off time) COT bagi peserta untuk menyelesaikan lomba?",
-    content: "• Half Marathon (21,1K) harus menyelesaikan lomba dengan waktu maksimum 4 jam (4:00) sejak lomba kategori ini dimulai.\n• Peserta kategori 10K harus menyelesaikan lomba dengan waktu maksimal 2 jam (2:00) sejak lomba kategori ini dimulai.\n• Peserta kategori 5K harus menyelesaikan lomba dengan waktu maksimal 1 jam (1:00) sejak lomba kategori ini dimulai.\n• Peserta kategori KIDS harus menyelesaikan lomba dengan waktu maksimal 30 menit (00:30) sejak lomba kategori ini dimulai.\n\nPeserta yang tidak menyelesaikan lomba sesuai syarat waktu maksimum (cut-off time) akan didiskualifikasi, sehingga tidak akan mendapatkan medali penamat/finisher medal dan penamat/finisher jersey (khusus peserta kategori half marathon). Hasil lombanya tidak ditampilkan.",
-    category: "Peraturan"
+    "title": "Berapa waktu maksimum (cut off time) COT bagi peserta untuk menyelesaikan lomba?",
+    "content": "• Half Marathon (21,1K) harus menyelesaikan lomba dengan waktu maksimum 3 jam 30 menit (3:30) sejak lomba kategori ini dimulai.\n• Peserta kategori 10K harus menyelesaikan lomba dengan waktu maksimal 2 jam (2:00) sejak lomba kategori ini dimulai.\n• Peserta kategori 5K harus menyelesaikan lomba dengan waktu maksimal 1 jam (1:00) sejak lomba kategori ini dimulai.\n• Peserta kategori KIDS harus menyelesaikan lomba dengan waktu maksimal 30 menit (00:30) sejak lomba kategori ini dimulai.\n\nPeserta yang tidak menyelesaikan lomba sesuai syarat waktu maksimum (cut-off time) akan didiskualifikasi, sehingga tidak akan mendapatkan medali penamat/finisher medal dan penamat/finisher jersey (khusus peserta kategori half marathon). Hasil lombanya tidak ditampilkan.",
+    "category": "Peraturan"
   },
   {
-    title: "Apakah ada batasan umur untuk mengikuti BAYAN RUN 2026?",
-    content: "Ya ada batasan umur. Berikut ketentuan batasan umur setiap kategori jarak di BAYAN RUN 2026:\n\n• Peserta kategori Half Marathon Nasional: usia minimal 17 tahun\n• Peserta kategori 10K Nasional: usia minimal 17 tahun\n• Peserta kategori 5K Nasional: usia minimal 17 tahun\n• Peserta kategori 5K Teens remaja: Usia 13 - 16 tahun\n• Peserta kategori Kids: usia 6 - 12 tahun\n\nJika peserta memiliki umur di bawah ketentuan di atas dan ingin mendaftar, pastikan mendapatkan persetujuan dari orang tua. Dan pada saat mengambil paket lomba, WAJIB melampirkan surat keterangan/persetujuan orang tua yang menyatakan peserta di bawah ketentuan umur dalam keadaan sehat jasmani dan rohani dan menyatakan bahwa orang tua bertanggung jawab sepenuhnya.",
-    category: "Peraturan"
+  "title": "Apakah ada batasan umur untuk mengikuti BAYAN RUN 2026?",
+  "content": "Ya, terdapat batasan umur untuk setiap kategori di BAYAN RUN 2026. Berikut ketentuannya:\n\n• Peserta kategori Half Marathon Nasional: usia minimal 17 tahun\n• Peserta kategori 10K Nasional: usia minimal 17 tahun\n• Peserta kategori 5K Nasional: usia minimal 17 tahun\n• Peserta kategori 5K Teens (remaja): usia 13 - 16 tahun\n• Peserta kategori Kids Dash 2.5K: usia 8 - 12 tahun\n• Peserta kategori Kids Dash 800m: usia 5 - 7 tahun\n\nJika peserta memiliki umur di bawah ketentuan di atas dan tetap ingin mendaftar, wajib mendapatkan persetujuan dari orang tua. Pada saat pengambilan race pack, peserta WAJIB melampirkan surat keterangan/persetujuan orang tua yang menyatakan bahwa peserta dalam kondisi sehat jasmani dan rohani serta orang tua bertanggung jawab sepenuhnya.",
+  "category": "Peraturan"
   },
   {
     title: "Bagaimana ketentuan mengenai pengunduran diri dari peserta BAYAN RUN 2026?",
