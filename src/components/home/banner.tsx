@@ -243,7 +243,7 @@ export default function AboutBanner() {
                       hover:shadow-[0_0_40px_rgba(59,130,246,0.7)]
                       transition-all duration-300 cursor-pointer"
                   >
-                    <a href="https://bayanrun.com" target="_blank" rel="noopener noreferrer">
+                    <a href="https://app.regnowonline.co.id/event/64" target="_blank" rel="noopener noreferrer">
                       Daftar Sekarang
                     </a>
                   </Button>

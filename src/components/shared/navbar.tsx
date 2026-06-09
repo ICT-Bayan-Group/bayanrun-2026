@@ -123,7 +123,7 @@ export default function Navbar() {
               <div className="nav-contact hidden lg:block">
                 {regOpen ? (
                   <Button asChild className={btnActive}>
-                    <a href="https://bayanrun.com" target="_blank" rel="noopener noreferrer">
+                    <a href="https://app.regnowonline.co.id/event/64" target="_blank" rel="noopener noreferrer">
                       Daftar Sekarang
                     </a>
                   </Button>
@@ -138,7 +138,7 @@ export default function Navbar() {
              <div className="flex items-center gap-4 lg:hidden">
                 {regOpen ? (
                   <Button asChild className={btnActiveMobile}>
-                    <a href="https://bayanrun.com" target="_blank" rel="noopener noreferrer">
+                    <a href="https://app.regnowonline.co.id/event/64" target="_blank" rel="noopener noreferrer">
                       Daftar Sekarang
                     </a>
                   </Button>
