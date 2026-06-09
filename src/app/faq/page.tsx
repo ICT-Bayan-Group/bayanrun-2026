@@ -15,7 +15,7 @@ const faqData = [
   },
   {
     title: "Kapan Pendaftaran BAYAN RUN 2026 di buka?",
-    content: "Sabtu, 13 Juni 2026 pada pukul 15.00 WITA",
+    content: "Sabtu, 13 Juni 2026 pukul 15.00 WITA",
     category: "Pendaftaran"
   },
   {
@@ -50,7 +50,7 @@ const faqData = [
   },
   {
     title: "Bagaimana saya mengetahui bahwa pendaftaran saya telah di terima?",
-    content: "Setelah pendaftaran dan pembayaran berhasil, peserta akan melihat halaman konfirmasi yang dapat disimpan atau dicetak sebagai bukti pendaftaran.\n\nSelain itu, konfirmasi pendaftaran juga akan dikirimkan ke alamat email yang didaftarkan dan juga akan dikirimkan melalui WhatsApp. Oleh karena itu, pastikan alamat email dan nomor WhatsApp yang dimasukkan sudah benar dan masih aktif.\n\nJika email konfirmasi belum diterima di kotak masuk (Inbox), silakan periksa folder Spam, Junk, atau Promotions.\n\nJika dalam 5 hari dari waktu pendaftaran belum mendapatkan pesan konfirmasi di email atau WhatsApp, silakan untuk menghubungi kontak yang tertera di website ini.\n\nDi dalam email konfirmasi terdapat tautan untuk masuk (login) ke akun pendaftaran Anda. Setelah login, Anda dapat melihat dan memeriksa data pendaftaran yang telah dibuat.",
+    content: "Setelah pendaftaran dan pembayaran berhasil, peserta akan melihat halaman konfirmasi yang dapat disimpan atau dicetak sebagai bukti pendaftaran.\n\nSelain itu, konfirmasi pendaftaran juga akan dikirimkan ke alamat email yang didaftarkan dan juga akan dikirimkan melalui WhatsApp. Oleh karena itu, pastikan alamat email dan nomor WhatsApp yang dimasukkan sudah benar dan masih aktif.\n\nJika email konfirmasi belum ditemukan di kotak masuk (Inbox), silakan periksa folder Spam, Junk, atau Promotions.\n\nJika dalam 5 hari dari waktu pendaftaran belum mendapatkan pesan konfirmasi di email dan/atau WhatsApp, silakan untuk menghubungi kontak yang tertera di website ini.\n\nDi dalam email konfirmasi terdapat tautan untuk masuk (login) ke akun pendaftaran Anda. Setelah login, Anda dapat melihat dan memeriksa data pendaftaran yang telah dibuat.",
     category: "Pendaftaran"
   },
   {
@@ -60,27 +60,27 @@ const faqData = [
   },
   {
     title: "Apakah bisa melakukan perubahan data pendaftaran setelah terdaftar sebagai peserta?",
-    content: "Tidak. Jika pendaftaran sudah dikonfirmasi, maka perubahan data tidak bisa dilakukan. Tetapi jika ada kesalahan pengetikan saat pengisian data, perbaikan data dilakukan dengan mengirimkan email ke admin@bayanrun.com dan konfirmasi ke WA admin 082154815113 berisi data-data yang hendak diperbaiki. Dalam hal perbaikan data, Panitia berhak meminta validasi kepada peserta berupa foto KTP dan konfirmasi pembayaran untuk memastikan keabsahannya.",
+    content: "Tidak. Jika pendaftaran sudah dikonfirmasi, maka perubahan data tidak bisa dilakukan. Tetapi jika ada kesalahan pengetikan saat pengisian data, perbaikan data dilakukan dengan mengirimkan email ke admin@bayanrun.com dan konfirmasi ke WA Customer Service 082154815113 berisi data-data yang hendak diperbaiki.\n\nDalam hal perbaikan data, Panitia berhak meminta validasi kepada peserta berupa foto KTP dan konfirmasi pembayaran untuk memastikan keabsahannya.",
     category: "Pendaftaran"
   },
   {
-    title: "Berapa batasan usia kategori MASTER?",
-    content: "Usia kategori master di BAYAN RUN 2026 adalah 45 tahun ke atas.",
+    title: "Berapa batas usia untuk kategori Master?",
+    content: "Kategori Master pada BAYAN RUN 2026 diperuntukkan bagi peserta yang berusia 45 tahun atau lebih pada hari pelaksanaan lomba.",
     category: "Kategori"
   },
   {
     title: "Berapa waktu maksimum (cut off time) COT bagi peserta untuk menyelesaikan lomba?",
-    content: "Setiap peserta wajib menyelesaikan lomba dalam batas waktu (Cut-Off Time/COT) berikut, yang dihitung sejak start kategori masing-masing:\n\n• Half Marathon (21K): maksimal 3 jam 30 menit (3:30)\n• 10K: maksimal 2 jam (2:00)\n• 5K: maksimal 1 jam (1:00)\n• Kids Dash-A: maksimal 30 menit (0:30)\n• Kids Dash-B: maksimal 20 menit (0:20)\n\nPeserta yang tidak menyelesaikan lomba dalam batas waktu yang ditentukan akan didiskualifikasi (DNF/Did Not Finish).\n\nPeserta yang didiskualifikasi tidak berhak menerima:\na. Medali finisher, dan\nb. Finisher jersey (khusus peserta kategori Half Marathon/21K).\n\nSelain itu, hasil lomba peserta yang didiskualifikasi tidak akan dicantumkan dalam hasil resmi perlombaan.",
+    content: "Setiap peserta wajib menyelesaikan lomba dalam batas waktu (Cut-Off Time/COT) berikut, yang dihitung sejak start kategori masing-masing:\n\n• Half Marathon (21K): maksimal 3 jam 30 menit (3:30)\n• 10K: maksimal 2 jam (2:00)\n• 5K: maksimal 1 jam (1:00)\n• Kids Dash-A: maksimal 30 menit (0:30)\n• Kids Dash-B: maksimal 20 menit (0:20)\n\nPeserta yang tidak berhasil menyelesaikan lomba dalam batas waktu yang ditentukan akan didiskualifikasi (DNF/Did Not Finish).\n\nPeserta yang didiskualifikasi tidak berhak menerima:\na. Medali finisher, dan\nb. Finisher jersey (khusus peserta kategori Half Marathon/21K).\n\nSelain itu, hasil lomba peserta yang didiskualifikasi tidak akan dicantumkan dalam hasil resmi perlombaan.",
     category: "Peraturan"
   },
   {
     title: "Apakah ada batasan umur untuk mengikuti BAYAN RUN 2026?",
-    content: "Ya, BAYAN RUN 2026 menerapkan batasan usia sesuai dengan kategori lomba yang diikuti, sebagai berikut:\n\n• Half Marathon (21K) Nasional: minimal 17 tahun\n• 10K Nasional: minimal 17 tahun\n• 5K Nasional: minimal 17 tahun\n• 5K Teens: usia 13–16 tahun\n• Kids Dash-A: usia 8–12 tahun\n• Kids Dash-B: usia 5–7 tahun\n\nPeserta yang berada di bawah batas usia minimum untuk kategori yang dipilih wajib mendapatkan persetujuan dari orang tua atau wali.\n\nPada saat pengambilan race pack, peserta wajib menyerahkan surat persetujuan dari orang tua/wali yang menyatakan bahwa:\n1. Peserta dalam kondisi sehat jasmani dan rohani untuk mengikuti lomba.\n2. Orang tua/wali mengetahui dan menyetujui keikutsertaan peserta.\n3. Orang tua/wali bersedia bertanggung jawab penuh atas keikutsertaan peserta selama kegiatan berlangsung.\n\nPanitia berhak menolak keikutsertaan peserta yang tidak dapat menunjukkan surat persetujuan tersebut pada saat pengambilan race pack.",
+    content: "Ya, BAYAN RUN 2026 menerapkan batasan usia sesuai dengan kategori lomba yang diikuti, sebagai berikut:\n\n• Half Marathon (21K) Nasional: minimal 17 tahun\n• 10K Nasional: minimal 17 tahun\n• 5K Nasional: minimal 17 tahun\n• 5K Teens: usia 13–16 tahun\n• Kids Dash-A: usia 8–12 tahun\n• Kids Dash-B: usia 5–7 tahun\n\nPeserta yang berusia di bawah batas usia minimum untuk kategori yang dipilih wajib mendapatkan persetujuan dari orang tua atau wali.\n\nPada saat pengambilan race pack, peserta wajib menyerahkan surat persetujuan dari orang tua/wali yang menyatakan bahwa:\n1. Peserta dalam kondisi sehat jasmani dan rohani untuk mengikuti lomba.\n2. Orang tua/wali mengetahui dan menyetujui keikutsertaan peserta.\n3. Orang tua/wali bersedia bertanggung jawab penuh atas keikutsertaan peserta selama kegiatan berlangsung.\n\nPanitia berhak menolak keikutsertaan peserta yang tidak dapat menunjukkan surat persetujuan tersebut pada saat pengambilan race pack.",
     category: "Peraturan"
   },
   {
     title: "Bagaimana ketentuan mengenai pengunduran diri dari peserta BAYAN RUN 2026?",
-    content: "Biaya pendaftaran yang telah dibayarkan tidak dapat dikembalikan (non-refundable) dengan alasan apapun, termasuk apabila peserta membatalkan keikutsertaan atau tidak hadir pada hari pelaksanaan lomba.\n\nSelain itu, slot pendaftaran yang telah dibeli tidak dapat dipindahtangankan, dialihkan, atau digunakan oleh orang lain.",
+    content: "Biaya pendaftaran yang telah dibayarkan tidak dapat dikembalikan (non-refundable) dengan alasan apa pun, termasuk apabila peserta membatalkan keikutsertaan atau tidak hadir pada hari pelaksanaan lomba.\n\nSelain itu, slot pendaftaran yang telah dibeli tidak dapat dipindahtangankan, dialihkan, atau digunakan oleh orang lain.",
     category: "Peraturan"
   },
   {
@@ -95,7 +95,7 @@ const faqData = [
   },
   {
     title: "Bagaimana penentuan podium pemenang dilakukan?",
-    content: "Penentuan pemenang podium dan peringkat juara menggunakan Gun Time, yaitu waktu yang dihitung sejak start resmi kategori dimulai hingga peserta melewati garis finis.\n\nOleh karena itu, peserta yang berpotensi meraih podium disarankan untuk mengambil posisi di barisan depan saat start. Seluruh hasil resmi perlombaan akan dipublikasikan melalui situs web www.bayanrun.com",
+    content: "Penentuan pemenang podium dan peringkat juara menggunakan Gun Time, yaitu waktu yang dihitung sejak start resmi kategori dimulai hingga peserta mencapai garis finis.\n\nOleh karena itu, peserta yang berpotensi meraih podium disarankan untuk mengambil posisi di barisan depan saat start. Seluruh hasil resmi perlombaan akan dipublikasikan melalui situs web www.bayanrun.com",
     category: "Peraturan"
   },
   {
@@ -109,28 +109,28 @@ const faqData = [
     category: "Peraturan"
   },
   {
-    title: "Apakah peserta diperbolehkan menggunakan sepeda, sepatu roda atau kereta bayi di rute lomba?",
-    content: "Tidak. Peserta tidak diperbolehkan menggunakan sepeda, sepatu roda, kereta bayi, maupun alat bantu berdaya lainnya selama mengikuti lomba.\n\nKetentuan ini diberlakukan demi menjaga keselamatan dan kenyamanan seluruh peserta, karena rute lomba masih berbagi jalan dengan pengguna jalan lainnya, seperti mobil, sepeda motor, truk, dan kendaraan lainnya.",
+    title: "Apakah peserta diperbolehkan menggunakan sepeda, sepatu roda, atau kereta bayi di rute lomba?",
+    content: "Tidak. Peserta tidak diperbolehkan menggunakan sepeda, sepatu roda, kereta bayi, maupun alat bantu beroda lainnya selama mengikuti lomba.\n\nKetentuan ini diberlakukan demi menjaga keselamatan dan kenyamanan seluruh peserta, karena rute lomba masih berbagi jalan dengan pengguna jalan lainnya, seperti mobil, sepeda motor, truk, dan kendaraan lainnya.",
     category: "Peraturan"
   },
   {
     title: "Apakah tersedia area parkir di lokasi lomba?",
-    content: "Ya, area parkir akan tersedia di lokasi lomba. Informasi lebih lanjut mengenai lokasi dan akses parkir dapat dilihat di www.bayanrun.com dan akun Instagram resmi @bayan_open",
+    content: "Ya, area parkir akan tersedia di lokasi acara. Informasi lebih lanjut mengenai lokasi dan akses parkir dapat dilihat di www.bayanrun.com dan akun Instagram resmi @bayan_open.",
     category: "Fasilitas"
   },
   {
     title: "Apakah tersedia tempat ibadah di area lomba?",
-    content: "Ya, panitia menyediakan area ibadah untuk peserta yang ingin melaksanakan Sholat Subuh sebelum lomba. Informasi lebih lanjut dapat dilihat di www.bayanrun.com dan akun Instagram resmi @bayan_open",
+    content: "Ya, panitia menyediakan area ibadah untuk peserta yang ingin melaksanakan salat Subuh sebelum lomba. Informasi lebih lanjut dapat dilihat di www.bayanrun.com dan akun Instagram resmi @bayan_open.",
     category: "Fasilitas"
   },
   {
-    title: "Apakah disediakan fasilitas penitipan barang di area lomba?",
-    content: "Ya, akan disediakan penitipan barang namun terbatas di lokasi lomba. Informasi tersebut dapat diakses di situs web resmi BAYAN RUN 2026, yaitu www.bayanrun.com dan akun Instagram resmi BAYAN RUN 2026, @bayan_open",
+    title: "Apakah tersedia fasilitas penitipan barang di area lomba?",
+    content: "Ya. Panitia menyediakan fasilitas penitipan barang bagi peserta di lokasi acara. Kapasitas penitipan barang terbatas dan tersedia selama persediaan masih ada.\n\nPanitia mengimbau peserta untuk tidak menitipkan barang berharga dan tidak bertanggung jawab atas kehilangan atau kerusakan barang yang dititipkan.",
     category: "Fasilitas"
   },
   {
-    title: "Dimana saya dapat memperoleh informasi lomba?",
-    content: "Informasi lomba selengkapnya, silakan akses akun Instagram resmi BAYAN RUN 2026, @bayan_open dan web resmi BAYAN RUN 2026 di www.bayanrun.com",
+    title: "Di mana saya dapat memperoleh informasi mengenai BAYAN RUN 2026?",
+    content: "Seluruh informasi terkait pendaftaran, jadwal, race pack, rute, fasilitas, dan pengumuman lainnya akan dipublikasikan melalui situs resmi www.bayanrun.com dan akun Instagram resmi @bayan_open.",
     category: "Informasi"
   }
 ];
