@@ -400,7 +400,7 @@ export default function BayanRunInfo() {
                 "Pilih kategori sesuai usia peserta",
                 "Tanda terima dikirim via email & WhatsApp",
                 "Ambil racepack dengan barcode & kartu identitas",
-                "Batas pembayaran: 15 hari setelah pendaftaran",
+                "Batas pembayaran: 15 menit setelah pendaftaran",
                 "Kids Dash 5–7 yo wajib didampingi 1 orang dewasa (+IDR 50.000)",
               ]} />
             </div>
