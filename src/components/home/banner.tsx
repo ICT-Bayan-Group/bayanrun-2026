@@ -4,9 +4,60 @@ import React, { useEffect, useState } from "react";
 import { Calendar, MapPin } from "lucide-react";
 import { Button } from "../ui/button";
 
-function useCountdown(targetISO: string) {
+// ── Server-time offset hook ──────────────────────────────────────────────────
+// Fetch world time dari API publik, hitung drift vs jam lokal.
+// Semua kalkulasi waktu pakai getReliableNow() bukan Date.now().
+function useServerTimeOffset() {
+  const [offset, setOffset] = useState<number>(0); // ms
+  const [ready, setReady]   = useState(false);
+
+  useEffect(() => {
+    const fetchOffset = async () => {
+      try {
+        const before = Date.now();
+        // Worldtimeapi – gratis, no key, CORS ok
+        const res  = await fetch("https://worldtimeapi.org/api/timezone/Asia/Makassar");
+        const after = Date.now();
+        if (!res.ok) throw new Error("fetch failed");
+
+        const data = await res.json();
+        // unixtime dalam detik → ms
+        const serverMs  = data.unixtime * 1000;
+        // estimasi kapan server merespons (tengah antara before & after)
+        const localAtResponse = (before + after) / 2;
+        setOffset(serverMs - localAtResponse);
+      } catch {
+        // Fallback: worldtimeapi.org down → coba timeapi.io
+        try {
+          const before = Date.now();
+          const res  = await fetch("https://timeapi.io/api/time/current/zone?timeZone=Asia/Makassar");
+          const after = Date.now();
+          if (!res.ok) throw new Error();
+          const data = await res.json();
+          const serverMs = new Date(data.dateTime).getTime();
+          setOffset(serverMs - (before + after) / 2);
+        } catch {
+          // Dua-duanya gagal → pakai jam lokal (offset = 0)
+          setOffset(0);
+        }
+      } finally {
+        setReady(true);
+      }
+    };
+
+    fetchOffset();
+  }, []);
+
+  // Kembalikan fungsi getter supaya selalu fresh
+  const getReliableNow = () => Date.now() + offset;
+
+  return { getReliableNow, ready };
+}
+
+// ── Countdown hook ───────────────────────────────────────────────────────────
+function useCountdown(targetISO: string, getReliableNow: () => number) {
   const calc = () => {
-    const diff = new Date(targetISO).getTime() - Date.now();
+    const diff = new Date(targetISO).getTime() - getReliableNow();
     if (diff <= 0) return null;
     const s = Math.floor(diff / 1000);
     return {
@@ -23,13 +74,22 @@ function useCountdown(targetISO: string) {
     setTime(calc());
     const id = setInterval(() => setTime(calc()), 1000);
     return () => clearInterval(id);
-  }, [targetISO]);
+  }, [targetISO, getReliableNow]);
 
   return time;
 }
 
-function CountdownBlock({ label, targetISO }: { label: string; targetISO: string }) {
-  const t = useCountdown(targetISO);
+// ── CountdownBlock ───────────────────────────────────────────────────────────
+function CountdownBlock({
+  label,
+  targetISO,
+  getReliableNow,
+}: {
+  label: string;
+  targetISO: string;
+  getReliableNow: () => number;
+}) {
+  const t = useCountdown(targetISO, getReliableNow);
   if (!t) return null;
   const pad = (n: number) => String(n).padStart(2, "0");
   const units = [
@@ -59,18 +119,22 @@ function CountdownBlock({ label, targetISO }: { label: string; targetISO: string
   );
 }
 
+// ── AboutBanner ──────────────────────────────────────────────────────────────
 export default function AboutBanner() {
-  const REG_OPEN_ISO  = "2026-06-13T15:00:00+08:00";
-  const RACE_DAY_ISO  = "2026-10-10T06:00:00+08:00";
+  const REG_OPEN_ISO = "2026-06-13T14:50:00+08:00";
+  const RACE_DAY_ISO = "2026-10-10T06:00:00+08:00";
 
-  // ✅ FIX: now update tiap detik → regOpen reaktif real-time
+  const { getReliableNow, ready } = useServerTimeOffset();
+
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
-    const id = setInterval(() => setNow(Date.now()), 1000);
+    const id = setInterval(() => setNow(getReliableNow()), 1000);
     return () => clearInterval(id);
-  }, []);
+  }, [getReliableNow]);
 
-  const regOpen = new Date(REG_OPEN_ISO).getTime() <= now;
+  // regOpen baru dievaluasi setelah server time ready
+  const regOpen = ready && new Date(REG_OPEN_ISO).getTime() <= now;
+
 
   return (
     <>
@@ -199,15 +263,17 @@ export default function AboutBanner() {
 
                 {/* ── Countdown block ── */}
                 <div className="mb-4 sm:mb-6">
-                  {!regOpen ? (
+                     {!regOpen ? (
                     <CountdownBlock
                       label="Countdown to Registration"
                       targetISO={REG_OPEN_ISO}
+                      getReliableNow={getReliableNow}
                     />
                   ) : (
                     <CountdownBlock
                       label="Countdown to Race Day"
                       targetISO={RACE_DAY_ISO}
+                      getReliableNow={getReliableNow}
                     />
                   )}
                 </div>

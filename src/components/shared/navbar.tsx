@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Button } from "../ui/button";
 import { usePathname } from "next/navigation";
 import { navLinks } from "@/lib/constant";
@@ -11,15 +11,79 @@ import { useContact } from "@/lib/contact-context";
 
 const REG_OPEN_ISO = "2026-06-13T15:00:00+08:00";
 
-function useRegOpen() {
-  const [now, setNow] = useState(() => Date.now()); // ✅ init langsung pakai Date.now()
+// ─────────────────────────────────────────────────────────────────────────────
+// useServerTimeOffset
+// Fetch server time sekali saat mount, hitung offset vs jam lokal.
+// ─────────────────────────────────────────────────────────────────────────────
+function useServerTimeOffset() {
+  const [offset, setOffset] = useState<number>(0);
+  const [ready, setReady] = useState(false);
+
   useEffect(() => {
-    const id = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(id);
+    const fetchOffset = async () => {
+      const calcOffset = (serverMs: number, before: number, after: number) =>
+        serverMs - (before + after) / 2;
+
+      try {
+        // Primary: WorldTimeAPI
+        const before = Date.now();
+        const res = await fetch(
+          "https://worldtimeapi.org/api/timezone/Asia/Makassar",
+          { cache: "no-store" }
+        );
+        const after = Date.now();
+        if (!res.ok) throw new Error("worldtimeapi failed");
+        const data = await res.json();
+        setOffset(calcOffset(data.unixtime * 1000, before, after));
+      } catch {
+        try {
+          // Fallback: timeapi.io
+          const before = Date.now();
+          const res = await fetch(
+            "https://timeapi.io/api/time/current/zone?timeZone=Asia/Makassar",
+            { cache: "no-store" }
+          );
+          const after = Date.now();
+          if (!res.ok) throw new Error("timeapi failed");
+          const data = await res.json();
+          setOffset(calcOffset(new Date(data.dateTime).getTime(), before, after));
+        } catch {
+          // Dua API gagal → offset 0 (pakai jam lokal sebagai last resort)
+          setOffset(0);
+        }
+      } finally {
+        setReady(true);
+      }
+    };
+
+    fetchOffset();
   }, []);
-  return new Date(REG_OPEN_ISO).getTime() <= now;
+
+  const getReliableNow = useCallback(() => Date.now() + offset, [offset]);
+
+  return { getReliableNow, ready };
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// useRegOpen
+// ─────────────────────────────────────────────────────────────────────────────
+function useRegOpen() {
+  const { getReliableNow, ready } = useServerTimeOffset();
+  const [now, setNow] = useState<number>(() => Date.now());
+
+  useEffect(() => {
+    if (ready) setNow(getReliableNow());
+    const id = setInterval(() => setNow(getReliableNow()), 1000);
+    return () => clearInterval(id);
+  }, [getReliableNow, ready]);
+
+  // Hanya true setelah server time ready → tidak bisa dimanipulasi jam lokal
+  return ready && new Date(REG_OPEN_ISO).getTime() <= now;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Navbar
+// ─────────────────────────────────────────────────────────────────────────────
 export default function Navbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -133,7 +197,7 @@ export default function Navbar() {
               </div>
 
               {/* Mobile Hamburger + Registration Button */}
-             <div className="flex items-center gap-4 lg:hidden">
+              <div className="flex items-center gap-4 lg:hidden">
                 {regOpen ? (
                   <Button asChild className={btnActiveMobile}>
                     <a href="https://app.regnowonline.co.id/event/64" target="_blank" rel="noopener noreferrer">
@@ -170,7 +234,9 @@ export default function Navbar() {
                         key={link.link}
                         href={link.link}
                         className={`text-2xl ${
-                          isActive ? "text-blue-900 font-semibold" : "text-blue-900/60 font-semibold hover:text-blue-900"
+                          isActive
+                            ? "text-blue-900 font-semibold"
+                            : "text-blue-900/60 font-semibold hover:text-blue-900"
                         }`}
                         onClick={toggleMobileMenu}
                       >
