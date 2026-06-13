@@ -4,9 +4,6 @@ import React, { useEffect, useState } from "react";
 import { Calendar, MapPin } from "lucide-react";
 import { Button } from "../ui/button";
 
-/* ─────────────────────────────────────────
-   Inline countdown — no external dependency
-───────────────────────────────────────── */
 function useCountdown(targetISO: string) {
   const calc = () => {
     const diff = new Date(targetISO).getTime() - Date.now();
@@ -31,17 +28,9 @@ function useCountdown(targetISO: string) {
   return time;
 }
 
-function CountdownBlock({
-  label,
-  targetISO,
-}: {
-  label: string;
-  targetISO: string;
-}) {
+function CountdownBlock({ label, targetISO }: { label: string; targetISO: string }) {
   const t = useCountdown(targetISO);
-
   if (!t) return null;
-
   const pad = (n: number) => String(n).padStart(2, "0");
   const units = [
     { val: t.days,    unit: "Hari" },
@@ -49,7 +38,6 @@ function CountdownBlock({
     { val: t.minutes, unit: "Menit" },
     { val: t.seconds, unit: "Detik" },
   ];
-
   return (
     <div className="w-full">
       <p className="text-white/50 text-[10px] sm:text-xs uppercase tracking-widest mb-2 sm:mb-3">
@@ -57,10 +45,7 @@ function CountdownBlock({
       </p>
       <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
         {units.map(({ val, unit }) => (
-          <div
-            key={unit}
-            className="flex flex-col items-center bg-white/10 rounded-xl py-2.5 sm:py-3 border border-white/15"
-          >
+          <div key={unit} className="flex flex-col items-center bg-white/10 rounded-xl py-2.5 sm:py-3 border border-white/15">
             <span className="text-xl sm:text-2xl font-black text-white tabular-nums leading-none">
               {pad(val)}
             </span>
@@ -74,22 +59,18 @@ function CountdownBlock({
   );
 }
 
-/* ─────────────────────────────────────────
-   Main component
-───────────────────────────────────────── */
 export default function AboutBanner() {
-  const REG_OPEN_ISO = "2026-06-13T15:00:00+08:00";
-  const RACE_DAY_ISO = "2026-10-10T06:00:00+08:00";
+  const REG_OPEN_ISO  = "2026-06-13T15:00:00+08:00";
+  const RACE_DAY_ISO  = "2026-10-10T06:00:00+08:00";
 
-  const [regOpen, setRegOpen] = useState(false);
-
+  // ✅ FIX: now update tiap detik → regOpen reaktif real-time
+  const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
-    const check = () =>
-      setRegOpen(new Date(REG_OPEN_ISO).getTime() <= Date.now());
-    check();
-    const id = setInterval(check, 60_000); // FIX: cek tiap menit saja, tidak perlu per-detik
+    const id = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(id);
   }, []);
+
+  const regOpen = new Date(REG_OPEN_ISO).getTime() <= now;
 
   return (
     <>
