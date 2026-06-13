@@ -12,14 +12,12 @@ import { useContact } from "@/lib/contact-context";
 const REG_OPEN_ISO = "2026-06-13T15:00:00+08:00";
 
 function useRegOpen() {
-  const [regOpen, setRegOpen] = useState(false);
+  const [now, setNow] = useState(() => Date.now()); // ✅ init langsung pakai Date.now()
   useEffect(() => {
-    const check = () => setRegOpen(new Date(REG_OPEN_ISO).getTime() <= Date.now());
-    check();
-    const id = setInterval(check, 1000);
+    const id = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(id);
   }, []);
-  return regOpen;
+  return new Date(REG_OPEN_ISO).getTime() <= now;
 }
 
 export default function Navbar() {
