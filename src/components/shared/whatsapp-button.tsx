@@ -6,7 +6,7 @@ export default function WhatsAppWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState('');
   
-  const phoneNumber = "6281234567890"; // Ganti dengan nomor WhatsApp Anda
+  const phoneNumber = "628873443101"; // Ganti dengan nomor WhatsApp Anda
   const companyName = "Bayan Run";
   const companyTagline = "THE BIGGEST RUNNING EVENT IN KALIMANTAN";
 
@@ -26,12 +26,6 @@ export default function WhatsAppWidget() {
     }
   };
 
-  const quickMessages = [
-    "Halo! Saya ingin tahu info tentang Bayan Run",
-    "Bagaimana cara registrasi?",
-    "Berapa biaya pendaftaran?",
-    "Kapan tanggal eventnya?",
-  ];
 
   return (
     <>
@@ -81,7 +75,7 @@ export default function WhatsAppWidget() {
               <span className="text-xs text-gray-500 ml-2" style={{ fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>Baru saja</span>
             </div>
 
-            {/* Quick Reply Buttons */}
+            {/* Quick Reply Buttons 
             <div className="space-y-2 mb-4">
               {quickMessages.map((msg, idx) => (
                 <button
@@ -93,7 +87,7 @@ export default function WhatsAppWidget() {
                   {msg}
                 </button>
               ))}
-            </div>
+            </div>*/}
           </div>
 
           {/* Input Area */}
