@@ -146,7 +146,7 @@ export default function AboutBanner() {
               {/* Logo */}
               <div className="about-s2 mb-3 sm:mb-4 -ml-2 sm:-ml-6 md:-ml-8 lg:-ml-10">
                 <img
-                  src="https://res.cloudinary.com/djs5pi7ev/image/upload/q_auto/f_auto/v1775466723/LOGO_BR2026_vbixvo.png"
+                  src="https://res.cloudinary.com/djs5pi7ev/image/upload/q_auto/f_auto/v1781317787/LOGO_BR2026_WHITEALL_f04hnk.png"
                   alt="Bayan RUN 2026"
                   width={640}
                   height={320}

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { FaYoutube, FaInstagram, FaWhatsapp } from 'react-icons/fa';
+import { FaYoutube, FaInstagram, FaWhatsapp, FaEnvelope } from 'react-icons/fa';
 import { useContact } from "@/lib/contact-context";
 import { Allison } from 'next/font/google';
 
@@ -102,11 +102,13 @@ const Footer: React.FC = () => {
               </div>
 
               {/* Social Links */}
-              <div className="flex flex-col items-end max-md:items-center max-md:text-center space-y-4">
+              {/* Social Links */}
+              <div className="flex flex-col items-center space-y-4">  {/* was: items-end max-md:items-center */}
                 <div className="flex items-center space-x-5 mb-2">
                   <SocialLink href="https://www.instagram.com/bayan_open/" label="Instagram" Icon={FaInstagram} />
-                  <SocialLink href="https://api.whatsapp.com/send/?phone=6282154815113&text&type=phone_number&app_absent=0" label="WhatsApp" Icon={FaWhatsapp} />
+                  <SocialLink href="https://api.whatsapp.com/send/?phone=628873443101&text&type=phone_number&app_absent=0" label="WhatsApp" Icon={FaWhatsapp} />
                   <SocialLink href="https://www.youtube.com/@BAYANOPEN" label="YouTube" Icon={FaYoutube} />
+                  <SocialLink href="mailto:info@regnowonline.com" label="Email" Icon={FaEnvelope} />
                 </div>
                 <Link
                   href="/infos"
