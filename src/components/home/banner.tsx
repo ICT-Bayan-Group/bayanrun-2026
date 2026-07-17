@@ -278,37 +278,21 @@ export default function AboutBanner() {
                   )}
                 </div>
 
-                {/* ── Button ── */}
-                {regOpen ? (
+                {/* ── Button (selalu tampil biru, gak ada state abu-abu lagi) ── */}
                 <Button
-                    asChild
-                    className="w-full py-4 sm:py-5 text-base sm:text-lg font-black tracking-widest uppercase
-                      bg-blue-800 hover:bg-blue-700 active:bg-blue-700
-                      border border-blue-400/30
-                      rounded-xl h-auto
-                      shadow-[0_0_24px_rgba(59,130,246,0.5)]
-                      hover:shadow-[0_0_40px_rgba(59,130,246,0.7)]
-                      transition-all duration-300 cursor-pointer"
-                  >
-                    <a href="https://app.regnowonline.co.id/event/64" target="_blank" rel="noopener noreferrer">
-                      Daftar Sekarang
-                    </a>
-                  </Button>
-                ) : (
-                  <Button
-                    disabled
-                    aria-disabled="true"
-                    className="w-full py-3 sm:py-4 text-xs sm:text-sm font-black tracking-normal sm:tracking-wider uppercase
-                      bg-white border border-white/20
-                      rounded-xl h-auto
-                      text-black
-                      whitespace-normal leading-tight
-                      cursor-not-allowed
-                      transition-all duration-300"
-                  >
-                    Pendaftaran Dibuka 13 Juni 2026
-                  </Button>
-                )}
+                  asChild
+                  className="w-full py-4 sm:py-5 text-base sm:text-lg font-black tracking-widest uppercase
+                    bg-blue-800 hover:bg-blue-700 active:bg-blue-700
+                    border border-blue-400/30
+                    rounded-xl h-auto
+                    shadow-[0_0_24px_rgba(59,130,246,0.5)]
+                    hover:shadow-[0_0_40px_rgba(59,130,246,0.7)]
+                    transition-all duration-300 cursor-pointer"
+                >
+                  <a href="https://app.regnowonline.co.id/event/64" target="_blank" rel="noopener noreferrer">
+                    Daftar Sekarang
+                  </a>
+                </Button>
               </div>
             </div>
           </div>
