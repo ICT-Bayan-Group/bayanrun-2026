@@ -2,84 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { usePathname } from "next/navigation";
 import { navLinks } from "@/lib/constant";
 import { Menu, X } from "lucide-react";
 import { useContact } from "@/lib/contact-context";
-
-const REG_OPEN_ISO = "2026-06-13T15:00:00+08:00";
-
-// ─────────────────────────────────────────────────────────────────────────────
-// useServerTimeOffset
-// Fetch server time sekali saat mount, hitung offset vs jam lokal.
-// ─────────────────────────────────────────────────────────────────────────────
-function useServerTimeOffset() {
-  const [offset, setOffset] = useState<number>(0);
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    const fetchOffset = async () => {
-      const calcOffset = (serverMs: number, before: number, after: number) =>
-        serverMs - (before + after) / 2;
-
-      try {
-        // Primary: WorldTimeAPI
-        const before = Date.now();
-        const res = await fetch(
-          "https://worldtimeapi.org/api/timezone/Asia/Makassar",
-          { cache: "no-store" }
-        );
-        const after = Date.now();
-        if (!res.ok) throw new Error("worldtimeapi failed");
-        const data = await res.json();
-        setOffset(calcOffset(data.unixtime * 1000, before, after));
-      } catch {
-        try {
-          // Fallback: timeapi.io
-          const before = Date.now();
-          const res = await fetch(
-            "https://timeapi.io/api/time/current/zone?timeZone=Asia/Makassar",
-            { cache: "no-store" }
-          );
-          const after = Date.now();
-          if (!res.ok) throw new Error("timeapi failed");
-          const data = await res.json();
-          setOffset(calcOffset(new Date(data.dateTime).getTime(), before, after));
-        } catch {
-          // Dua API gagal → offset 0 (pakai jam lokal sebagai last resort)
-          setOffset(0);
-        }
-      } finally {
-        setReady(true);
-      }
-    };
-
-    fetchOffset();
-  }, []);
-
-  const getReliableNow = useCallback(() => Date.now() + offset, [offset]);
-
-  return { getReliableNow, ready };
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// useRegOpen
-// ─────────────────────────────────────────────────────────────────────────────
-function useRegOpen() {
-  const { getReliableNow, ready } = useServerTimeOffset();
-  const [now, setNow] = useState<number>(() => Date.now());
-
-  useEffect(() => {
-    if (ready) setNow(getReliableNow());
-    const id = setInterval(() => setNow(getReliableNow()), 1000);
-    return () => clearInterval(id);
-  }, [getReliableNow, ready]);
-
-  // Hanya true setelah server time ready → tidak bisa dimanipulasi jam lokal
-  return ready && new Date(REG_OPEN_ISO).getTime() <= now;
-}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Navbar
@@ -88,7 +16,6 @@ export default function Navbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const {} = useContact();
-  const regOpen = useRegOpen();
 
   const toggleMobileMenu = () => setMobileMenuOpen((prev) => !prev);
 
@@ -101,11 +28,6 @@ export default function Navbar() {
     hover:shadow-[0_0_40px_rgba(59,130,246,0.7)]
     transition-all duration-300 text-white
   `;
-  const btnDisabled = `
-    text-sm font-black tracking-wider uppercase cursor-not-allowed
-    bg-white/10 border border-blue-400/20 rounded-xl
-    text-blue-900/50 transition-all duration-300
-  `;
   const btnActiveMobile = `
     text-xs font-black tracking-widest uppercase cursor-pointer
     bg-blue-800 hover:bg-blue-700 active:bg-blue-700
@@ -113,11 +35,6 @@ export default function Navbar() {
     shadow-[0_0_24px_rgba(59,130,246,0.5)]
     hover:shadow-[0_0_40px_rgba(59,130,246,0.7)]
     transition-all duration-300 text-white
-  `;
-  const btnDisabledMobile = `
-    text-[10px] font-black tracking-wide uppercase cursor-not-allowed
-    bg-white/10 border border-blue-400/20 rounded-xl
-    text-blue-900/50 transition-all duration-300 px-2
   `;
 
   return (
@@ -181,34 +98,22 @@ export default function Navbar() {
                 </ul>
               </div>
 
-              {/* Desktop Registration Button */}
+              {/* Desktop Registration Button (selalu biru, gak ada state abu-abu lagi) */}
               <div className="nav-contact hidden lg:block">
-                {regOpen ? (
-                  <Button asChild className={btnActive}>
-                    <a href="https://app.regnowonline.co.id/event/64" target="_blank" rel="noopener noreferrer">
-                      Daftar Sekarang
-                    </a>
-                  </Button>
-                ) : (
-                  <Button disabled className={btnDisabled}>
-                    Pendaftaran Dibuka 13 Juni 2026
-                  </Button>
-                )}
+                <Button asChild className={btnActive}>
+                  <a href="https://app.regnowonline.co.id/event/64" target="_blank" rel="noopener noreferrer">
+                    Daftar Sekarang
+                  </a>
+                </Button>
               </div>
 
               {/* Mobile Hamburger + Registration Button */}
               <div className="flex items-center gap-4 lg:hidden">
-                {regOpen ? (
-                  <Button asChild className={btnActiveMobile}>
-                    <a href="https://app.regnowonline.co.id/event/64" target="_blank" rel="noopener noreferrer">
-                      Daftar Sekarang
-                    </a>
-                  </Button>
-                ) : (
-                  <Button disabled className={btnDisabledMobile}>
-                    Dibuka 13 Juni 2026
-                  </Button>
-                )}
+                <Button asChild className={btnActiveMobile}>
+                  <a href="https://app.regnowonline.co.id/event/64" target="_blank" rel="noopener noreferrer">
+                    Daftar Sekarang
+                  </a>
+                </Button>
                 <button onClick={toggleMobileMenu}>
                   {mobileMenuOpen ? (
                     <X className="w-6 h-6" />
