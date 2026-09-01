@@ -20,6 +20,11 @@ const nextConfig: NextConfig = {
         hostname: "drive.google.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "ik.imagekit.io",
+        pathname: "/**",
+      },
     ],
   },
 };

@@ -4,7 +4,7 @@ import { useRef, useEffect, useState } from "react";
 import { Users, Zap, Star } from "lucide-react";
 
 const PHOTO_URL =
-  "https://res.cloudinary.com/djs5pi7ev/image/upload/v1780711905/20251012060936_-_BOM_7023_uzwd7f_6_11zon_jtyqr0.webp";
+  "https://ik.imagekit.io/nwtwwkdgu/20251012064855_-_BOM_0690_f1v4kw_8_11zon_sm9ipn.webp?updatedAt=1787729794595?tr=w-2000";
 
 const sections = [
   {

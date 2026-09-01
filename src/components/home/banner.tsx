@@ -181,7 +181,7 @@ export default function AboutBanner() {
         <div className="relative flex items-center justify-center min-h-screen overflow-hidden">
 
           <img
-            src="https://res.cloudinary.com/djs5pi7ev/image/upload/v1780041585/DJI_20251012054325_0006_D_p3yx0k_edwqb7.webp"
+            src="https://ik.imagekit.io/nwtwwkdgu/20251012053734%20-%20BOM_6641.jpg"
             alt="Bayan RUN 2026 Background"
             width={1920}
             height={1080}
@@ -210,7 +210,7 @@ export default function AboutBanner() {
               {/* Logo */}
               <div className="about-s2 mb-3 sm:mb-4 -ml-2 sm:-ml-6 md:-ml-8 lg:-ml-10">
                 <img
-                  src="https://res.cloudinary.com/djs5pi7ev/image/upload/q_auto/f_auto/v1781317787/LOGO_BR2026_WHITEALL_f04hnk.png"
+                  src="https://ik.imagekit.io/nwtwwkdgu/LOGO_BR2026_WHITEALL_f04hnk.png?updatedAt=1787729794843"
                   alt="Bayan RUN 2026"
                   width={640}
                   height={320}
