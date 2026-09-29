@@ -2,16 +2,20 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
+
+const GALLERY_URL = "https://ambilfoto.id";
+const AMBILFOTO_LOGO =
+  "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790643645/ambilfoto-logo_in2s7b.png";
 
 const slideImages = [
-  "https://ik.imagekit.io/nwtwwkdgu/DJI_20251012073328_0025_D_q1zgb2bdC.webp?tr=w-2000",
-  "https://ik.imagekit.io/nwtwwkdgu/20251012062146%20-%20BOM_0444.webp?updatedAt=1788244259102?tr=w-2000",
-  "https://ik.imagekit.io/nwtwwkdgu/DJI_20251012090310_0032_D_nm8eit_3_11zon_tqey3t.webp?updatedAt=1787729796927?tr=w-2000",
-  "https://ik.imagekit.io/nwtwwkdgu/20251012061107_-_BOM_7070_nah0u9_2_11zon_qaipyv.webp?updatedAt=1787729794791",
-  "https://ik.imagekit.io/nwtwwkdgu/20251012060936_-_BOM_7023_uzwd7f_6_11zon_jtyqr0.webp?updatedAt=1787729794840",
-  "https://ik.imagekit.io/nwtwwkdgu/20251012064855_-_BOM_0690_f1v4kw_8_11zon_sm9ipn.webp?updatedAt=1787729794595",
-  "https://ik.imagekit.io/nwtwwkdgu/AR__4961_njqhws_7_11zon_p01pyk.webp?updatedAt=1787729794259",
+  "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630023/DJI_20251012054325_0006_D_p3yx0k_edwqb7_o7dwzn.webp",
+  "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630020/20251012060936_-_BOM_7023_uzwd7f_6_11zon_jtyqr0_jsjbnm.webp",
+  "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630073/20251012062146_-_BOM_0444_ipz7s9.jpg",
+  "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630023/DJI_20251012054325_0006_D_p3yx0k_edwqb7_o7dwzn.webp",
+  "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630019/DJI_20251012090310_0032_D_nm8eit_3_11zon_tqey3t_ba9jkq.webp",
+  "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630019/20251012061107_-_BOM_7070_nah0u9_2_11zon_qaipyv_nvju70.webp",
+  "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630019/20251012070224_-_BOM_8032_qy3ajc_9_11zon_w2cbpi_od1l7e.webp",
 ];
 
 const total = slideImages.length;
@@ -28,7 +32,6 @@ function getCardStyle(order: number): React.CSSProperties {
     zIndex: total - order,
     opacity: 1 - order * 0.15,
     transition: "all 0.5s cubic-bezier(0.4,0,0.2,1)",
-    // FIX: will-change hanya pada card yang visible, bukan semua 9 card
     willChange: order <= 1 ? "transform, opacity" : "auto",
   };
 }
@@ -56,7 +59,6 @@ export default function StackedSlider() {
 
   return (
     <section className="py-16 lg:py-24 bg-gray-200 overflow-hidden relative">
-
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-100/40 rounded-full" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-amber-100/40 rounded-full" />
@@ -75,11 +77,37 @@ export default function StackedSlider() {
         <p className="text-blue-900/70 mt-4 text-sm font-semibold tracking-widest uppercase">
           Moment terbaik Bayan Run
         </p>
+
+        {/* CTA: logo AmbilFoto */}
+        <div className="flex justify-center mt-8 px-4">
+          <a
+            href={GALLERY_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Ambil fotomu di AmbilFoto.id"
+            className="group inline-flex items-center gap-4 rounded-2xl border border-gray-200 bg-white px-6 py-3.5 shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-200"
+          >
+            <Image
+              src={AMBILFOTO_LOGO}
+              alt="AmbilFoto.id"
+              width={120}
+              height={120}
+              className="h-9 w-auto object-contain"
+            />
+            <span className="text-sm sm:text-base font-bold tracking-wide text-gray-500 group-hover:text-blue-900 transition-colors">
+              Ambil Fotomu
+            </span>
+            <ArrowRight
+              className="w-4 h-4 text-gray-400 group-hover:text-blue-900 group-hover:translate-x-1 transition-all duration-300"
+              aria-hidden="true"
+            />
+            <span className="sr-only"> (buka di tab baru)</span>
+          </a>
+        </div>
       </div>
 
       {/* Slider */}
       <div className="relative max-w-2xl mx-auto px-4">
-  
         <div
           className="relative h-[55svh] w-full"
           style={{ contain: "layout style" }}
@@ -97,9 +125,10 @@ export default function StackedSlider() {
 
             if (isExiting) {
               style = {
-                transform: exitDir === "next"
-                  ? "translateX(600px) translateY(-100px) rotate(20deg) scale(0.8)"
-                  : "translateX(-600px) translateY(-100px) rotate(-20deg) scale(0.8)",
+                transform:
+                  exitDir === "next"
+                    ? "translateX(600px) translateY(-100px) rotate(20deg) scale(0.8)"
+                    : "translateX(-600px) translateY(-100px) rotate(-20deg) scale(0.8)",
                 zIndex: total + 1,
                 opacity: 0,
                 transition: "all 0.5s cubic-bezier(0.4,0,0.2,1)",
@@ -113,7 +142,6 @@ export default function StackedSlider() {
                 className="absolute inset-0 rounded-2xl overflow-hidden shadow-xl cursor-pointer border border-black/5"
                 style={style}
                 onClick={moveNext}
-                // FIX ACCESSIBILITY: hanya card aktif yang interactive untuk screen reader
                 role={order === 0 ? "group" : "presentation"}
                 aria-roledescription={order === 0 ? "slide" : undefined}
                 aria-label={order === 0 ? `Foto ${current + 1} dari ${total}` : undefined}
@@ -123,7 +151,6 @@ export default function StackedSlider() {
                   src={src}
                   alt={`Foto Bayan Run 2025 nomor ${i + 1}`}
                   fill
-                  // FIX PERF: hanya gambar aktif & berikutnya yang eager
                   loading={order <= 1 ? "eager" : "lazy"}
                   priority={order === 0}
                   className="object-cover"
@@ -131,7 +158,10 @@ export default function StackedSlider() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
                 {order === 0 && !isExiting && (
-                  <div className="absolute bottom-4 left-4 text-white/80 text-xs tracking-widest uppercase font-mono" aria-hidden="true">
+                  <div
+                    className="absolute bottom-4 left-4 text-white/80 text-xs tracking-widest uppercase font-mono"
+                    aria-hidden="true"
+                  >
                     {String(current + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
                   </div>
                 )}
@@ -141,8 +171,11 @@ export default function StackedSlider() {
         </div>
 
         {/* Controls */}
-        <div className="flex items-center justify-center gap-4 mt-10" role="group" aria-label="Kontrol gallery">
-          {/* FIX ACCESSIBILITY: tambah aria-label pada semua button navigasi */}
+        <div
+          className="flex items-center justify-center gap-4 mt-10"
+          role="group"
+          aria-label="Kontrol gallery"
+        >
           <button
             onClick={movePrev}
             disabled={isAnimating}
