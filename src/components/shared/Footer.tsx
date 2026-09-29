@@ -3,8 +3,13 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { FaYoutube, FaInstagram, FaWhatsapp, FaEnvelope } from 'react-icons/fa';
-import { useContact } from "@/lib/contact-context";
 import { Allison } from 'next/font/google';
+import {
+  AMBILFOTO_URL,
+  RESULT_URL,
+  SURAT_KUASA_URL,
+  SURAT_KUASA_FILENAME,
+} from '@/lib/links';
 
 const allison = Allison({
   weight: '400',
@@ -30,9 +35,10 @@ const SocialLink: React.FC<SocialLinkProps> = ({ href, label, Icon }) => (
   </a>
 );
 
-const Footer: React.FC = () => {
-  const { setIsContactOpen } = useContact();
+const menuLinkClass =
+  'hover:text-blue-900 transition-colors text-base md:text-lg font-medium';
 
+const Footer: React.FC = () => {
   return (
     <>
       <style jsx global>{`
@@ -74,7 +80,7 @@ const Footer: React.FC = () => {
 
             <div className="flex-1 flex flex-col justify-center items-end mt-12 md:mt-0 text-right max-md:items-center max-md:text-center">
               <div className="uppercase text-sm md:text-base font-bold tracking-widest mb-3 text-gray-600">
-               10 - 11 OKTOBER 2026
+                10 - 11 OKTOBER 2026
               </div>
               <h2 className="text-5xl md:text-6xl font-bold mb-6 text-black">Balikpapan</h2>
             </div>
@@ -93,17 +99,38 @@ const Footer: React.FC = () => {
                   <span className="uppercase text-gray-700 font-extrabold tracking-widest mb-3 text-sm md:text-base">
                     Menu
                   </span>
-                  <Link href="/" className="hover:text-blue-900 transition-colors text-base md:text-lg font-medium">Home</Link>
-                  <Link href="/schedule-rules" className="hover:text-blue-900 transition-colors text-base md:text-lg font-medium">Schedule & Rules</Link>
-                  <Link href="/faq" className="hover:text-blue-900 transition-colors text-base md:text-lg font-medium">FAQ</Link>
-                  <Link href="https://results.scorenow.co.id/Results.aspx?CId=19723&RId=280" className="hover:text-blue-900 transition-colors text-base md:text-lg font-medium">Race Results</Link>
+                  <Link href="/" className={menuLinkClass}>Home</Link>
+                  <Link href="/schedule-rules" className={menuLinkClass}>Schedule & Rules</Link>
+                  <Link href="/faq" className={menuLinkClass}>FAQ</Link>
+                  <a
+                    href={RESULT_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={menuLinkClass}
+                  >
+                    Race Results
+                  </a>
+                  <a
+                    href={AMBILFOTO_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={menuLinkClass}
+                  >
+                    Ambil Foto Kamu
+                  </a>
+                  <a
+                    href={SURAT_KUASA_URL}
+                    download={SURAT_KUASA_FILENAME}
+                    className={menuLinkClass}
+                  >
+                    Download Surat Kuasa
+                  </a>
                 </div>
                 <p className="text-gray-600 text-sm md:text-base font-medium">© 2026 PT BAYAN RESOURCES TBK</p>
               </div>
 
               {/* Social Links */}
-              {/* Social Links */}
-              <div className="flex flex-col items-center space-y-4">  {/* was: items-end max-md:items-center */}
+              <div className="flex flex-col items-center space-y-4">
                 <div className="flex items-center space-x-5 mb-2">
                   <SocialLink href="https://www.instagram.com/bayan_open/" label="Instagram" Icon={FaInstagram} />
                   <SocialLink href="https://api.whatsapp.com/send/?phone=628873443101&text&type=phone_number&app_absent=0" label="WhatsApp" Icon={FaWhatsapp} />
@@ -123,7 +150,7 @@ const Footer: React.FC = () => {
             <div className="flex-1 flex justify-end ml-6 mt-6 md:mt-0 max-md:justify-center max-md:ml-0">
               <div className="w-35 md:w-50 h-35 md:h-50 relative group">
                 <Image
-                  src="https://ik.imagekit.io/nwtwwkdgu/LOGO_BR2026_vbixvo.webp?updatedAt=1787729796492"
+                  src="https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630020/LOGO_BR2026_vbixvo_w7hjua.webp"
                   alt="Logo"
                   fill
                   className="object-contain transform transition duration-500 group-hover:scale-110 group-hover:rotate-12 group-hover:animate-bounce"

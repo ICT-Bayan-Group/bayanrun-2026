@@ -16,7 +16,7 @@ const RED_BG      = "#FEF2F2";
 const RED_BORDER  = "#FECACA";
 const BEBAS       = "'Bebas Neue', Arial Black, sans-serif";
 
-const PHOTO_SRC = "https://ik.imagekit.io/nwtwwkdgu/DJI_20251012054325_0006_D_p3yx0k_edwqb7.webp?tr=w-2000";
+const PHOTO_SRC = "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630015/20251012064855_-_BOM_0690_f1v4kw_8_11zon_sm9ipn_punuqf.webp";
 
 const categories = [
   {

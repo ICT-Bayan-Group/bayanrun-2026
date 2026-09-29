@@ -3,39 +3,28 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
-import { Button } from "../ui/button";
 import { usePathname } from "next/navigation";
 import { navLinks } from "@/lib/constant";
-import { Menu, X } from "lucide-react";
-import { useContact } from "@/lib/contact-context";
+import { Menu, X, Download } from "lucide-react";
+import {
+  AMBILFOTO_URL,
+  AMBILFOTO_LOGO,
+  SURAT_KUASA_URL,
+  SURAT_KUASA_FILENAME,
+} from "@/lib/links";
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Navbar
-// ─────────────────────────────────────────────────────────────────────────────
 export default function Navbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const {} = useContact();
 
   const toggleMobileMenu = () => setMobileMenuOpen((prev) => !prev);
 
-  /* Shared button styles */
-  const btnActive = `
-    text-sm font-black tracking-widest uppercase cursor-pointer
-    bg-blue-800 hover:bg-blue-700 active:bg-blue-700
-    border border-blue-400/30 rounded-xl
-    shadow-[0_0_24px_rgba(59,130,246,0.5)]
-    hover:shadow-[0_0_40px_rgba(59,130,246,0.7)]
-    transition-all duration-300 text-white
-  `;
-  const btnActiveMobile = `
-    text-xs font-black tracking-widest uppercase cursor-pointer
-    bg-blue-800 hover:bg-blue-700 active:bg-blue-700
-    border border-blue-400/30 rounded-xl
-    shadow-[0_0_24px_rgba(59,130,246,0.5)]
-    hover:shadow-[0_0_40px_rgba(59,130,246,0.7)]
-    transition-all duration-300 text-white
-  `;
+  const btnBase =
+    "inline-flex items-center justify-center gap-2 text-xs font-black tracking-widest uppercase rounded-xl transition-all duration-300 cursor-pointer";
+  const btnLogo = `${btnBase} px-3 py-2 bg-white border border-gray-300 text-gray-600 hover:text-blue-900 hover:shadow-md hover:-translate-y-0.5`;
+  const btnSolid = `${btnBase} px-3 xl:px-4 py-2.5 bg-blue-800 hover:bg-blue-700 active:bg-blue-700 border border-blue-400/30 text-white shadow-[0_0_24px_rgba(59,130,246,0.5)] hover:shadow-[0_0_40px_rgba(59,130,246,0.7)]`;
+  const btnLogoMobile = `${btnBase} w-64 px-5 py-3 text-sm bg-white border border-gray-300 text-gray-600 hover:text-blue-900`;
+  const btnSolidMobile = `${btnBase} w-64 px-5 py-3.5 text-sm bg-blue-800 hover:bg-blue-700 border border-blue-400/30 text-white shadow-[0_0_24px_rgba(59,130,246,0.5)]`;
 
   return (
     <>
@@ -66,7 +55,7 @@ export default function Navbar() {
               <div className="nav-logo">
                 <Link href="/">
                   <Image
-                    src="https://ik.imagekit.io/nwtwwkdgu/LOGO_BR2026_vbixvo.webp?updatedAt=1787729796492"
+                    src="https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630020/LOGO_BR2026_vbixvo_w7hjua.webp"
                     alt="logo"
                     width={1000}
                     height={1000}
@@ -76,8 +65,8 @@ export default function Navbar() {
               </div>
 
               {/* Desktop Navigation */}
-              <div className="nav-links lg:-ml-16 hidden lg:block">
-                <ul className="flex gap-8 items-center">
+              <div className="nav-links hidden lg:block">
+                <ul className="flex gap-6 xl:gap-8 items-center">
                   {navLinks.map((link) => {
                     const isActive =
                       pathname === link.link ||
@@ -98,23 +87,40 @@ export default function Navbar() {
                 </ul>
               </div>
 
-              {/* Desktop Registration Button (selalu biru, gak ada state abu-abu lagi) */}
-              <div className="nav-contact hidden lg:block">
-                <Button asChild className={btnActive}>
-                  <a href="https://app.regnowonline.co.id/event/64" target="_blank" rel="noopener noreferrer">
-                    Daftar Sekarang
-                  </a>
-                </Button>
+              {/* Desktop Action Buttons */}
+              <div className="nav-contact hidden lg:flex items-center gap-2">
+                <a
+                  href={AMBILFOTO_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={btnLogo}
+                  aria-label="Ambil Foto Kamu di AmbilFoto.id"
+                  title="Ambil Foto Kamu"
+                >
+                  <Image
+                    src={AMBILFOTO_LOGO}
+                    alt="AmbilFoto.id"
+                    width={80}
+                    height={80}
+                    className="h-6 w-auto object-contain"
+                  />
+                  <span className="hidden xl:inline">Ambil Foto Kamu</span>
+                </a>
+                <a
+                  href={SURAT_KUASA_URL}
+                  download={SURAT_KUASA_FILENAME}
+                  className={btnSolid}
+                  aria-label="Download Surat Kuasa"
+                  title="Download Surat Kuasa"
+                >
+                  <Download className="w-4 h-4" aria-hidden="true" />
+                  <span className="hidden xl:inline">Surat Kuasa</span>
+                </a>
               </div>
 
-              {/* Mobile Hamburger + Registration Button */}
+              {/* Mobile Hamburger */}
               <div className="flex items-center gap-4 lg:hidden">
-                <Button asChild className={btnActiveMobile}>
-                  <a href="https://app.regnowonline.co.id/event/64" target="_blank" rel="noopener noreferrer">
-                    Daftar Sekarang
-                  </a>
-                </Button>
-                <button onClick={toggleMobileMenu}>
+                <button onClick={toggleMobileMenu} aria-label="Toggle menu">
                   {mobileMenuOpen ? (
                     <X className="w-6 h-6" />
                   ) : (
@@ -149,7 +155,36 @@ export default function Navbar() {
                       </Link>
                     );
                   })}
-                  <div onClick={toggleMobileMenu}>
+
+                  <div className="flex flex-col items-center gap-3 pt-2">
+                    <a
+                      href={AMBILFOTO_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={btnLogoMobile}
+                      onClick={toggleMobileMenu}
+                    >
+                      <Image
+                        src={AMBILFOTO_LOGO}
+                        alt="AmbilFoto.id"
+                        width={80}
+                        height={80}
+                        className="h-7 w-auto object-contain"
+                      />
+                      Ambil Foto Kamu
+                    </a>
+                    <a
+                      href={SURAT_KUASA_URL}
+                      download={SURAT_KUASA_FILENAME}
+                      className={btnSolidMobile}
+                      onClick={toggleMobileMenu}
+                    >
+                      <Download className="w-4 h-4" aria-hidden="true" />
+                      Download Surat Kuasa
+                    </a>
+                  </div>
+
+                  <div onClick={toggleMobileMenu} className="cursor-pointer">
                     <X className="w-6 h-6" />
                   </div>
                 </div>
