@@ -6,6 +6,7 @@ import Navbar from "@/components/shared/navbar";
 import Footer from "@/components/shared/Footer";
 import { ContactProvider } from "@/lib/contact-context";
 import { Toaster } from "sonner";
+import WhatsappButton from "@/components/shared/whatsapp-button";
 import TrackingProvider from "@/providers/tracking-provider";
 import { Analytics } from "@vercel/analytics/next"
 import { Poppins } from "next/font/google";
@@ -94,8 +95,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           fbPixelId="680203374976332"
         />
         <Analytics />
-
+          <WhatsappButton />
         <SmoothScrollProvider>
+
           <ContactProvider>
             <Navbar />
             {children}
