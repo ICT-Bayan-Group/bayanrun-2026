@@ -100,7 +100,7 @@ const Footer: React.FC = () => {
                     Menu
                   </span>
                   <Link href="/" className={menuLinkClass}>Home</Link>
-                  <Link href="/schedule-rules" className={menuLinkClass}>Schedule & Rules</Link>
+                  <Link href="/rules-regulations" className={menuLinkClass}>Rules & Regulations</Link>
                   <Link href="/faq" className={menuLinkClass}>FAQ</Link>
                   <a
                     href={RESULT_URL}

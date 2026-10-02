@@ -5,7 +5,6 @@ import { Calendar, MapPin, BarChart3, Download, ArrowRight } from "lucide-react"
 import {
   AMBILFOTO_URL,
   AMBILFOTO_LOGO,
-  RESULT_URL,
   SURAT_KUASA_URL,
   SURAT_KUASA_FILENAME,
 } from "@/lib/links";
@@ -123,7 +122,7 @@ function CountdownBlock({
   );
 }
 
-// ── ActionButton (glass style, icon atau logo) ───────────────────────────────
+// ── ActionButton (glass style, icon atau logo, support disabled) ─────────────
 function ActionButton({
   href,
   icon: Icon,
@@ -132,26 +131,29 @@ function ActionButton({
   subtitle,
   download,
   external = true,
+  disabled = false,
   className = "",
 }: {
-  href: string;
+  href?: string;
   icon?: React.ElementType;
   logo?: string;
   title: string;
   subtitle: string;
   download?: string;
   external?: boolean;
+  disabled?: boolean;
   className?: string;
 }) {
-  return (
-    <a
-      href={href}
-      {...(download ? { download } : {})}
-      {...(external && !download ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      className={`group flex items-center gap-3 sm:gap-4 w-full rounded-2xl border border-white/25 bg-white/10 backdrop-blur-md px-3.5 sm:px-4 py-3 shadow-lg transition-all duration-300 hover:bg-white/20 hover:border-white/40 hover:-translate-y-0.5 active:translate-y-0 ${className}`}
-    >
+  const content = (
+    <>
       {logo ? (
-        <span className="flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-white shadow-[0_0_18px_rgba(255,255,255,0.35)] flex-shrink-0 p-1.5">
+        <span
+          className={`flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex-shrink-0 p-1.5 ${
+            disabled
+              ? "bg-gray-300 grayscale"
+              : "bg-white shadow-[0_0_18px_rgba(255,255,255,0.35)]"
+          }`}
+        >
           <img
             src={logo}
             alt="AmbilFoto.id"
@@ -164,24 +166,72 @@ function ActionButton({
         </span>
       ) : (
         Icon && (
-          <span className="flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-800 shadow-[0_0_18px_rgba(59,130,246,0.55)] flex-shrink-0">
-            <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" aria-hidden="true" />
+          <span
+            className={`flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex-shrink-0 ${
+              disabled
+                ? "bg-gray-500"
+                : "bg-gradient-to-br from-blue-500 to-blue-800 shadow-[0_0_18px_rgba(59,130,246,0.55)]"
+            }`}
+          >
+            <Icon
+              className={`w-5 h-5 sm:w-6 sm:h-6 ${disabled ? "text-gray-300" : "text-white"}`}
+              aria-hidden="true"
+            />
           </span>
         )
       )}
       <span className="flex flex-col flex-1 min-w-0 text-left">
-        <span className="flex items-center gap-1.5 text-white font-bold text-sm sm:text-base leading-tight">
-          <span className="about-pulse w-1.5 h-1.5 rounded-full bg-yellow-400 inline-block" aria-hidden="true" />
+        <span
+          className={`flex items-center gap-1.5 font-bold text-sm sm:text-base leading-tight ${
+            disabled ? "text-gray-300" : "text-white"
+          }`}
+        >
+          <span
+            className={`w-1.5 h-1.5 rounded-full inline-block ${
+              disabled ? "bg-gray-500" : "about-pulse bg-yellow-400"
+            }`}
+            aria-hidden="true"
+          />
           {title}
         </span>
-        <span className="text-white/60 text-[11px] sm:text-xs font-medium leading-snug mt-0.5 truncate">
+        <span
+          className={`text-[11px] sm:text-xs font-medium leading-snug mt-0.5 truncate ${
+            disabled ? "text-gray-400" : "text-white/60"
+          }`}
+        >
           {subtitle}
         </span>
       </span>
       <ArrowRight
-        className="w-4 h-4 text-white/70 flex-shrink-0 transition-transform duration-300 group-hover:translate-x-1"
+        className={`w-4 h-4 flex-shrink-0 transition-transform duration-300 ${
+          disabled ? "text-gray-500" : "text-white/70 group-hover:translate-x-1"
+        }`}
         aria-hidden="true"
       />
+    </>
+  );
+
+  if (disabled) {
+    return (
+      <div
+        role="link"
+        aria-disabled="true"
+        tabIndex={-1}
+        className={`flex items-center gap-3 sm:gap-4 w-full rounded-2xl border border-gray-500/40 bg-gray-500/20 backdrop-blur-md px-3.5 sm:px-4 py-3 shadow-lg cursor-not-allowed select-none pointer-events-none ${className}`}
+      >
+        {content}
+      </div>
+    );
+  }
+
+  return (
+    <a
+      href={href}
+      {...(download ? { download } : {})}
+      {...(external && !download ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      className={`group flex items-center gap-3 sm:gap-4 w-full rounded-2xl border border-white/25 bg-white/10 backdrop-blur-md px-3.5 sm:px-4 py-3 shadow-lg transition-all duration-300 hover:bg-white/20 hover:border-white/40 hover:-translate-y-0.5 active:translate-y-0 ${className}`}
+    >
+      {content}
     </a>
   );
 }
@@ -261,7 +311,7 @@ export default function AboutBanner() {
               {/* Logo */}
               <div className="about-s2 mb-3 sm:mb-4 -ml-2 sm:-ml-6 md:-ml-8 lg:-ml-10">
                 <img
-                  src="https://ik.imagekit.io/nwtwwkdgu/LOGO_BR2026_WHITEALL_f04hnk.png?updatedAt=1787729794843"
+                  src="https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630018/LOGO_BR2026_WHITEALL_f04hnk_gkxs5x.webp"
                   alt="Bayan RUN 2026"
                   width={640}
                   height={320}
@@ -275,13 +325,13 @@ export default function AboutBanner() {
               {/* Tagline */}
               <p className="about-s3 text-base sm:text-xl lg:text-2xl font-bold italic text-white/70 mb-5 sm:mb-6 tracking-wider sm:tracking-widest uppercase">
                 — The Biggest Running Event in{" "}
-                <span className="text-yellow-400 not-italic">Kalimantan</span>
+                <span className="text-yellow-400 not-italic"> East Kalimantan</span>
               </p>
 
               {/* Action buttons: 2 atas, 1 bawah */}
               <div className="about-s4 grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 w-full max-w-[720px] mb-6 sm:mb-8">
                 <ActionButton
-                  href={RESULT_URL}
+                  disabled
                   icon={BarChart3}
                   title="Race Result"
                   subtitle="Lihat hasil lomba Bayan Run 2026"
