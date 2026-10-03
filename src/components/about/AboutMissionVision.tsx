@@ -4,7 +4,7 @@ import { useRef, useEffect, useState } from "react";
 import { Users, Zap, Star } from "lucide-react";
 
 const PHOTO_URL =
-  "+";
+  "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630023/DJI_20251012054325_0006_D_p3yx0k_edwqb7_o7dwzn.webp";
 
 const sections = [
   {

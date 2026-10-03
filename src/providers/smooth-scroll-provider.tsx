@@ -12,17 +12,25 @@ export default function SmoothScrollProvider({
     children: React.ReactNode;
 }) {
     useEffect(() => {
-        ScrollSmoother.create({
-            wrapper: "#smooth-wrapper",
-            content: "#smooth-content",
-            smooth: 1.5,
-            effects: true,
+        const media = gsap.matchMedia();
+
+        media.add("(min-width: 1024px)", () => {
+            const smoother = ScrollSmoother.create({
+                wrapper: "#smooth-wrapper",
+                content: "#smooth-content",
+                smooth: 1.5,
+                effects: true,
+            });
+
+            return () => smoother.kill();
         });
+
+        return () => media.revert();
     }, []);
 
     return (
-        <div id="smooth-wrapper" className="h-screen overflow-hidden">
-            <div id="smooth-content" className="will-change-transform">
+        <div id="smooth-wrapper" className="min-h-screen lg:h-screen lg:overflow-hidden">
+            <div id="smooth-content" className="lg:will-change-transform">
                 {children}
             </div>
         </div>

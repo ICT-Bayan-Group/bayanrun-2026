@@ -9,9 +9,9 @@ const AMBILFOTO_LOGO =
   "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790643645/ambilfoto-logo_in2s7b.png";
 
 const slideImages = [
-  "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630023/DJI_20251012054325_0006_D_p3yx0k_edwqb7_o7dwzn.webp",
-  "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630020/20251012060936_-_BOM_7023_uzwd7f_6_11zon_jtyqr0_jsjbnm.webp",
   "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630073/20251012062146_-_BOM_0444_ipz7s9.jpg",
+  "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630020/20251012060936_-_BOM_7023_uzwd7f_6_11zon_jtyqr0_jsjbnm.webp",
+  "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630023/DJI_20251012054325_0006_D_p3yx0k_edwqb7_o7dwzn.webp",
   "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630023/DJI_20251012054325_0006_D_p3yx0k_edwqb7_o7dwzn.webp",
   "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630019/DJI_20251012090310_0032_D_nm8eit_3_11zon_tqey3t_ba9jkq.webp",
   "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630019/20251012061107_-_BOM_7070_nah0u9_2_11zon_qaipyv_nvju70.webp",
