@@ -120,7 +120,14 @@ export default function Navbar() {
 
               {/* Mobile Hamburger */}
               <div className="flex items-center gap-4 lg:hidden">
-                <button onClick={toggleMobileMenu} aria-label="Toggle menu">
+                <button
+                  type="button"
+                  onClick={toggleMobileMenu}
+                  aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+                  aria-expanded={mobileMenuOpen}
+                  aria-controls="mobile-navigation"
+                  className="relative z-[60]"
+                >
                   {mobileMenuOpen ? (
                     <X className="w-6 h-6" />
                   ) : (
@@ -132,10 +139,12 @@ export default function Navbar() {
               {/* Mobile Menu */}
               <div
                 className={`
-                  fixed top-0 h-screen w-full lg:hidden bg-white/90 backdrop-blur-2xl pt-20
+                  fixed top-0 z-50 h-screen w-full overflow-y-auto lg:hidden bg-white/90 backdrop-blur-2xl pt-20
                   transition-all duration-500 ease-in-out
                   ${mobileMenuOpen ? "left-0" : "left-[-100%]"}
                 `}
+                id="mobile-navigation"
+                aria-hidden={!mobileMenuOpen}
               >
                 <div className="flex flex-col items-center space-y-8 mt-10 w-full">
                   {navLinks.map((link) => {
