@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 
-const GALLERY_URL = "https://ambilfoto.id";
+const GALLERY_URL = "https://ambilfoto.id/event-public/bayan-run-2026";
 const AMBILFOTO_LOGO =
   "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790643645/ambilfoto-logo_in2s7b.png";
 
