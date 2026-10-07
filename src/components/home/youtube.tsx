@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Play } from "lucide-react";
 
-const YOUTUBE_ID = "L_bVOMxbSY0";
-const START_TIME = 363;
+const YOUTUBE_ID = "qe6Im_Yt87k";
+const START_TIME = 0;
 
 declare global {
   interface Window {
@@ -81,8 +81,6 @@ export default function AboutVideo() {
     }
   };
 
-
-
   return (
     <section className="py-16 lg:py-24 bg-gray-200 overflow-hidden relative">
       <style>{`
@@ -125,7 +123,7 @@ export default function AboutVideo() {
       {/* Header */}
       <div className="text-center mb-16 relative z-10">
         <p className="about-video-sub text-[13px] uppercase font-semibold tracking-[0.5em] text-blue-900/70 mb-3">
-          Bayan Run 2025
+          Bayan Run 2026
         </p>
         <p className="text-4xl lg:text-6xl font-bold flex flex-wrap justify-center gap-3">
           <span className="about-video-label text-blue-900" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>OUR</span>
@@ -133,7 +131,7 @@ export default function AboutVideo() {
         </p>
         <div className="mx-auto mt-3 h-[2px] w-12 bg-amber-400" />
         <p className="text-blue-900/70 mt-4 text-sm font-semibold tracking-widest uppercase about-video-sub">
-          Momen terbaik Bayan Run 2025
+          Momen Persiapan Bayan Run 2026
         </p>
       </div>
 
@@ -151,25 +149,11 @@ export default function AboutVideo() {
           <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
             {/* YouTube iframe target */}
             <div id="yt-player" className="absolute inset-0 w-full h-full" />
-
-
           </div>
         </div>
 
-        {/* Bottom caption — same pattern as ReelsSlider 
-        <p
-          className="text-center text-blue-900 mt-6 tracking-wide about-video-label"
-          style={{ fontSize: 20 }}
-        >
-          Menuju Bayan Run 
-        </p>
-        <p className="text-center text-blue-900/50 text-xs mt-1 tracking-wider about-video-sub uppercase">
-          Klik play untuk menonton · Tekan ikon layar penuh untuk fokus
-        </p>*/}
-
         {/* Dot accent — matches ReelsSlider */}
-        <div className="flex items-center justify-center gap-2 mt-5">
-        </div>
+        <div className="flex items-center justify-center gap-2 mt-5"></div>
       </div>
     </section>
   );
