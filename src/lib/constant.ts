@@ -5,7 +5,7 @@ export const navLinks = [
  { name: "Rules & Regulations", link: "/rules-regulations" },
   { name: "FAQ", link: "/faq" },
  // { name: "Surat Kuasa", link: "https://bayanrun.com/BAYAN%20RUN%202025%20-%20SURAT%20KUASA%20(Power%20of%20Attorney%20Letter).pdf" },
-   { name: "Race Results", link: "https://results.scorenow.co.id/Results.aspx?CId=19723&RId=280" },
+   { name: "Race Results", link: "https://results.scorenow.co.id/results.aspx?CId=19723&RId=335&EId=6&dt=0" },
   // { name: "Portfolio", link: "/portfolio" },
  // { name: "Blog", link: "/blog" },
 ];
