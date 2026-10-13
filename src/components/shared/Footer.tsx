@@ -150,7 +150,7 @@ const Footer: React.FC = () => {
             <div className="flex-1 flex justify-end ml-6 mt-6 md:mt-0 max-md:justify-center max-md:ml-0">
               <div className="w-35 md:w-50 h-35 md:h-50 relative group">
                 <Image
-                  src="https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630020/LOGO_BR2026_vbixvo_w7hjua.webp"
+                  src="https://res.cloudinary.com/viecqvpk/image/upload/v1791797555/LOGO_BR2026_rb5fsf.png"
                   alt="Logo"
                   fill
                   className="object-contain transform transition duration-500 group-hover:scale-110 group-hover:rotate-12 group-hover:animate-bounce"

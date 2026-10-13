@@ -1,160 +1,210 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import * as React from "react";
+import Link from "next/link";
 import { Users, Zap, Star } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
+import { cn } from "@/lib/utils";
 
 const PHOTO_URL =
-  "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630023/DJI_20251012054325_0006_D_p3yx0k_edwqb7_o7dwzn.webp";
+  "https://res.cloudinary.com/viecqvpk/image/upload/v1791856278/IMG_4430.JPG_bptwgv.jpg";
 
-const sections = [
+type AboutItem = {
+  value: string;
+  label: string;
+  kicker: string;
+  heading: string;
+  body: string;
+  icon: React.ComponentType<{ className?: string }>;
+  src: string;
+  alt: string;
+};
+
+const items: AboutItem[] = [
   {
-    icon: Users,
+    value: "tentang",
+    label: "Tentang",
     kicker: "WHO WE ARE",
     heading: "Tentang Bayan Run",
     body: "Bayan Run 2026 adalah perayaan lari terbesar yang pernah ada di Kalimantan — sebuah komunitas yang lahir dari semangat kebersamaan, kebanggaan daerah, dan gaya hidup sehat yang berkelanjutan bagi seluruh lapisan masyarakat.",
-    iconBg: "bg-blue-50",
-    iconColor: "text-blue-700",
-    accentColor: "bg-blue-500",
+    icon: Users,
+    src: PHOTO_URL,
+    alt: "Bayan Run 2026 Kalimantan",
   },
   {
-    icon: Zap,
+    value: "misi",
+    label: "Misi",
     kicker: "WHAT DRIVES US",
     heading: "Misi Kami",
     body: "Mendorong setiap pelari untuk melampaui batas diri, mempertemukan komunitas dari berbagai latar belakang, dan menjadikan setiap langkah sebagai wujud nyata persatuan. Setiap langkah mendekatkan kita satu sama lain.",
-    iconBg: "bg-blue-50",
-    iconColor: "text-blue-700",
-    accentColor: "bg-blue-500",
+    icon: Zap,
+    src: PHOTO_URL,
+    alt: "Misi Bayan Run 2026",
   },
   {
-    icon: Star,
+    value: "visi",
+    label: "Visi",
     kicker: "WHERE WE'RE HEADED",
     heading: "Visi Kami",
     body: "Menjadi event lari ikonik bertaraf internasional yang berpusat di Kalimantan — membangun warisan prestasi, menginspirasi generasi berikutnya, dan menempatkan Bayan Run sebagai simbol kebanggaan Borneo di peta lari dunia.",
-    iconBg: "bg-blue-50",
-    iconColor: "text-blue-700",
-    accentColor: "bg-blue-500",
+    icon: Star,
+    src: PHOTO_URL,
+    alt: "Visi Bayan Run 2026",
   },
 ];
 
-const BayanRunAboutMissionVision = () => {
-  const [visible, setVisible] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
+const stats = ["Terbesar di Kalimantan", "Ribuan pelari", "Skala internasional"];
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !visible) {
-          setVisible(true);
-        }
-      },
-      { threshold: 0.2 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, [visible]);
+export default function BayanRunAboutMissionVision({
+  className,
+  panelMinHeight = 640,
+}: {
+  className?: string;
+  panelMinHeight?: number;
+}) {
+  const [active, setActive] = React.useState<string>(items[0].value);
 
   return (
-    <div
-      ref={sectionRef}
-      className="bg-gray-200 text-gray-900 min-h-screen flex flex-col lg:flex-row"
-    >
-      {/* ── KIRI: Foto sebagai card ── */}
-      <div className="w-full lg:w-1/2 flex items-stretch p-8 lg:p-12">
-        <div className="relative w-full rounded-2xl overflow-hidden shadow-sm min-h-[400px]">
-          <img
-            src={PHOTO_URL}
-            alt="Bayan Run 2026 Kalimantan"
-            className="absolute inset-0 w-full h-full object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-          <div className="absolute bottom-5 left-5">
-            <p className="text-white/70 text-xs">© Dokumentasi Bayan Run Resmi</p>
-          </div>
-        </div>
-      </div>
+    <section className={cn("w-full bg-gray-200 text-gray-900", className)}>
+      <div className="container mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-16 md:grid-cols-12 md:py-20 lg:gap-14">
+        {/* Left column */}
+        <div className="md:col-span-6">
+          <Badge
+            variant="outline"
+            className="mb-6 gap-2 border-gray-200 bg-white px-4 py-1.5 text-sm font-medium text-gray-500 shadow-sm"
+          >
+            <span className="inline-block h-2 w-2 rounded-full bg-blue-500" />
+            Bayan Run 2026
+          </Badge>
 
-      {/* ── KANAN: Konten ── */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-center py-12 px-8 lg:pr-14 lg:pl-4">
-
-        {/* Header */}
-        <div className="mb-10">
-          <div className="inline-flex items-center gap-2 bg-white border border-gray-200 rounded-full px-4 py-1.5 text-sm text-gray-500 mb-5 shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-blue-500 inline-block" />
-            Bayan Run 2026 · Kalimantan
-          </div>
-          <h1 className="text-4xl lg:text-5xl font-semibold text-blue-800 tracking-tight leading-tight mb-3">
-           WHO WE ARE
-          </h1>
-          <p className="text-base font-medium text-gray-500 leading-relaxed">
-            Mengenal lebih dekat semangat, misi, dan visi Bayan Run 2026
-          </p>
-        </div>
-
-        {/* Section Cards — vertikal stack */}
-        <div className="flex flex-col gap-3 mb-5">
-          {sections.map((section, index) => {
-            const Icon = section.icon;
-            return (
-                <div
-                  key={index}
-                  className={`bg-white border border-gray-200 rounded-2xl px-6 py-5 flex items-start gap-5 hover:border-gray-400 hover:shadow-sm cursor-pointer ${
-                    visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-                  }`}
-                  style={{
-                    transitionProperty: "opacity, transform, border-color, box-shadow",
-                    transitionDuration: "0.5s, 0.5s, 0.3s, 0.3s",
-                    transitionTimingFunction: "ease",
-                    transitionDelay: visible ? `${index * 120}ms` : "0ms",
-                  }}
-                >
-                <div
-                  className={`w-11 h-11 ${section.iconBg} rounded-xl flex items-center justify-center shrink-0 mt-0.5`}
-                >
-                  <Icon className={`w-5 h-5 ${section.iconColor}`} />
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span
-                      className={`inline-flex items-center gap-1 text-[10px] tracking-[0.35em] uppercase font-medium ${section.iconColor}`}
-                    >
-                      <span className={`inline-block w-3 h-px ${section.accentColor}`} />
-                      {section.kicker}
-                    </span>
-                  </div>
-                  <div className="text-lg font-semibold text-gray-900 mb-1 leading-snug">
-                    {section.heading}
-                  </div>
-                  <div className={`h-[2px] w-8 ${section.accentColor} mb-2 opacity-70`} />
-                  <p className="text-sm text-gray-400 leading-relaxed">
-                    {section.body}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Highlight card */}
-        <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-          <div className="inline-flex items-center gap-1.5 bg-red-50 text-red-700 text-xs font-medium px-3 py-1 rounded-full mb-3 w-fit">
-            Pencapaian Terbesar
-          </div>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2 leading-snug">
-            Event Lari Terbesar di Kalimantan
+          <h2 className="text-balance text-4xl font-bold leading-[0.95] tracking-tight text-blue-800 sm:text-5xl md:text-6xl">
+            WHO WE ARE
           </h2>
-          <p className="text-sm text-gray-400 leading-relaxed">
-            Bergabunglah dengan ribuan pelari dari berbagai kota dan negara dalam event running terbesar di Kalimantan.
-            Bersama kita ciptakan sejarah baru di tanah Borneo dan membangun gaya hidup sehat yang berkelanjutan.
+
+          <p className="mt-6 max-w-xl text-gray-500">
+            Mengenal lebih dekat semangat, misi, dan visi Bayan Run 2026  event
+            lari terbesar di Kalimantan yang membangun gaya hidup sehat dan
+            persatuan di tanah Kalimantan.
           </p>
+
+          {/* Stats chips */}
+          <div className="mt-6 flex flex-wrap gap-2">
+            {stats.map((s, i) => (
+              <Badge
+                key={i}
+                variant="secondary"
+                className="border border-gray-200 bg-white text-gray-700 hover:bg-white"
+              >
+                {s}
+              </Badge>
+            ))}
+          </div>
+
+          {/* Accordion (synced with tabs) */}
+          <div className="mt-10 max-w-xl">
+            <Accordion
+              type="single"
+              collapsible
+              value={active}
+              onValueChange={(v) => v && setActive(v)}
+              className="w-full"
+            >
+              {items.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <AccordionItem
+                    key={item.value}
+                    value={item.value}
+                    className="border-gray-300"
+                  >
+                    <AccordionTrigger className="text-left text-base font-medium text-gray-900">
+                      <span className="flex items-center gap-3">
+                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-50">
+                          <Icon className="h-4 w-4 text-blue-700" />
+                        </span>
+                        <span className="flex flex-col">
+                          <span className="text-[10px] font-medium uppercase tracking-[0.3em] text-blue-700">
+                            {item.kicker}
+                          </span>
+                          <span>{item.heading}</span>
+                        </span>
+                      </span>
+                    </AccordionTrigger>
+                    <AccordionContent className="text-sm text-gray-500">
+                      {item.body}
+                    </AccordionContent>
+                  </AccordionItem>
+                );
+              })}
+            </Accordion>
+
+          </div>
         </div>
 
-      </div>
-    </div>
-  );
-};
+        {/* Right column */}
+        <div className="md:col-span-6">
+          <Card
+            className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-0 shadow-sm"
+            style={{ height: panelMinHeight, minHeight: panelMinHeight }}
+          >
+            <Tabs
+              value={active}
+              onValueChange={setActive}
+              className="relative h-full w-full"
+            >
+              <div className="relative h-full w-full">
+                {items.map((t, idx) => (
+                  <TabsContent
+                    key={t.value}
+                    value={t.value}
+                    className={cn(
+                      "absolute inset-0 m-0 h-full w-full",
+                      "data-[state=inactive]:hidden"
+                    )}
+                  >
+                    <img
+                      src={t.src}
+                      alt={t.alt}
+                      className="h-full w-full object-cover object-center"
+                      loading={idx === 0 ? "eager" : "lazy"}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+                    <div className="absolute left-5 top-5">
+                    </div>
+                    <p className="absolute bottom-20 left-5 text-xs text-white/70">
+                      © Dokumentasi Bayan Run Resmi
+                    </p>
+                  </TabsContent>
+                ))}
+              </div>
 
-export default BayanRunAboutMissionVision;
+              {/* Tab controls (pill) */}
+              <div className="pointer-events-auto absolute inset-x-0 bottom-4 z-10 flex w-full justify-center">
+                <TabsList className="flex gap-2 rounded-xl border border-gray-200 bg-white/80 p-1 text-gray-600 backdrop-blur supports-[backdrop-filter]:bg-white/70">
+                  {items.map((t) => (
+                    <TabsTrigger
+                      key={t.value}
+                      value={t.value}
+                      className="rounded-lg px-4 py-2 text-gray-700 data-[state=active]:bg-blue-800 data-[state=active]:text-white"
+                    >
+                      {t.label}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </div>
+            </Tabs>
+          </Card>
+        </div>
+      </div>
+    </section>
+  );
+}
