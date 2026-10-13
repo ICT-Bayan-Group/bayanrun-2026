@@ -9,13 +9,13 @@ const AMBILFOTO_LOGO =
   "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790643645/ambilfoto-logo_in2s7b.png";
 
 const slideImages = [
-  "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630073/20251012062146_-_BOM_0444_ipz7s9.jpg",
-  "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630020/20251012060936_-_BOM_7023_uzwd7f_6_11zon_jtyqr0_jsjbnm.webp",
-  "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630023/DJI_20251012054325_0006_D_p3yx0k_edwqb7_o7dwzn.webp",
-  "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630023/DJI_20251012054325_0006_D_p3yx0k_edwqb7_o7dwzn.webp",
-  "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630019/DJI_20251012090310_0032_D_nm8eit_3_11zon_tqey3t_ba9jkq.webp",
-  "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630019/20251012061107_-_BOM_7070_nah0u9_2_11zon_qaipyv_nvju70.webp",
-  "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630019/20251012070224_-_BOM_8032_qy3ajc_9_11zon_w2cbpi_od1l7e.webp",
+  "https://res.cloudinary.com/viecqvpk/image/upload/v1791796647/ALK_0153_h2gzpc.jpg",
+  "https://res.cloudinary.com/viecqvpk/image/upload/v1791796945/ALK_0097_bdw69k.jpg",
+  "https://res.cloudinary.com/viecqvpk/image/upload/v1791796949/ALK_4557_t11dzx.jpg",
+  "https://res.cloudinary.com/viecqvpk/image/upload/v1791796961/ALK_3703_bkxgac.jpg",
+  "https://res.cloudinary.com/viecqvpk/image/upload/v1791856300/IMG_4380.JPG_g9mbxa.jpg",
+  "https://res.cloudinary.com/viecqvpk/image/upload/v1791856278/IMG_4430.JPG_bptwgv.jpg",
+  "https://res.cloudinary.com/viecqvpk/image/upload/v1791856315/IMG_4417.JPG_a2ptfd.jpg",
 ];
 
 const total = slideImages.length;

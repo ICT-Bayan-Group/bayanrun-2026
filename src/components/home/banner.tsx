@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React /*, { useCallback, useEffect, useState } */ from "react";
 import { Calendar, MapPin, BarChart3, Download, ArrowRight } from "lucide-react";
 import {
   AMBILFOTO_URL,
@@ -10,11 +10,13 @@ import {
 } from "@/lib/links";
 
 // ── Config ───────────────────────────────────────────────────────────────────
-const RACE_DAY_ISO = "2026-10-10T06:00:00+08:00";
+// const RACE_DAY_ISO = "2026-10-10T06:00:00+08:00"; // countdown dinonaktifkan
+const RESULT_URL =
+  "https://results.scorenow.co.id/results.aspx?CId=19723&RId=335&EId=6&dt=0";
 const HERO_IMG =
-  "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630070/20251012053734_-_BOM_6641_nxp5w0.jpg";
+  "https://res.cloudinary.com/viecqvpk/image/upload/v1791796641/ALK_0778_hfdmcu.jpg";
 
-// ── Server-time offset hook ──────────────────────────────────────────────────
+/* ── Server-time offset hook (countdown dinonaktifkan) ────────────────────────
 function useServerTimeOffset() {
   const [offset, setOffset] = useState<number>(0);
   const [ready, setReady] = useState(false);
@@ -49,8 +51,9 @@ function useServerTimeOffset() {
   const getReliableNow = useCallback(() => Date.now() + offset, [offset]);
   return { getReliableNow, ready };
 }
+*/
 
-// ── Countdown hook ───────────────────────────────────────────────────────────
+/* ── Countdown hook (countdown dinonaktifkan) ─────────────────────────────────
 function useCountdown(targetISO: string, getReliableNow: () => number) {
   const [time, setTime] = useState<{
     days: number;
@@ -78,8 +81,9 @@ function useCountdown(targetISO: string, getReliableNow: () => number) {
 
   return time;
 }
+*/
 
-// ── CountdownBlock ───────────────────────────────────────────────────────────
+/* ── CountdownBlock (countdown dinonaktifkan) ─────────────────────────────────
 function CountdownBlock({
   label,
   targetISO,
@@ -121,6 +125,7 @@ function CountdownBlock({
     </div>
   );
 }
+*/
 
 // ── ActionButton (glass style, icon atau logo, support disabled) ─────────────
 function ActionButton({
@@ -238,7 +243,7 @@ function ActionButton({
 
 // ── AboutBanner ──────────────────────────────────────────────────────────────
 export default function AboutBanner() {
-  const { getReliableNow, ready } = useServerTimeOffset();
+  // const { getReliableNow, ready } = useServerTimeOffset(); // countdown dinonaktifkan
 
   return (
     <>
@@ -303,7 +308,7 @@ export default function AboutBanner() {
                 <div className="about-badge-glow flex items-center gap-2 border border-blue-400/60 rounded-full px-3 sm:px-4 py-1 backdrop-blur-sm bg-blue-400/10 w-fit">
                   <span className="about-pulse w-1.5 h-1.5 rounded-full bg-blue-400 inline-block" aria-hidden="true" />
                   <span className="text-blue-300 text-xs sm:text-sm font-semibold tracking-[0.2em] sm:tracking-[0.3em] uppercase">
-                    Segera Dimulai
+                    Hasil Tersedia
                   </span>
                 </div>
               </div>
@@ -311,7 +316,7 @@ export default function AboutBanner() {
               {/* Logo */}
               <div className="about-s2 mb-3 sm:mb-4 -ml-2 sm:-ml-6 md:-ml-8 lg:-ml-10">
                 <img
-                  src="https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630018/LOGO_BR2026_WHITEALL_f04hnk_gkxs5x.webp"
+                  src="https://res.cloudinary.com/viecqvpk/image/upload/v1791797835/LOGO_BR2026_WHITEALL_vwbooy.webp"
                   alt="Bayan RUN 2026"
                   width={640}
                   height={320}
@@ -328,31 +333,6 @@ export default function AboutBanner() {
                 <span className="text-yellow-400 not-italic"> East Kalimantan</span>
               </p>
 
-              {/* Action buttons: 2 atas, 1 bawah */}
-              <div className="about-s4 grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 w-full max-w-[720px] mb-6 sm:mb-8">
-                <ActionButton
-                  disabled
-                  icon={BarChart3}
-                  title="Race Result"
-                  subtitle="Lihat hasil lomba Bayan Run 2026"
-                />
-                <ActionButton
-                  href={AMBILFOTO_URL}
-                  logo={AMBILFOTO_LOGO}
-                  title="Ambil Foto Kamu"
-                  subtitle="Temukan foto larimu di AmbilFoto.id"
-                />
-                <ActionButton
-                  href={SURAT_KUASA_URL}
-                  icon={Download}
-                  title="Download Surat Kuasa"
-                  subtitle="Surat Kuasa Bayan Open 2026"
-                  download={SURAT_KUASA_FILENAME}
-                  external={false}
-                  className="sm:col-span-2"
-                />
-              </div>
-
               {/* Date & Location */}
               <div className="about-s5 flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-x-8 sm:gap-y-3 pt-4 border-t border-white/20 max-w-[720px]">
                 <div className="flex items-center gap-2 sm:gap-3 text-white/90">
@@ -368,7 +348,48 @@ export default function AboutBanner() {
               </div>
             </div>
 
-            {/* ── RIGHT: Countdown Card ── */}
+            {/* ── RIGHT: Action Card (pengganti countdown) ── */}
+            <div className="about-sc w-full lg:w-[400px] flex-shrink-0">
+              <div className="rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md p-5 sm:p-6 shadow-2xl">
+                <div className="inline-flex items-center gap-2 bg-blue-700 rounded-full px-3 sm:px-4 py-1 mb-4 sm:mb-5">
+                  <span className="text-white text-xs font-bold tracking-widest uppercase">
+                    Akses Cepat
+                  </span>
+                </div>
+
+                <h2 className="text-xl sm:text-2xl font-black text-white mb-2 leading-snug">
+                  Hasil, Foto &amp; Dokumen
+                </h2>
+                <p className="text-white/60 text-xs sm:text-sm mb-4 sm:mb-5 leading-relaxed">
+                  Cek hasil lomba, temukan foto larimu, dan unduh surat kuasa Bayan Run 2026.
+                </p>
+
+                <div className="flex flex-col gap-2.5 sm:gap-3">
+                  <ActionButton
+                    href={RESULT_URL}
+                    icon={BarChart3}
+                    title="Race Result"
+                    subtitle="Lihat hasil lomba Bayan Run 2026"
+                  />
+                  <ActionButton
+                    href={AMBILFOTO_URL}
+                    logo={AMBILFOTO_LOGO}
+                    title="Ambil Foto Kamu"
+                    subtitle="Temukan foto larimu di AmbilFoto.id"
+                  />
+                  <ActionButton
+                    href={SURAT_KUASA_URL}
+                    icon={Download}
+                    title="Download Surat Kuasa"
+                    subtitle="Surat Kuasa Bayan Open 2026"
+                    download={SURAT_KUASA_FILENAME}
+                    external={false}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* ── RIGHT: Countdown Card (dinonaktifkan) ──
             <div className="about-sc w-full lg:w-[400px] flex-shrink-0">
               <div className="rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md p-5 sm:p-6 lg:p-8 shadow-2xl">
                 <div className="inline-flex items-center gap-2 bg-red-700 rounded-full px-3 sm:px-4 py-1 mb-4 sm:mb-5">
@@ -396,6 +417,7 @@ export default function AboutBanner() {
                 </div>
               </div>
             </div>
+            */}
           </div>
         </div>
 
