@@ -18,7 +18,7 @@ const RED_BORDER  = "#FECACA";
 const BEBAS       = "'Bebas Neue', Arial Black, sans-serif";
 
 const PHOTO_SRC =
-  "https://res.cloudinary.com/viecqvpk/image/upload/v1791796647/ALK_0153_h2gzpc.jpg";
+  "https://cdnsyno.ambilfoto.id/cdn/ALK_0153.JPG";
 
 /* ───────────────────────── Types ───────────────────────── */
 type Item = {

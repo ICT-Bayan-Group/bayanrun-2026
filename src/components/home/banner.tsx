@@ -14,7 +14,7 @@ import {
 const RESULT_URL =
   "https://results.scorenow.co.id/results.aspx?CId=19723&RId=335&EId=6&dt=0";
 const HERO_IMG =
-  "https://res.cloudinary.com/viecqvpk/image/upload/v1791796641/ALK_0778_hfdmcu.jpg";
+  "https://cdnsyno.ambilfoto.id/cdn/ALK_0778.JPG";
 
 /* ── Server-time offset hook (countdown dinonaktifkan) ────────────────────────
 function useServerTimeOffset() {
@@ -316,7 +316,7 @@ export default function AboutBanner() {
               {/* Logo */}
               <div className="about-s2 mb-3 sm:mb-4 -ml-2 sm:-ml-6 md:-ml-8 lg:-ml-10">
                 <img
-                  src="https://res.cloudinary.com/viecqvpk/image/upload/v1791797835/LOGO_BR2026_WHITEALL_vwbooy.webp"
+                  src="https://cdnsyno.ambilfoto.id/cdn/LOGO_BR2026_WHITEALL_f04hnk.png"
                   alt="Bayan RUN 2026"
                   width={640}
                   height={320}

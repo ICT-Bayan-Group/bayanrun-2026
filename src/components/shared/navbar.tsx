@@ -55,7 +55,7 @@ export default function Navbar() {
               <div className="nav-logo">
                 <Link href="/">
                   <Image
-                    src="https://res.cloudinary.com/viecqvpk/image/upload/v1791797555/LOGO_BR2026_rb5fsf.png"
+                    src="https://cdnsyno.ambilfoto.id/cdn/LOGO_BR2026_vbixvo.webp"
                     alt="logo"
                     width={1000}
                     height={1000}

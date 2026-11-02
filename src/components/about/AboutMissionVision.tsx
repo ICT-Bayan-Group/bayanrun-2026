@@ -16,7 +16,7 @@ import {
 import { cn } from "@/lib/utils";
 
 const PHOTO_URL =
-  "https://res.cloudinary.com/viecqvpk/image/upload/v1791856278/IMG_4430.JPG_bptwgv.jpg";
+  "https://cdnsyno.ambilfoto.id/cdn/TOP.jpg";
 
 type AboutItem = {
   value: string;
@@ -93,7 +93,7 @@ export default function BayanRunAboutMissionVision({
           <p className="mt-6 max-w-xl text-gray-500">
             Mengenal lebih dekat semangat, misi, dan visi Bayan Run 2026  event
             lari terbesar di Kalimantan yang membangun gaya hidup sehat dan
-            persatuan di tanah Kalimantan.
+            persatuan di tanah K.
           </p>
 
           {/* Stats chips */}

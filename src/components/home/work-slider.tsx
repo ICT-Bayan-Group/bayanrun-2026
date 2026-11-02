@@ -3,19 +3,18 @@
 import { useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
+import { AMBILFOTO_LOGO } from "@/lib/links";
 
 const GALLERY_URL = "https://ambilfoto.id/event-public/bayan-run-2026";
-const AMBILFOTO_LOGO =
-  "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790643645/ambilfoto-logo_in2s7b.png";
 
 const slideImages = [
-  "https://res.cloudinary.com/viecqvpk/image/upload/v1791796647/ALK_0153_h2gzpc.jpg",
-  "https://res.cloudinary.com/viecqvpk/image/upload/v1791796945/ALK_0097_bdw69k.jpg",
-  "https://res.cloudinary.com/viecqvpk/image/upload/v1791796949/ALK_4557_t11dzx.jpg",
-  "https://res.cloudinary.com/viecqvpk/image/upload/v1791796961/ALK_3703_bkxgac.jpg",
-  "https://res.cloudinary.com/viecqvpk/image/upload/v1791856300/IMG_4380.JPG_g9mbxa.jpg",
-  "https://res.cloudinary.com/viecqvpk/image/upload/v1791856278/IMG_4430.JPG_bptwgv.jpg",
-  "https://res.cloudinary.com/viecqvpk/image/upload/v1791856315/IMG_4417.JPG_a2ptfd.jpg",
+  "https://cdnsyno.ambilfoto.id/cdn/ALK_0153.JPG",
+  "https://cdnsyno.ambilfoto.id/cdn/ALF07848.jpg",
+  "https://cdnsyno.ambilfoto.id/cdn/ALF07942.jpg",
+  "https://cdnsyno.ambilfoto.id/cdn/ALF08352.jpg",
+  "https://cdnsyno.ambilfoto.id/cdn/ALF08933.jpg",
+  "https://cdnsyno.ambilfoto.id/cdn/BYN01836.jpg",
+  "https://cdnsyno.ambilfoto.id/cdn/DSC01113.jpg",
 ];
 
 const total = slideImages.length;

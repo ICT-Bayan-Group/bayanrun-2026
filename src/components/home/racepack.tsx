@@ -4,31 +4,31 @@ import Image from "next/image";
 
 const racePackItems = [
   {
-    src: "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630015/BR_BIB_PIN_pbwogf_my1rh4.webp",
+    src: "https://cdnsyno.ambilfoto.id/cdn/BR_BIB_PIN_pbwogf.webp",
     name: "Magnetic Pin BIB",
   },
   {
-    src: "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630014/jersey-removebg-preview_mlqcdm_dpc8i8.webp",
+    src: "https://cdnsyno.ambilfoto.id/cdn/jersey-removebg-preview_mlqcdm.webp",
     name: "Jersey Runners",
   },
   {
-    src: "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630015/contoh_bib_opqp4i_gin7mc.webp",
+    src: "https://cdnsyno.ambilfoto.id/cdn/contoh_bib_opqp4i.webp",
     name: "BIB Number",
   },
   {
-    src: "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630020/tas_multifungsi_black_am9pnv_wvoi1v.webp",
+    src: "https://cdnsyno.ambilfoto.id/cdn/tas_multifungsi_black_am9pnv.webp",
     name: "Multifunction Bag",
   },
   {
-    src: "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630016/RUNNING_BELT_i0zhie_aujeym.webp",
+    src: "https://cdnsyno.ambilfoto.id/cdn/RUNNING_BELT_i0zhie.webp",
     name: "Running Belt",
   },
   {
-    src: "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630017/soft_flask_br2026_cfxayd_h3zfjo.webp",
+    src: "https://cdnsyno.ambilfoto.id/cdn/soft_flask_br2026_cfxayd.webp",
     name: "Soft Flask",
   },
   {
-    src: "https://res.cloudinary.com/ddeigqz5d/image/upload/v1790630018/Medali_BR2026_zzg1as_jdrtgg.webp",
+    src: "https://cdnsyno.ambilfoto.id/cdn/Medali_BR2026_zzg1as.webp",
     name: "Medal",
   },
 ];
